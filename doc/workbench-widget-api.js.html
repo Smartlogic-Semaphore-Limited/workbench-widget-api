@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: workbench-widget-api.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: workbench-widget-api.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/****
+ * WorkbenchWidgetApi
+ * https://github.com/smatrlogic/workbench-widget-api
+ *
+ * @version 1.0.0
+ *
+ *
+ * Released under License. See LICENSE.txt*/
+
+/*global window*/
+(function () {
+
+  "use strict";
+
+  var _widgetId, _debug,
+    _postIndex = 1,
+    _promises = {};
+  window.addEventListener("message", _receiveMessage, false);
+  window.WorkbenchWidgetApi = WorkbenchWidgetApi;
+  /**
+   * Library helper to integrate widgets with Smartlogic Semaphore Workbench.
+   * @param widgetId - optional parameter to override automatic ID receiver.
+   * @returns {{widgetId: *, ready: ready, getStateParams: getStateParams, navigateToItem: navigateToItem, closeWidget: closeWidget, openWidget: openWidget, backendData: {getClasses: *, getAssociativeUnfilteredTypes: *, getBroaderUnfilteredTypes: *, getNarrowerUnfilteredTypes: *, getSemaphoreSettings: *, getAssociativeTypes: *, getAltLabelProperties: *, getAltLabelUnfilteredProperties: *, getBroaderTypes: *, getDetailsWithMetadata: *, getMetadataTypes: *, getNarrowerTypes: *, getConceptMetadata: *, getConceptSchemes: *, getConceptDetails: *, getConceptGuid: *, getConceptGetPrefLabels: *, getConceptAltLabels: *, getConceptRelated: *, getConceptNarrower: *, getConceptBroader: *, getTopConcepts: *}}}
+   * @constructor
+   */
+  function WorkbenchWidgetApi(widgetId, debug) {
+    _widgetId = (widgetId || _getUriParameterByName("widgetId"));
+    _debug = debug;
+    _postMessage(_createMessage(_widgetId, "ready"));
+    return {
+      /**
+       * Current widget id.
+       */
+      widgetId: _widgetId,
+      /**
+       * Fetch current host state params (modelGraphUri, taskGraphUri, itemUri).
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      getStateParams: function () {
+        var message = _createMessage(_widgetId, "getStateParams");
+        return _postMessage(message);
+      },
+      /**
+       * Navigate host application to item.
+       * @param {Item} item - Item can be concept, concept scheme, relationship, class etc. existing in current task.
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      navigateToItem: function (item) {
+        var message = _createMessage(_widgetId, "navigateToItem"),
+          needs = [
+            {name: "item", type: "Object"}
+          ],
+          preparedArguments = _prepareArguments(needs, arguments, "navigateToItem");
+        if (preparedArguments.valid) {
+          message.data.item = preparedArguments.argumentsObj.item;
+          return _postMessage(message);
+        }
+      },
+
+      /**
+       * Close right side panel in host application.
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      closeWidget: function () {
+        var message = _createMessage(_widgetId, "closeWidget");
+        return _postMessage(message);
+      },
+
+      /**
+       * Open different widget exist in same model.
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      openWidget: function (targetWidgetId) {
+        var message = _createMessage(targetWidgetId, "openWidget"),
+          needs = [
+            {name: "targetWidgetId", type: "String"}
+          ],
+          preparedArguments = _prepareArguments(needs, arguments, "openWidget");
+        if (preparedArguments.valid) {
+          return _postMessage(message);
+        }
+      },
+
+      /**
+       * Return class data for current item.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getClasses": _dataSourceWithNoParameters("getClasses"),
+
+
+      /**
+       * Return all Associative Types.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getAssociativeUnfilteredTypes": _dataSourceWithNoParameters("getAssociativeUnfilteredTypes"),
+
+      /**
+       * Return Associative Types valid for current item.
+       * @param {String} itemUri.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getAssociativeTypes": _dataSourceWithItemUri("getAssociativeTypes"),
+
+
+      /**
+       * Return all Broader Types.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getBroaderUnfilteredTypes": _dataSourceWithNoParameters("getBroaderUnfilteredTypes"),
+
+      /**
+       * Return Broader Types valid for current item.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getBroaderTypes": _dataSourceWithItemUri("getBroaderTypes"),
+
+      /**
+       * Return all Narrower Types.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getNarrowerUnfilteredTypes": _dataSourceWithNoParameters("getNarrowerUnfilteredTypes"),
+
+      /**
+       * Return Narrower Types valid for current item.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getNarrowerTypes": _dataSourceWithItemUri("getNarrowerTypes"),
+
+      /**
+       * Return Semaphore Settings.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getSemaphoreSettings": _dataSourceWithNoParameters("getSemaphoreSettings"),
+
+      /**
+       * Return All Alternative Labels Types.
+       * @param {String} itemUri.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getAltLabelUnfilteredProperties": _dataSourceWithItemUri("getAltLabelUnfilteredProperties"),
+
+      /**
+       * Return Alternative Labels Types valid for item.
+       * @param {String} itemUri.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getAltLabelProperties": _dataSourceWithItemUri("getAltLabelProperties"),
+
+      /**
+       * Return Metadata types valid for item.
+       * @param {String} itemUri.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getMetadataTypes": _dataSourceWithItemUri("getMetadataTypes"),
+
+      /**
+       * Return Item with metadata properties.
+       * @param {String} taskGraphUri.
+       * @param {String} itemUri.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getDetailsWithMetadata": _dataSourcesWithTaskAndItemUri("getDetailsWithMetadata"),
+
+      /**
+       *  Return both default metadata and metadata specific for given domain.
+       * @param {String} taskGraphUri.
+       * @param {String} domainUri.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getMetadataForDomain": _dataSourceWithItemAndDomainUri("getMetadataForDomain"),
+
+      /**
+       *  Return all concept schemes for given task.
+       * @param {String} taskGraphUri.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getConceptSchemes": _dataSourcesWithTaskUri("getConceptSchemes"),
+
+      /**
+       *  Return concept details.
+       * @param {String} taskGraphUri.
+       * @param {String} itemUri.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getConceptDetails": _dataSourcesWithTaskAndItemUri("getConceptDetails"),
+
+      /**
+       *  Return concept guid data.
+       * @param {String} taskGraphUri.
+       * @param {String} itemUri.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getConceptGuid": _dataSourcesWithTaskAndItemUri("getConceptGuid"),
+
+      /**
+       *  Return concept details with preferred labels.
+       * @param {String} taskGraphUri.
+       * @param {String} itemUri.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getConceptPrefLabels": _dataSourcesWithTaskAndItemUri("getConceptPrefLabels"),
+
+      /**
+       *  Return concept details with alternative labels.
+       * @param {String} taskGraphUri.
+       * @param {String} itemUri.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getConceptAltLabels": _dataSourcesWithTaskAndItemUri("getConceptAltLabels"),
+
+      /**
+       *  Return concept details with associative concepts grouped by relation type.
+       * @param {String} taskGraphUri.
+       * @param {String} itemUri.
+       * @param {Number} limit - optional, default 10.
+       * @param {Number} offset - optional, default 0.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getConceptRelated": _dataSourcesWithTaskAndItemUriAndPaging("getConceptRelated"),
+
+      /**
+       *  Return concept details with narrower concepts grouped by relation type.
+       * @param {String} taskGraphUri.
+       * @param {String} itemUri.
+       * @param {Number} limit - optional, default 10.
+       * @param {Number} offset - optional, default 0.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getConceptNarrower": _dataSourcesWithTaskAndItemUriAndPaging("getConceptNarrower"),
+
+      /**
+       *  Return concept details with broader concepts grouped by relation type.
+       * @param {String} taskGraphUri.
+       * @param {String} itemUri.
+       * @param {Number} limit - optional, default 10.
+       * @param {Number} offset - optional, default 0.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getConceptBroader": _dataSourcesWithTaskAndItemUriAndPaging("getConceptBroader"),
+
+      /**
+       *  Return concept scheme details with top concepts.
+       * @param {String} taskGraphUri.
+       * @param {String} itemUri.
+       * @param {Number} limit - optional, default 10.
+       * @param {Number} offset - optional, default 0.
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getTopConcepts": _dataSourcesWithTaskAndItemUriAndPaging("getTopConcepts")
+
+    };
+
+  }
+
+  function _addCallee(array, calle) {
+    if (_matchType(calle, "Function")) {
+      array.push(calle);
+    }
+  }
+
+  function _getBackendData(widgetID, backendFunction, backendArguments) {
+    var message = _createMessage(widgetID, "getBackendData");
+    message.data.backendArguments = backendArguments;
+    message.data.backendFunction = backendFunction;
+    return _postMessage(message);
+  }
+
+  function _dataSourceWithNoParameters(backendFunction) {
+    return function () {
+      return _getBackendData(_widgetId, backendFunction, {});
+    };
+  }
+
+  function _dataSourceWithItem(backendFunction) {
+    return function (item) {
+      var needs = [{name: "item", type: "Object"}],
+        preparedArguments = _prepareArguments(needs, arguments, backendFunction);
+      if (preparedArguments.valid) {
+        return _getBackendData(_widgetId, backendFunction, preparedArguments.argumentsObj);
+      }
+    };
+  }
+
+  function _dataSourceWithItemUri(backendFunction) {
+    return function (itemUri) {
+      var needs = [{name: "itemUri", type: "String"}],
+        preparedArguments = _prepareArguments(needs, arguments, backendFunction);
+      if (preparedArguments.valid) {
+        return _getBackendData(_widgetId, backendFunction, preparedArguments.argumentsObj);
+      }
+    };
+  }
+
+  function _dataSourcesWithTaskAndItemUri(backendFunction) {
+    return function (taskGraphUri, itemUri) {
+      var needs = [
+          {name: "taskGraphUri", type: "String"},
+          {name: "itemUri", type: "String"}
+        ],
+        preparedArguments = _prepareArguments(needs, arguments, backendFunction);
+      if (preparedArguments.valid) {
+        return _getBackendData(_widgetId, backendFunction, preparedArguments.argumentsObj);
+      }
+    };
+
+  }
+
+  function _dataSourcesWithTaskAndItemUriAndPaging(backendFunction) {
+    return function (taskGraphUri, itemUri, limit, offset) {
+      var needs = [
+          {name: "taskGraphUri", type: "String"},
+          {name: "itemUri", type: "String"},
+          {name: "limit", type: "Number", optional: true},
+          {name: "offset", type: "Number", optional: true}
+        ],
+        preparedArguments = _prepareArguments(needs, arguments, backendFunction);
+      if (preparedArguments.valid) {
+        return _getBackendData(_widgetId, backendFunction, preparedArguments.argumentsObj);
+      }
+    };
+  }
+
+  function _dataSourceWithItemAndDomainUri(backendFunction) {
+    return function (taskGraphUri, domainUri) {
+      var needs = [
+          {name: "taskGraphUri", type: "String"},
+          {name: "domainUri", type: "String"}
+        ],
+        preparedArguments = _prepareArguments(needs, arguments, backendFunction);
+      if (preparedArguments.valid) {
+        return _getBackendData(_widgetId, backendFunction, preparedArguments.argumentsObj);
+      }
+    };
+  }
+
+  function _dataSourcesWithTaskUri(backendFunction) {
+    return function (taskGraphUri) {
+      var needs = [
+          {name: "taskGraphUri", type: "String"}
+        ],
+        preparedArguments = _prepareArguments(needs, arguments, backendFunction);
+      if (preparedArguments.valid) {
+        return _getBackendData(_widgetId, backendFunction, preparedArguments.argumentsObj);
+      }
+    };
+  }
+
+
+  function _set(target, key, value, optional) {
+    if (!optional || !_isEmpty(value)) {
+      target[key] = value;
+    }
+  }
+
+  function _isEmpty(value) {
+    return value === undefined || value === null;
+  }
+
+  function _createMessage(widgetID, key) {
+    var message = {
+      type: "action",
+      key: key,
+      data: {
+        widgetId: widgetID
+      }
+    };
+    return message;
+  }
+
+  function _postMessage(message) {
+    var tag = _generateTag(message.data.widgetId);
+    message.data.tag = tag;
+    _promises[tag] = Q.defer();
+    window.top.postMessage(JSON.decycle(message), '*');
+    _logMessage("postMessage", message);
+    return _promises[tag].promise;
+  }
+
+  function _generateTag(widgetId) {
+    _postIndex++;
+    return widgetId + "_" + _postIndex;
+  }
+
+
+  function _receiveMessage(event) {
+
+    _logMessage("receiveMessage", event);
+    //var origin = event.origin || event.originalEvent.origin; // For Chrome, the origin property is in the event.originalEvent object.
+
+    if (event.data.tag &amp;&amp; _promises[event.data.tag]) {
+      if (event.data.type === "response") {
+        if (event.data.results !== undefined) {
+          _promises[event.data.tag]["resolve"](JSON.retrocycle(event.data.results));
+        } else if (event.data.reason !== undefined) {
+          _promises[event.data.tag]["reject"](JSON.retrocycle(event.data.reason));
+        } else {
+          _logError("Response message need results or reason in data.");
+        }
+      }
+      delete _promises[event.data.tag];
+    }
+
+  }
+
+  function _getType(obj) {
+    return Object.prototype.toString.call(obj);
+  }
+
+  function _matchType(value, typeName) {
+    return _getType(value) === '[object ' + typeName + ']';
+  }
+
+  function _prepareArguments(needs, got, functionName) {
+    var errors = [], argumentsObj = {};
+    if (needs.length) {
+      needs.forEach(function (need, index) {
+        var gotValue = got[index],
+          isValid = need.optional ?
+            (_isEmpty(gotValue) || _matchType(gotValue, need.type)) :
+            _matchType(gotValue, need.type);
+        if (isValid) {
+          _set(argumentsObj, need.name, got[index], need.optional);
+        } else {
+          errors.push("Argument '" + need.name + "' needs to be of '" + need.type + "' type.");
+        }
+
+      });
+    }
+    if (errors.length) {
+      errors.unshift("Api function '" + functionName + "' arguments list is invalid.");
+      throw new Error(errors.join("\n"));
+    }
+    return {valid: !(errors.length), argumentsObj: argumentsObj};
+  }
+
+  function _getUriParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&amp;");
+    var regex = new RegExp("[?&amp;]" + name + "(=([^&amp;#]*)|&amp;|#|$)"),
+      results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  function _logMessage() {
+    if (_debug) {
+      console.log.apply(this, arguments);
+    }
+  }
+
+  function _logError() {
+    if (_debug) {
+      console.error.apply(this, arguments);
+    }
+  }
+
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#closeWidget">closeWidget</a></li><li><a href="global.html#getAltLabelProperties">getAltLabelProperties</a></li><li><a href="global.html#getAltLabelUnfilteredProperties">getAltLabelUnfilteredProperties</a></li><li><a href="global.html#getAssociativeTypes">getAssociativeTypes</a></li><li><a href="global.html#getAssociativeUnfilteredTypes">getAssociativeUnfilteredTypes</a></li><li><a href="global.html#getBroaderTypes">getBroaderTypes</a></li><li><a href="global.html#getBroaderUnfilteredTypes">getBroaderUnfilteredTypes</a></li><li><a href="global.html#getClasses">getClasses</a></li><li><a href="global.html#getConceptAltLabels">getConceptAltLabels</a></li><li><a href="global.html#getConceptBroader">getConceptBroader</a></li><li><a href="global.html#getConceptDetails">getConceptDetails</a></li><li><a href="global.html#getConceptGuid">getConceptGuid</a></li><li><a href="global.html#getConceptNarrower">getConceptNarrower</a></li><li><a href="global.html#getConceptPrefLabels">getConceptPrefLabels</a></li><li><a href="global.html#getConceptRelated">getConceptRelated</a></li><li><a href="global.html#getConceptSchemes">getConceptSchemes</a></li><li><a href="global.html#getDetailsWithMetadata">getDetailsWithMetadata</a></li><li><a href="global.html#getMetadataForDomain">getMetadataForDomain</a></li><li><a href="global.html#getMetadataTypes">getMetadataTypes</a></li><li><a href="global.html#getNarrowerTypes">getNarrowerTypes</a></li><li><a href="global.html#getNarrowerUnfilteredTypes">getNarrowerUnfilteredTypes</a></li><li><a href="global.html#getSemaphoreSettings">getSemaphoreSettings</a></li><li><a href="global.html#getStateParams">getStateParams</a></li><li><a href="global.html#getTopConcepts">getTopConcepts</a></li><li><a href="global.html#navigateToItem">navigateToItem</a></li><li><a href="global.html#openWidget">openWidget</a></li><li><a href="global.html#widgetId">widgetId</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Mar 09 2016 08:54:45 GMT+0100 (Środkowoeuropejski czas stand.)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
