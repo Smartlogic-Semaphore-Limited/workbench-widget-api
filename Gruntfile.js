@@ -51,6 +51,13 @@ module.exports = function (grunt) {
     clean: {
       build:['dist/', 'doc/']
     },
+    embed: {
+      main: {
+        files: {
+          'dist/output.html': 'example/widget.html'
+        }
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -58,7 +65,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-embed');
 
-  grunt.registerTask('default', ['clean', 'uglify', 'jsdoc', 'copy', 'karma']);
+  grunt.registerTask('default', ['clean', 'uglify', 'jsdoc', 'copy', 'embed', 'karma']);
 
 }
