@@ -54,7 +54,7 @@ module.exports = function (grunt) {
     embed: {
       main: {
         files: {
-          'dist/output.html': 'example/widget.html'
+          'dist/widget.html': 'example/widget.html'
         }
       }
     }
