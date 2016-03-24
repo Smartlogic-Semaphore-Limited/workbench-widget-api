@@ -1,38 +1,55 @@
 # WorkbenchWidgetApi
-  WorkbenchWidgetApi is library helper to integrate widgets with Smartlogic Semaphore Workbench.
-  It simplify communication between remote widget and OM Application. 
-  Instead of send and listen for messages remote widget can simply fetch data 
-  with solid api and promises. We use q promise [see Q Promise documentation](https://github.com/kriskowal/q)   
+  WorkbenchWidgetApi is a library to write and integrate widgets with 
+  Smartlogic Semaphore Workbench (OM Application). 
+  Widgets are remote html applications delivered by third party developers.
 
-## Quick start
-  1. refer to library
+  Widgets are served inside an iframe embedded in the right panel of OM Application. 
+  They communicate with OM Application and retrieve information about current 
+  model structure.
+  
+## Writing a widget
+1. referencing the library
   
   __remember to use full url, not relative url__
   
   ```html
   <script src="http://full.url/swApiWidget.min.js"></script>
   ```
-  
-   *alternatively whole script can be merged in the html file head section*
+    
+   *alternatively, the whole library can be embedded in the html file head section*
+
+1. widget initialization
    
    ```javascript
    var widget = new WorkbenchWidgetApi();
    ```
    
-   This will send to OM Application the confirmation that widget is ready. 
+   This will send to OM Application the confirmation that widget is initialized.
+    
+1. Example and details
+
+See [(Panoramio widget)](examples_src/widgetPanoramio.html) as an example widget implementation.
+
+Please refer to [(Api Documentation)](doc/ApiDocumentation.md) for more details.
+
+## Proxy mechanism
+  To prevent security issues widget html file is proxied from original location to OM Application domain.
+  This implies that all linked resources (js, css, fonts) need to be referenced with full url address or included into html file.
    
-## Examples
-  Directory __examples_src__ contains simple widgets source files.
-  Directory __examples_dist__ contains simple widgets prepared for use.
+## Widget configuration and enabling
+
+    
+This section describes the following steps to configure and enable a set of 
+example widgets for OM Application. Here __examples_src__ is the directory that 
+contains simple widgets source files, whereas __examples_dist__ is the directiry 
+that contains simple widgets prepared for use.
+
+  In order to enable example widgets:
   
-  Install example widgets:
-  
-  - deploy all files from __examples_dist__ directory on your http server.
-  - create new model and make sure its uri is  __WidgetTest__ - please use 
-  ctrl-c/ctrl-v, additionally you need to make sure that model with this uri 
-  not exist yet
+  - copy all files from __examples_dist__ directory on your *http server*.
+  - create s new model with uri  __WidgetTest__
   - navigate to SPARQL Editor
-  - paste this SPARQL script
+  - paste the following SPARQL script
   
 ```
     PREFIX myNamespace: <http://myCompany.com/#> 
@@ -67,36 +84,27 @@
     WHERE {}
 ```
   
-  - change http://widget.full.url.address/ to your http server address
+  
+  - replace http://widget.full.url.address/ with the *http server* with widget files
   - select Mode to SPARQL 1.1 Update
   - click submit query
   - navigate to model's list
   - open __WidgetTest__ model
-  - open any concept/concept scheme (if you started with empty model you need to 
-  import or create new items at first)
+  - create a new concept scheme
   
-  __View menu__ should contains 3 additional positions 
+  __View menu__ should contain 3 additional positions 
   ("Panoramio Example Widget", "Wikipedia Example Widget", "Api Presentation Example Widget")
-  
-  Please refer to Configuration documentation for further details [(Configuration Documentation)](doc/Configuration.md)
  
+Please refer to [(Configuration Documentation)](doc/Configuration.md) for further details.
  
- ## Details
- 
- [(Overview)](doc/Overview.md)
- 
- [(Configuration Documentation)](doc/Configuration.md)
-  
- [(ProviderNotifications Configuration Details)](doc/ProviderNotifications.md)
- 
- [(Communication Documentation)](doc/Communication.md)
- 
- [(Api Documentation)](doc/ApiDocumentation.md)
- 
+## Details
 
-  
+For more details on low-level communication protol used by the library, see [(Low-level communication)](doc/Communication.md)
+ 
 ## Build
-Build process compress js src files, build api documentation and run unit tests.
+
+Build process compresses js src files, compiles API documentation and runs unit tests.
+To run the build process checkout git repository and run: 
 
 ```
 npm install

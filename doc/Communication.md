@@ -1,12 +1,11 @@
-## Communication with OM Application
-For communication between the remote widget frame and the OM Application frame 
-__Window.postMessage__ mechanism 
-[(mdn documentation)](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) is used.
+## Low-level communication with OM Application
+WorkbenchWidgetApi uses __Window.postMessage__ mechanism 
+[(mdn documentation)](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage) 
+for communication between remote widgets and the OM Application.
 
 ### Communication Principals
-1. Each transmission starts with _"action message"_ send by the remote widget.
-1. OM Application reply with _"response message"_.
-1. There is only one response message for each action message. 
+1. Each transmission starts with _"action message"_ sent by the remote widget.
+1. OM Application replies with single _"response message"_. 
 1. Each response message contains the results or the reason property, but not both. 
 
 ### Example action message:
@@ -20,8 +19,10 @@ __Window.postMessage__ mechanism
          }
      }
 + **type** - widget sends action type messages only
-+ **key** - one of public method exposed in OM Application api
-+ **data** - data object require "widgetId" property and can handle any additional data expected by particular method, optionally data can has "tag" property witch can be used to match action and response message.  
++ **key** - one of public methods exposed in OM Application API
++ **data** - data object require "widgetId" property and can handle any additional 
+data expected by particular method, optionally data can have "tag" property witch 
+can be used to match action and response message.  
 
 ### Example response message on success:
 
@@ -36,8 +37,8 @@ __Window.postMessage__ mechanism
          "tag":"1234234234678892334"
      }
 + **type** - OM Application sends response type messages only
-+ **key** - one of public method exposed in OM Application api
-+ **results** - when method succeed result property contains requested data - in edge case it is empty object {}   
++ **key** - one of public methods exposed in OM Application API
++ **results** - when method succeeds result property contains requested data   
 
 ### Example response message on error:
 
@@ -50,5 +51,5 @@ __Window.postMessage__ mechanism
          "tag":"1234234234678892334"
      }
   + **type** - OM Application sends response type messages only
-  + **key** - one of public method exposed in OM Application api
-  + **reason** - contains list of errors   
+  + **key** - one of public methods exposed in OM Application API
+  + **reason** - contains list of errors
