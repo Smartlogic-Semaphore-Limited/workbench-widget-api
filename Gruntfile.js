@@ -6,8 +6,8 @@ module.exports = function (grunt) {
     pkg: grunt.file.readJSON('package.json'),
     info: {
       banner: "/****\n" +
-      " * swWidget\n" +
-      " * https://github.com/smatrlogic/swWidget\n" +
+      " * <%= pkg.name %>\n" +
+      " * https://github.com/Smartlogic-Semaphore-Limited/workbench-widget-api\n" +
       " *\n" +
       " * @author <%= pkg.author %>\n" +
       " * @link <%= pkg.link %>\n" +
@@ -25,12 +25,10 @@ module.exports = function (grunt) {
         dest: 'dist/workbench-widget-api.min.js'
       }
     },
-    jsdoc: {
-      dist: {
-        src: ['src/workbench-widget-api.js', 'test/*.js'],
-        options: {
-          destination: 'doc'
-        }
+    jsdoc2md: {
+      oneOutputFile: {
+        src: 'src/*.js',
+        dest: 'doc/ApiDocumentation.md'
       }
     },
     karma: {
@@ -45,28 +43,30 @@ module.exports = function (grunt) {
         expand: true,
         cwd: 'dist',
         src: 'workbench-widget-api.min.js',
-        dest: 'example/'
+        dest: 'examples_src/'
       },
     },
     clean: {
-      build:['dist/', 'doc/']
+      build:['dist/', 'examples_dist/']
     },
     embed: {
       main: {
         files: {
-          'dist/widget.html': 'example/widget.html'
+          'examples_dist/widgetApiPresentation.html': 'examples_src/widgetApiPresentation.html',
+          'examples_dist/widgetWikipedia.html': 'examples_src/widgetWikipedia.html',
+          'examples_dist/widgetPanoramio.html': 'examples_src/widgetPanoramio.html',
         }
       }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-jsdoc');
+  grunt.loadNpmTasks('grunt-jsdoc-to-markdown');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-embed');
 
-  grunt.registerTask('default', ['clean', 'uglify', 'jsdoc', 'copy', 'embed', 'karma']);
+  grunt.registerTask('default', ['clean', 'uglify', 'jsdoc2md', 'copy', 'embed', 'karma']);
 
 }

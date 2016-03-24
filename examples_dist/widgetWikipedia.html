@@ -1,15 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="widgetApp">
+
+<html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <title>Widget Example</title>
+
+  <title>Simple widget wikipedia</title>
   <!-- grunt embed task will embed content of workbench-widget-api.min.js into html -->
   <script>
   /****
-   * swWidget
-   * https://github.com/smatrlogic/swWidget
+   * WorkbenchWidgetApi
+   * https://github.com/Smartlogic-Semaphore-Limited/workbench-widget-api
    *
-   * @author 
+   * @author Smartlogic Semaphore
    * @link 
    * @version 1.0.0
    *
@@ -39,277 +43,68 @@
     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
     integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
     crossorigin="anonymous"></script>
-  <script>
-    var widgetApp = angular.module('widgetApp', []);
-    var api = new WorkbenchWidgetApi();
-    widgetApp.controller('mainCtrl', function ($scope) {
 
-      $scope.data = {};
-      $scope.taskGraphUri = "...";
-      $scope.goToConcept = "...";
-      $scope.goToConceptScheme = "...";
-      $scope.goToRelationship = "...";
-
-      $scope.getCurrentTaskUri = function () {
-        return api.getStateParams();
-      };
-
-      $scope.navigateToItem = function (item) {
-        api.navigateToItem(item);
-      };
-
-      $scope.closeWidget = function () {
-        api.closeWidget();
-      };
-
-      $scope.openWidget = function (targetWidgetId) {
-        api.openWidget(targetWidgetId);
-      };
-
-      $scope.getBackendData = function (dataSource) {
-        return dataSource.example().then(function success(results) {
-          $scope.data[dataSource.name + 'Results'] = JSON.decycle(results);
-          $scope.$apply();
-        }, function error(reason) {
-          $scope.data[dataSource.name + 'Error'] = JSON.decycle(reason);
-          $scope.$apply();
-        });
-      };
-
-      $scope.fetchTopConceptOf = function (conceptScheme) {
-        api.getTopConcepts($scope.stateParams.taskGraphUri, conceptScheme["@id"]).then(function (results) {
-          $scope.goToConcept = results["skos:hasTopConcept"][Math.floor(results["skos:hasTopConcept"].length * Math.random())];
-          $scope.$apply();
-        });
-      };
-
-      $scope.fetchInitialData = function () {
-        api.getConceptSchemes($scope.stateParams.taskGraphUri).
-        then(function (results) {
-          $scope.goToConceptScheme = results[Math.floor(results.length * Math.random())];
-          $scope.$apply();
-          $scope.fetchTopConceptOf($scope.goToConceptScheme);
-        });
-        api.getNarrowerUnfilteredTypes($scope.stateParams.taskGraphUri).then(function (results) {
-          $scope.goToRelationship = results[Math.floor(results.length * Math.random())];
-          $scope.$apply();
-        });
-      };
-
-
-      $scope.getCurrentTaskUri().then(function (stateParams) {
-        $scope.stateParams = stateParams;
-        prepareDataSources();
-        $scope.fetchInitialData();
-        $scope.$apply();
-      });
-
-      function prepareDataSources() {
-
-
-        var config = {
-            showLoadingOverlay: false
-          },
-          dataSourceWitNoParameters = ["getClasses", "getAssociativeUnfilteredTypes", "getBroaderUnfilteredTypes", "getNarrowerUnfilteredTypes", "getSemaphoreSettings"],
-          dataSourceWithItemUri = ["getAssociativeTypes", "getAltLabelProperties", "getAltLabelUnfilteredProperties", "getBroaderTypes", "getMetadataTypes", "getNarrowerTypes"],
-          dataSourceWithItemAndDomainUri = ["getMetadataForDomain"],
-          dataSourcesWithTaskUri = ["getConceptSchemes"],
-          dataSourcesWithTaskAndItemUri = ["getConceptDetails", "getConceptGuid", "getConceptPrefLabels", "getDetailsWithMetadata", "getConceptAltLabels"],
-          dataSourcesWithTaskAndItemUriAndPaging = ["getConceptRelated", "getConceptNarrower", "getConceptBroader", "getTopConcepts"];
-        $scope.dataSources = [];
-        dataSourceWitNoParameters.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "()",
-            example: api[dataSource]
-          });
-        });
-        dataSourceWithItemUri.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(itemUri)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.itemUri)
-            }
-          });
-        });
-        dataSourcesWithTaskAndItemUri.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(taskGraphUri, itemUri)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.taskGraphUri, $scope.stateParams.itemUri)
-            }
-          });
-        });
-        dataSourcesWithTaskAndItemUriAndPaging.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(taskGraphUri, itemUri, limit, offset)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.taskGraphUri, $scope.stateParams.itemUri, 5, 0)
-            }
-          });
-        });
-        dataSourceWithItemAndDomainUri.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(taskGraphUri, domainUri)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.taskGraphUri, 'skos:Concept')
-            }
-          });
-        });
-        dataSourcesWithTaskUri.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(taskGraphUri)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.taskGraphUri)
-            }
-          });
-        });
-
-      }
-    });
-  </script>
 </head>
-<body ng-controller="mainCtrl" class="container">
+
+<body>
+
+<script>
+  var api = new WorkbenchWidgetApi();
+  api.getStateParams().then(function (data) {
+
+    api.getConceptDetails(data.taskGraphUri, data.itemUri).then(function (concept) {
+
+      var conceptName = concept["meta:displayName"]["@value"];
+      $("#iframe").attr("src", "https://en.wikipedia.org/wiki/" + conceptName);
+    })
+  });
+  function openWidget(widgetId) {
+    api.openWidget(widgetId);
+  }
+
+  function closeWidget() {
+
+    api.closeWidget();
+
+  }
+
+</script>
+
 <header class="header bg-info">
+
   <div class="row">
+
     <div class="col-xs-10">
+
       <p class="m-t"></p>
+
     </div>
+
     <div class="col-xs-2 text-right">
-      <a class="close m-t" uib-tooltip="Close" tooltip-placement="bottom"
-         ng-click="closeWidget();">×</a>
+
+      <button class="close m-t" uib-tooltip="Close" tooltip-placement="bottom"
+              onclick="closeWidget()">×
+      </button>
+
     </div>
+
   </div>
+
 </header>
-<h1>Demo Widget</h1>
 
-<div class="panel-group" id="accordion" role="tablist"
-     aria-multiselectable="true">
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab">
-      <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#accordion"
-           href="#getUri" aria-expanded="true" aria-controls="getUri">
-          Get current modelGraphUri, taskGraphUri and itemUri
-        </a>
-      </h4>
-    </div>
-    <div id="getUri" class="panel-collapse collapse in" role="tabpanel"
-         aria-labelledby="headingOne">
-      <div class="panel-body">
-        <dl class="dl-horizontal">
-          <dt>modelGraphUri</dt>
-          <dd><span
-            class="label label-success">{{ stateParams.modelGraphUri }}</span>
-          </dd>
-          <dt>taskGraphUri</dt>
-          <dd><span
-            class="label label-success">{{ stateParams.taskGraphUri }}</span>
-          </dd>
-          <dt>itemUri</dt>
-          <dd><span class="label label-success">{{ stateParams.itemUri }}</span>
-          </dd>
-        </dl>
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingTwo">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse"
-           data-parent="#accordion" href="#collapseTwo"
-           aria-expanded="false"
-           aria-controls="collapseTwo">
-          Get data api
-        </a>
-      </h4>
-    </div>
-    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
-         aria-labelledby="headingTwo">
-      <div class="panel-body">
-        <div ng-repeat="dataSource in dataSources">
-          <h3>{{ dataSource.name }}
-            <button class="btn btn-xs"
-                    ng-click="dataSource.showExample = !dataSource.showExample">
-              example
-            </button>
-          </h3>
-          <pre class="bg-info" ng-if="dataSource.showExample">{{ dataSource.help   | json }}</pre>
-          <button class="btn btn-primary btn-xs"
-                  ng-click="getBackendData(dataSource)">load real data
-          </button>
-          <pre ng-if="data[dataSource.name + 'Results']"
-               style="max-height: 250px;" class="bg-success">{{ data[dataSource.name + "Results"]  | json }}</pre>
-          <pre ng-if="data[dataSource.name + 'Error']"
-               class="bg-danger">{{ data[dataSource.name + "Error"]  | json}}</pre>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingThree">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse"
-           data-parent="#accordion" href="#collapseThree"
-           aria-expanded="false"
-           aria-controls="collapseThree">
-          Send command api
+<h1>Wikipedia widget example</h1>
 
-        </a>
-      </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
-         aria-labelledby="headingThree">
-      <div class="panel-body">
-        <h3>Navigate to item</h3>
+<button onclick="openWidget('http://myCompany.com/#WidgetPanoramio')"
+        class="btn btn-xs">Open widget 'Panoramio'
+</button>
 
+<button onclick="openWidget('http://myCompany.com/#WidgetApi')"
+        class="btn btn-xs">Open widget 'Api'
+</button>
 
-        <div>
-          <h2>random concept</h2>
-          <pre style="height: 100px;">{{ goToConcept | json }}</pre>
-          <button ng-click="navigateToItem(goToConcept)"
-                  class="btn btn-xs">go
-            to concept
-          </button>
-        </div>
-        <div>
-          <h2>random concept scheme</h2>
-          <pre style="height: 100px;">{{ goToConceptScheme | json }}</pre>
-          <button ng-click="navigateToItem(goToConceptScheme)"
-                  class="btn btn-xs">go to concept scheme
-          </button>
-        </div>
-        <div>
-          <h2>random relationship</h2>
-          <pre style="height: 100px;">{{ goToRelationship | json }}</pre>
-          <button ng-click="navigateToItem(goToRelationship)"
-                  class="btn btn-xs">go to relationship
-          </button>
-        </div>
-        <hr/>
-        <button ng-click="closeWidget()"
-                class="btn btn-xs">Close widget
-        </button>
-        <hr/>
-        <button ng-click="openWidget('widget1')"
-                class="btn btn-xs">Open widget 'widget1'
-        </button>
-
-        <hr/>
-        <button ng-click="openWidget('widget2')"
-                class="btn btn-xs">Open widget 'widget2'
-        </button>
-
-      </div>
-    </div>
-  </div>
-</div>
-
+<iframe id="iframe" width="100%" border="0" height="100%"></iframe>
 
 </body>
+
 </html>
+

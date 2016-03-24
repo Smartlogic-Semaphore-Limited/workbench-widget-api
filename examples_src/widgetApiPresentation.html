@@ -2,7 +2,7 @@
 <html lang="en" ng-app="widgetApp">
 <head>
   <meta charset="UTF-8">
-  <title>Widget Example</title>
+  <title>Widget Api Presentation</title>
   <!-- grunt embed task will embed content of workbench-widget-api.min.js into html -->
   <script
     src="workbench-widget-api.min.js" data-embed></script>
@@ -281,18 +281,21 @@
           </button>
         </div>
         <hr/>
+
+
+        <button ng-click="openWidget('http://myCompany.com/#WidgetPanoramio')"
+                class="btn btn-xs">Open widget 'Panoramio'
+        </button>
+
+        <button ng-click="openWidget('http://myCompany.com/#WidgetWikipedia')"
+                class="btn btn-xs">Open widget 'Wikipedia'
+        </button>
+
         <button ng-click="closeWidget()"
                 class="btn btn-xs">Close widget
         </button>
         <hr/>
-        <button ng-click="openWidget('widget1')"
-                class="btn btn-xs">Open widget 'widget1'
-        </button>
 
-        <hr/>
-        <button ng-click="openWidget('widget2')"
-                class="btn btn-xs">Open widget 'widget2'
-        </button>
 
       </div>
     </div>
