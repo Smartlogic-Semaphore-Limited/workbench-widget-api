@@ -24,7 +24,7 @@
    * @constructor
    */
   function WorkbenchWidgetApi(widgetId, debug) {
-    _widgetId = (widgetId || _getUriParameterByName("widgetId"));
+    _widgetId = (widgetId || _getIdFromHash());
     _debug = debug;
     _postMessage(_createMessage(_widgetId, "ready"));
     return {
@@ -455,14 +455,8 @@
     return {valid: !(errors.length), argumentsObj: argumentsObj};
   }
 
-  function _getUriParameterByName(name, url) {
-    if (!url) url = window.location.href;
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-      results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  function _getIdFromHash() {
+    return decodeURIComponent(window.location.hash.substr(1).replace(/\+/g, " "));
   }
 
   function _logMessage() {
