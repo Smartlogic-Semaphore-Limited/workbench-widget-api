@@ -19,7 +19,7 @@
     myNamespace:Widget1 rdfs:label "Example Widget" .
     myNamespace:Widget1 semwidgets:widgetUrl "http://widget.full.url.address/widget.html" .
     myNamespace:Widget1 semwidgets:widgetIcon "fa fa-file-text".
-    myNamespace:Widget1 semwidgets:notificationEmail "nottification@email.address".
+    myNamespace:Widget1 semwidgets:notificationEmail "notification@email.address".
     myNamespace:Widget1 semwidgets:timeoutInSeconds "30".
     myNamespace:Widget1 semwidgets:allowedRole teamwork:viewer 
   }

@@ -61,7 +61,7 @@ that contains simple widgets prepared for use.
       myNamespace:WidgetPanoramio rdfs:label "Panoramio Example Widget" .
       myNamespace:WidgetPanoramio semwidgets:widgetUrl "http://widget.full.url.address/widgetPanoramio.html" .
       myNamespace:WidgetPanoramio semwidgets:widgetIcon "fa fa-file-text".
-      myNamespace:WidgetPanoramio semwidgets:notificationEmail "nottification@email.address".
+      myNamespace:WidgetPanoramio semwidgets:notificationEmail "notification@email.address".
       myNamespace:WidgetPanoramio semwidgets:timeoutInSeconds "30".
       myNamespace:WidgetPanoramio semwidgets:allowedRole teamwork:viewer .
       <urn:x-evn-master:WidgetTest.tch> semwidgets:hasWidget myNamespace:WidgetWikipedia.   
@@ -69,7 +69,7 @@ that contains simple widgets prepared for use.
       myNamespace:WidgetWikipedia rdfs:label "Wikipedia Example Widget" .
       myNamespace:WidgetWikipedia semwidgets:widgetUrl "http://widget.full.url.address/widgetWikipedia.html" .
       myNamespace:WidgetWikipedia semwidgets:widgetIcon "fa fa-wikipedia-w".
-      myNamespace:WidgetWikipedia semwidgets:notificationEmail "nottification@email.address".
+      myNamespace:WidgetWikipedia semwidgets:notificationEmail "notification@email.address".
       myNamespace:WidgetWikipedia semwidgets:timeoutInSeconds "30".
       myNamespace:WidgetWikipedia semwidgets:allowedRole teamwork:viewer .
       <urn:x-evn-master:WidgetTest.tch> semwidgets:hasWidget myNamespace:WidgetApi.   
@@ -77,7 +77,7 @@ that contains simple widgets prepared for use.
       myNamespace:WidgetApi rdfs:label "Api Presentation Example Widget" .
       myNamespace:WidgetApi semwidgets:widgetUrl "http://widget.full.url.address/widgetApiPresentation.html" .
       myNamespace:WidgetApi semwidgets:widgetIcon "fa fa-list".
-      myNamespace:WidgetApi semwidgets:notificationEmail "nottification@email.address".
+      myNamespace:WidgetApi semwidgets:notificationEmail "notification@email.address".
       myNamespace:WidgetApi semwidgets:timeoutInSeconds "30".
       myNamespace:WidgetApi semwidgets:allowedRole teamwork:viewer
     }
