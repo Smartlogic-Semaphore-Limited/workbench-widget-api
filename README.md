@@ -1,113 +1,78 @@
 # WorkbenchWidgetApi
-  WorkbenchWidgetApi is a library to write and integrate widgets with 
-  Smartlogic Semaphore Workbench (OM Application). 
-  Widgets are remote html applications delivered by third party developers.
+  The WorkbenchWidgetApi is provided by Smartlogic Semaphore to enable any developer to write and integrate widgets with 
+  the Smartlogic Semaphore Ontology Editor application.
 
-  Widgets are served inside an iframe embedded in the right panel of OM Application. 
-  They communicate with OM Application and retrieve information about current 
-  model structure.
-  
+  The widgets can be written as separate web applications. To make the model aware of its existence triples are added to the model. Once this is done, the widget will be selectable from the "View" menu on the concept/concept scheme editing pane.
+
+  From then on, whenever a different concept scheme or concept is selected, the widget will be re-opened. a message is sent to the widget, this widget can process this message however the developer chooses.
+
 ## Writing a widget
-1. referencing the library
-  
-  __remember to use full url, not relative url__
-  
-  ```html
-  <script src="http://full.url/swApiWidget.min.js"></script>
-  ```
-    
-   *alternatively, the whole library can be embedded in the html file head section*
+  We provide a number of widget examples in this package. The easiest way to create a new widget is to take one of the example and to modify it.
 
-1. widget initialization
-   
-   ```javascript
-   var widget = new WorkbenchWidgetApi();
-   ```
-   
-   This will send to OM Application the confirmation that widget is initialized.
-    
-1. Example and details
+  Looking through the widgetWikipedia.html example we see a !function line that includes the widget. This could be taken out of the html file by referencing the script file:
 
-See [(Panoramio widget)](examples_src/widgetPanoramio.html) as an example widget implementation.
+      <script src="http://full.url/swApiWidget.min.js"></script>
+    
+  Remember to use the complete URL for this - the relative URL is not sufficient.
+
+  Ignoring the bootstrap styling, the next interesting line is where we define 
+   
+       var api = new WorkbenchWidgetApi();
+    
+   When this is executed, the Ontology Editor application is notified that this widget is loaded.
+
+   After this line we see 
+
+      api.getStateParams().then(function (data) {
+
+      	api.getConceptDetails(data.taskGraphUri, data.itemUri).then(function (concept) {
+
+      		var conceptName = concept["meta:displayName"]["@value"];
+      		$("#iframe").attr("src", "https://en.wikipedia.org/wiki/" + conceptName);
+	   	})
+      });
+
+  This is a simple example of what can be done as the widget is initialized - in this case we load into the iframe the wikipedia document with the same name as the concept or concept scheme selected. 
+
+  This is meant as a very naive example of what can be done at this stage - clearly you can write your own more sophisticated code here.
+ 
+## Configuring the widget ##
+
+  Once you have written the widget and installed it on a web server somewhere, you tell Ontology Editor about it by adding triples to the model. For example, to add in the widgetWikepedia.html example you would add the following triples:
+
+    PREFIX myNamespace: <http://myCompany.com/#>[1] 
+    PREFIX semwidgets: <http://www.smartlogic.com/2016/02/semaphore-widgets#> 
+    WITH <urn:x-evn-master:WidgetTest.tch> [2]
+    INSERT {
+      <urn:x-evn-master:WidgetTest.tch>[2] semwidgets:hasWidget myNamespace:WidgetWikipedia.   
+      myNamespace:WidgetWikipedia a semwidgets:Widget.
+      myNamespace:WidgetWikipedia rdfs:label "Wikipedia Example Widget" .
+      myNamespace:WidgetWikipedia semwidgets:widgetUrl "http://widget.full.url.address/widgetWikipedia.html[3]" .
+      myNamespace:WidgetWikipedia semwidgets:widgetIcon "fa fa-wikipedia-w".
+      myNamespace:WidgetWikipedia semwidgets:notificationEmail "notification@email.address[4]".
+      myNamespace:WidgetWikipedia semwidgets:timeoutInSeconds "30".
+      myNamespace:WidgetWikipedia semwidgets:allowedRole teamwork:viewer .
+    }
+    
+ This will need tuning for your particular installation.
+   
+1. replace the value of this prefix with some sensible value for your installation
+2. this the URI of the model to which you are adding the widget - with .tch appended to it (two locations to amend).
+3. this should be the full URL of the widget application
+4. replace this with a relevant email address for issue reporting. Please refer to [(Provider notifications)](doc/ProviderNotifications.md) for further details.
+
+Once you have run this SPARQL in the SPARQL editor, you can return to the model editing pane. Once a concept or concept scheme is selected, the "View" menu will appear in the editing panel. From this select this widget - and you will see wikipedia documents appearing as concepts and concept schemes are selected.
+
 
 Please refer to [(Api Documentation)](doc/ApiDocumentation.md) for more details.
 
 ## Proxy mechanism
-  To prevent security issues widget html file is proxied from original location to OM Application domain.
-  This implies that all linked resources (js, css, fonts) need to be referenced with full url address or included into html file.
+  To prevent security issues, the widget html file is proxied from its original location to the Ontology Editor Application domain.
+  This means that all linked resources (js, css, fonts) must to be referenced with their full URL.
    
-## Widget configuration and enabling
-
-    
-This section describes the following steps to configure and enable a set of 
-example widgets for OM Application. Here __examples_src__ is the directory that 
-contains simple widgets source files, whereas __examples_dist__ is the directiry 
-that contains simple widgets prepared for use.
-
-  In order to enable example widgets:
-  
-  - copy all files from __examples_dist__ directory on your *http server*.
-  - create s new model with uri  __WidgetTest__
-  - navigate to SPARQL Editor
-  - paste the following SPARQL script
-  
-```
-    PREFIX myNamespace: <http://myCompany.com/#> 
-    PREFIX semwidgets: <http://www.smartlogic.com/2016/02/semaphore-widgets#> 
-    WITH <urn:x-evn-master:WidgetTest.tch> 
-    INSERT {
-      <urn:x-evn-master:WidgetTest.tch> semwidgets:hasWidget myNamespace:WidgetPanoramio.   
-      myNamespace:WidgetPanoramio a semwidgets:Widget.
-      myNamespace:WidgetPanoramio rdfs:label "Panoramio Example Widget" .
-      myNamespace:WidgetPanoramio semwidgets:widgetUrl "http://widget.full.url.address/widgetPanoramio.html" .
-      myNamespace:WidgetPanoramio semwidgets:widgetIcon "fa fa-file-text".
-      myNamespace:WidgetPanoramio semwidgets:notificationEmail "notification@email.address".
-      myNamespace:WidgetPanoramio semwidgets:timeoutInSeconds "30".
-      myNamespace:WidgetPanoramio semwidgets:allowedRole teamwork:viewer .
-      <urn:x-evn-master:WidgetTest.tch> semwidgets:hasWidget myNamespace:WidgetWikipedia.   
-      myNamespace:WidgetWikipedia a semwidgets:Widget.
-      myNamespace:WidgetWikipedia rdfs:label "Wikipedia Example Widget" .
-      myNamespace:WidgetWikipedia semwidgets:widgetUrl "http://widget.full.url.address/widgetWikipedia.html" .
-      myNamespace:WidgetWikipedia semwidgets:widgetIcon "fa fa-wikipedia-w".
-      myNamespace:WidgetWikipedia semwidgets:notificationEmail "notification@email.address".
-      myNamespace:WidgetWikipedia semwidgets:timeoutInSeconds "30".
-      myNamespace:WidgetWikipedia semwidgets:allowedRole teamwork:viewer .
-      <urn:x-evn-master:WidgetTest.tch> semwidgets:hasWidget myNamespace:WidgetApi.   
-      myNamespace:WidgetApi a semwidgets:Widget.
-      myNamespace:WidgetApi rdfs:label "Api Presentation Example Widget" .
-      myNamespace:WidgetApi semwidgets:widgetUrl "http://widget.full.url.address/widgetApiPresentation.html" .
-      myNamespace:WidgetApi semwidgets:widgetIcon "fa fa-list".
-      myNamespace:WidgetApi semwidgets:notificationEmail "notification@email.address".
-      myNamespace:WidgetApi semwidgets:timeoutInSeconds "30".
-      myNamespace:WidgetApi semwidgets:allowedRole teamwork:viewer
-    }
-    WHERE {}
-```
-  
-  
-  - replace http://widget.full.url.address/ with the *http server* with widget files
-  - select Mode to SPARQL 1.1 Update
-  - click submit query
-  - navigate to model's list
-  - open __WidgetTest__ model
-  - create a new concept scheme
-  
-  __View menu__ should contain 3 additional positions 
-  ("Panoramio Example Widget", "Wikipedia Example Widget", "Api Presentation Example Widget")
- 
 Please refer to [(Configuration Documentation)](doc/Configuration.md) for further details.
  
 ## Details
 
 For more details on low-level communication protol used by the library, see [(Low-level communication)](doc/Communication.md)
- 
-## Build
 
-Build process compresses js src files, compiles API documentation and runs unit tests.
-To run the build process checkout git repository and run: 
-
-```
-npm install
-bower install
-grunt
-```
