@@ -46,13 +46,13 @@
     INSERT {
       <urn:x-evn-master:WidgetTest.tch>[2] semwidgets:hasWidget myNamespace:WidgetWikipedia.   
       myNamespace:WidgetWikipedia 
-      a semwidgets:Widget;
-      rdfs:label "Wikipedia Example Widget";
-      semwidgets:widgetUrl "http://widget.full.url.address/widgetWikipedia.html[3]";
-      semwidgets:widgetIcon "fa fa-wikipedia-w";
-      semwidgets:notificationEmail "notification@email.address[4]";
-      semwidgets:timeoutInSeconds "30";
-      semwidgets:allowedRole teamwork:viewer .
+        a semwidgets:Widget;
+        rdfs:label "Wikipedia Example Widget";
+        semwidgets:widgetUrl "http://widget.full.url.address/widgetWikipedia.html[3]";
+        semwidgets:widgetIcon "fa fa-wikipedia-w";
+        semwidgets:notificationEmail "notification@email.address[4]";
+        semwidgets:timeoutInSeconds "30";
+        semwidgets:allowedRole teamwork:viewer .
     } WHERE {}
       
     
