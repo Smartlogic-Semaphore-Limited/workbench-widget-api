@@ -45,14 +45,16 @@
     WITH <urn:x-evn-master:WidgetTest.tch> [2]
     INSERT {
       <urn:x-evn-master:WidgetTest.tch>[2] semwidgets:hasWidget myNamespace:WidgetWikipedia.   
-      myNamespace:WidgetWikipedia a semwidgets:Widget.
-      myNamespace:WidgetWikipedia rdfs:label "Wikipedia Example Widget" .
-      myNamespace:WidgetWikipedia semwidgets:widgetUrl "http://widget.full.url.address/widgetWikipedia.html[3]" .
-      myNamespace:WidgetWikipedia semwidgets:widgetIcon "fa fa-wikipedia-w".
-      myNamespace:WidgetWikipedia semwidgets:notificationEmail "notification@email.address[4]".
-      myNamespace:WidgetWikipedia semwidgets:timeoutInSeconds "30".
-      myNamespace:WidgetWikipedia semwidgets:allowedRole teamwork:viewer .
-    }
+      myNamespace:WidgetWikipedia 
+      a semwidgets:Widget;
+      rdfs:label "Wikipedia Example Widget";
+      semwidgets:widgetUrl "http://widget.full.url.address/widgetWikipedia.html[3]";
+      semwidgets:widgetIcon "fa fa-wikipedia-w";
+      semwidgets:notificationEmail "notification@email.address[4]";
+      semwidgets:timeoutInSeconds "30";
+      semwidgets:allowedRole teamwork:viewer .
+    } WHERE {}
+      
     
  This will need tuning for your particular installation.
    
