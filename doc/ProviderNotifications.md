@@ -41,14 +41,18 @@ notifications' sender account.
 The recommended way to configure the password for the notifications' sender account
 is to store it in secure storage (it will be stored as encrypted). In order to do that:
 
+1. Choose a password key under which the password will be stored. The password key should
+contain '@' sign. For example **EMAIL\_NOTIFICATIONS@PASSWORD\_KEY**.
 1. Go to: [PasswordManagerPage](http://localhost:9080/tbl/swp?_viewClass=pwadmin:PasswordManagerPage)
 1. Click "Add password"
-1. The "User name" field should be filled with a chosen key, for example
-**EMAIL\_NOTIFICATIONS\_KEY**; the URL field should be left empty; the password field
-should be filled with the actual password to the e-mail account.
-1. Click save
+1. The "User name" field should be filled with the first part of the chosen key; in this example:
+**EMAIL\_NOTIFICATIONS**; the URL field should be filled with the second path of the chosen key;
+in this example: **PASSWORD\_KEY**. The password field should be filled with the actual password
+to the e-mail account.
+1. Click "Add password" - a new entry on the list will be created
+1. Confirm the password and click "Save"
 
 Finally, set the **notificationEmail.passwordKey** property to the same value as the
 key used to store the actual password in secure storage. In this example:
-**notificationEmail.passwordKey=EMAIL\_NOTIFICATIONS\_KEY**.
+**notificationEmail.passwordKey=EMAIL\_NOTIFICATIONS@PASSWORD\_KEY**.
 
