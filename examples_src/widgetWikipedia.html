@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <html lang="en">
@@ -25,74 +26,435 @@
         integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
         crossorigin="anonymous">
 
-  <link rel="stylesheet"
-        href="https://bootswatch.com/lumen/bootstrap.min.css">
-  <!-- Latest compiled and minified JavaScript -->
+
+  <link rel="stylesheet" crossorigin="anonymous"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
+
+
+  <link rel="stylesheet" crossorigin="anonymous"
+        href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
+
   <script
     src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
     integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
     crossorigin="anonymous"></script>
 
+  <script>
+    var api = new WorkbenchWidgetApi();
+    api.getStateParams().then(function (data) {
+
+      api.getConceptDetails(data.taskGraphUri, data.itemUri).then(function (concept) {
+
+
+        // Get the pref label of the concept in the current language
+        var conceptName = concept["meta:displayName"]["@value"];
+
+        // Call out to Wikipedia to find out related resources
+        $.ajax({
+          dataType: "json",
+          crossDomain: true,
+          dataType: "jsonp",
+          url: "//en.m.wikipedia.org/w/api.php?action=opensearch&format=json&language=en&uselang=en&type=item&continue=0&search=" + conceptName,
+          success: function (data) {
+            var dLabels = data[1], dDescriptions = data[2], dUrls = data[3],
+              items = [],
+              pageUrl = null;
+            // data  =  [search term, labels[], descriptions[], urls[]]
+            // Note: if description is empty or it end in "may refer to:" it is a disambiguation page
+
+            // If there is a single match or if there is a direct match for the name let's open that one. Same thing if there is a disambiguation page
+
+
+            if (dUrls.length === 1) {
+              pageUrl = dUrls[0];
+            } else {
+              var name = conceptName.toLowerCase();
+              $.each(dLabels, function (key, val) {
+                if (val.toLowerCase() === name) {
+                  pageUrl = dUrls[key];
+                }
+              });
+
+              if (!pageUrl) {
+                var re = new RegExp(".*(may|could) refer to:$");
+                $.each(dLabels, function (key, val) {
+                  if (re.test(val)) {
+                    pageUrl = dUrls[key];
+                  }
+                });
+              }
+
+              if (!pageUrl) {
+                $.each(dLabels, function (key) {
+                  var id = dUrls[key].replace(/.*?\/wiki\//, ''),
+                    line = "<li id=" + id + "><span class='wd-label'>" + dLabels[key] + "</span>";
+                  line += " <span class='wd-description'>" + dDescriptions[key] + "</span>";
+                  line += "</li>";
+                  items.push(line);
+                });
+              }
+            }
+
+            if (pageUrl) {
+              loadPage(pageUrl.replace(/.*?\/wiki\//, ''));
+            } else if (items.length) {
+              $("<h2>" + conceptName + " could refer to:</h2>").appendTo("#widget-content");
+              $("<ul/>", {
+                "class": "wd-results",
+                "id": "wd-results",
+                html: items.join("")
+              }).appendTo("#widget-content");
+            } else {
+              $("<span class='wd-no-results'>No results found on Wikipedia</span>").appendTo("#widget-content");
+            }
+            $('#widget-content').show();
+            $('#widget-error').hide();
+            $('#widget-progress').hide();
+            updateHistoryButtons();
+          }
+        });
+        setupLinks();
+      });
+
+    });
+
+
+    function setupLinks() {
+      $('#widget-content')
+        .off('click', '#wd-results li')
+        .on('click', '#wd-results li', function () {
+          loadPage($(this).attr('id'));
+        });
+
+      $('#widget-content')
+        .off('click', 'a')
+        .on('click', 'a', function (e) {
+          var absoluteDetector = new RegExp('^(?:[a-z]+:)?//', 'i');
+          var $this = $(this), href = $this.attr('href');
+          if(absoluteDetector.test(href)) {
+            $this.attr("target", "_blank");
+          } else if (href.lastIndexOf('#', 0) !== 0) {
+            e.preventDefault();
+            var wikiPage = href.replace('/wiki/', '');
+            loadPage(wikiPage);
+          }
+        });
+      $('#widget-content a').each(function(index, element) {
+        var absoluteDetector = new RegExp('^(?:[a-z]+:)?//', 'i'),
+          href = $(element).attr('href');
+        if(absoluteDetector.test(href)) {
+          $(element).addClass("external");
+        }
+      });
+    };
+
+    function closeWidget() {
+      api.closeWidget();
+    }
+    var myHistory = [], myHistoryIndex = 0;
+
+    function historyBack() {
+      if (myHistory.length > 0 && myHistoryIndex > 0) {
+        myHistoryIndex--;
+        loadPage(myHistory[myHistoryIndex], true);
+      }
+
+    }
+    function historyForward() {
+      if (myHistoryIndex < myHistory.length - 1) {
+        myHistoryIndex++;
+        loadPage(myHistory[myHistoryIndex], true);
+      }
+    }
+
+    function updateHistoryButtons() {
+      if (myHistory.length > 0 && myHistoryIndex > 0) {
+        $("#widget-history-back").removeClass("disabled");
+      } else {
+        $("#widget-history-back").addClass("disabled");
+      }
+      if (myHistoryIndex < myHistory.length - 1) {
+        $("#widget-history-forward").removeClass("disabled");
+      } else {
+        $("#widget-history-forward").addClass("disabled");
+      }
+    }
+    function loadPage(page, fromHistory) {
+      if(!fromHistory) {
+        myHistory = myHistory.slice(0, myHistoryIndex + 1);
+        myHistory.push(page);
+        myHistoryIndex = myHistory.length - 1;
+      }
+      updateHistoryButtons();
+      $('#widget-content').hide();
+      $('#widget-error').hide();
+      $('#widget-progress').show();
+      $.ajax({
+        dataType: "json",
+        crossDomain: true,
+        dataType: "json",
+        url: "//rest.wikimedia.org/en.wikipedia.org/v1/page/mobile-sections/" + page,
+        success: function success(data) {console.log("loadPage success",page, data)
+          $('#widget-content').show();
+          $('#widget-progress').hide();
+          $('#widget-content').html("");
+          if (data.lead) {
+            $('<h2>' + data.lead.displaytitle + '</h2>').appendTo('#widget-content');
+            $.each(data.lead.sections, function (key, val) {
+              if (val.text) {
+                $('<div>' + val.text + '</div>').appendTo('#widget-content');
+              }
+            });
+          }
+
+          if (data['remaining']) {
+
+            var panelGroup = $('<div class="panel-group"></div>');
+            panelGroup.appendTo('#widget-content');
+
+            function toggleChev(e) {
+              $(e.target).prev('.panel-heading').find('span.glyphicon').toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+            };
+            $('.panel-group').on('hide.bs.collapse show.bs.collapse', toggleChev);
+
+
+            function nestArray(inputArray, levelCheck) {
+              var tr; //threshold
+              return inputArray.map(function (x, i, arr) {
+                x.children = arr.map(function (y, j, inArr) {
+                  if ((y[levelCheck] === (x[levelCheck] )) &&
+                    (j > 1) &&
+                    (!tr || tr < y.id)
+                  ) {
+                    //if we have siblings, we set the limit for each section to the
+                    //id of the next sibling
+                    tr = j;
+                  } else if ((y[levelCheck] === (x[levelCheck] + 1)) && //a child has a level directly bigger
+                    (j > i) && //no child is defined before a parent
+                    (!tr || (tr && j <= tr)) //if a threshold is defined, don't add if tr is reached
+                  ) {
+                    y.parent = x.id;
+                    return y;
+                  }
+                }).filter( Boolean );
+                return x;
+              }).filter( Boolean ).filter(function(x) {
+                return x[levelCheck] == 1;
+              });
+            }
+
+
+            function simpleMarkup (structuredData, container) {
+
+              for(var i =0; i < structuredData.length; i++) {
+                var elem = structuredData[i];
+                // Format anchors
+                var valAnchor = elem.anchor.replace(/\./g, '');
+                var groupSection =  $('<div id="wikiSection'+ elem.id +'" class="toclevel'+ elem.toclevel +' panel panel-default"></div>');
+                var heading = $('<div class="panel-heading" data="' + valAnchor + '" role="button" data-toggle="collapse" data-target="#' + valAnchor + '"><span class="font-bold"><span class="glyphicon glyphicon-chevron-down"></span>  ' + elem.line + '</span></div>');
+                var panelContent =  $('<div id="' + valAnchor + '" class="panel-collapse collapse"></div>');
+                var panelbody = $('<div class="panel-body">'+ elem.text +'</div>')
+                var childrenContainer = $('<div class="sectionContent"></div>');
+                var childHeading = $('<h4 class="child-heading">' + elem.line + '</<h4>');
+                var childPanelbody = $('<span>'+ elem.text +'</span>')
+
+                container.append(groupSection);//panel-group > panel-section
+
+                if(elem.toclevel !== 1){
+                  groupSection.append(childHeading);
+                  groupSection.append(childPanelbody);
+                  childPanelbody.append(childrenContainer);
+                  groupSection.removeClass('panel panel-default')
+                } else {
+                  groupSection.append(heading);
+                  groupSection.append(panelContent);
+                  panelContent.append(panelbody);
+                  panelbody.append(childrenContainer);
+                }
+
+                simpleMarkup(elem.children, childrenContainer);
+              }
+
+            }
+
+
+            var structuredWikiDataArray = nestArray(data['remaining']['sections'], 'toclevel');
+
+            simpleMarkup(structuredWikiDataArray, panelGroup);
+
+          }
+
+          // Add BS table formatting
+          $('table').addClass('table table-striped table-condensed');
+          setupLinks();
+        }, error:function(){
+          $('#widget-error').show();
+          $('#widget-progress').hide();
+        }
+      });
+    }
+
+  </script>
+
+  <style>
+
+    /*Some Reset and Wiki overrides*/
+    .btn-close {margin-top:10px;}
+
+    .container{word-wrap: break-word; font-size: 13px;}
+
+    img {margin:10px 0; max-width: 100%;}
+
+    a{
+      color: #0094cc;
+      text-decoration: underline;
+    }
+
+    a:hover, a:focus, a:active{
+      color:#31708f;
+      text-decoration: underline;
+    }
+
+    button{
+      outline:none !important;
+      color:inherit !important;
+    }
+
+    .disabled{
+      cursor:default !important;
+      color:inherit !important;
+    }
+
+    .panel-default>.panel-heading {
+      background-color: #f5f5f5 !important;
+      background-image: none;
+    }
+
+    .panel-group{
+      margin-top:10px;
+    }
+
+    blockquote{
+      font-size: 16px;
+    }
+
+    .quotebox {
+      margin: 10px 0 !important;
+      padding:5px 5px 5px 20px !important;
+      border:none !important;
+      border-left: 5px solid #ccc !important;
+      float: none !important;
+    }
+
+    .wrapper{
+      padding:20px;
+    }
+
+    table{
+      font-size: 11px;
+      background:#fff;
+      width:100% !important;
+    }
+
+    /*reset*/
+    .child-heading{
+      margin:25px 0 5px 0;
+    }
+
+    .toclevel2:first-child .child-heading{
+      margin-top:0;
+    }
+
+    .thumbinner{
+      width:100% !important;
+    }
+
+    .gallery{
+      list-style: none;
+    }
+
+    .gallery .thumb div{
+      margin-bottom: 0 !important;
+    }
+
+    figure img{
+      width:100%;
+      height:100%;
+    }
+
+    ul, ol{
+      padding:0 15px;
+    }
+
+    a.external{
+      color:#FF5722;
+    }
+
+    #wd-results {
+      list-style: none;
+      padding:0;
+    }
+
+    #wd-results li span.wd-label {
+      color: #0094cc;
+      text-decoration: none;
+      cursor: pointer;
+      display: block;
+      font-weight: bold;
+      font-size: 16px !important;
+    }
+    #wd-results li span.wd-label:hover {
+      text-decoration: underline;
+    }
+
+    #wd-results li span.wd-label:hover {
+      text-decoration: underline;
+    }
+
+    #wd-results .wd-description{
+      margin-bottom: 10px !important;
+      display:block;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #efefef;
+      cursor: pointer;
+    }
+
+  </style>
+
 </head>
 
 <body>
 
-<script>
-  var api = new WorkbenchWidgetApi();
-  api.getStateParams().then(function (data) {
+<div class="container animated fadeIn">
+  <button class="btn btn-sm btn-close pull-right" onclick="closeWidget()">
+    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+  </button>
+  <button class="btn btn-sm btn-close" onclick="historyBack()" id="widget-history-back">
+    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back
+  </button>
+  <button class="btn btn-sm btn-close" onclick="historyForward()" id="widget-history-forward">
+    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span> Forward
+  </button>
+</div>
 
-    api.getConceptDetails(data.taskGraphUri, data.itemUri).then(function (concept) {
-
-      var conceptName = concept["meta:displayName"]["@value"];
-      $("#iframe").attr("src", "https://en.wikipedia.org/wiki/" + conceptName);
-    })
-  });
-  function openWidget(widgetId) {
-    api.openWidget(widgetId);
-  }
-
-  function closeWidget() {
-
-    api.closeWidget();
-
-  }
-
-</script>
-
-<header class="header bg-info">
-
-  <div class="row">
-
-    <div class="col-xs-10">
-
-      <p class="m-t"></p>
-
-    </div>
-
-    <div class="col-xs-2 text-right">
-
-      <button class="close m-t" uib-tooltip="Close" tooltip-placement="bottom"
-              onclick="closeWidget()">×
-      </button>
-
-    </div>
-
+<div class="container animated fadeIn" id="widget-error" style="display:none;">
+  <div class="wrapper text-center">
+    <h1><span class="text-warning glyphicon glyphicon-alert" aria-hidden="true"></span></h1>
+    <h4>Sorry we can not find what you was looking for...</h4>
+    <p><button class="btn btn-sm btn-close" onclick="historyBack()">
+      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Back
+    </button></p>
   </div>
+</div>
 
-</header>
+<div class="container animated fadeIn" id="widget-content" style="display:none;">
+</div>
 
-<h1>Wikipedia widget example</h1>
-
-<button onclick="openWidget('http://myCompany.com/#WidgetPanoramio')"
-        class="btn btn-xs">Open widget 'Panoramio'
-</button>
-
-<button onclick="openWidget('http://myCompany.com/#WidgetApi')"
-        class="btn btn-xs">Open widget 'Api'
-</button>
-
-<iframe id="iframe" width="100%" border="0" height="100%"></iframe>
-
+<div class="container animated fadeIn" id="widget-progress">
+  <div class="wrapper text-center">
+    <h4><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Loading...</h4>
+  </div>
+</div>
 </body>
 
 </html>
