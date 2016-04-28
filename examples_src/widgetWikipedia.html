@@ -193,7 +193,7 @@
         dataType: "json",
         crossDomain: true,
         dataType: "json",
-        url: "//rest.wikimedia.org/en.wikipedia.org/v1/page/mobile-sections/" + page,
+        url: "//en.wikipedia.org/api/rest_v1/page/mobile-sections/" + page,
         success: function success(data) {console.log("loadPage success",page, data)
           $('#widget-content').show();
           $('#widget-progress').hide();
