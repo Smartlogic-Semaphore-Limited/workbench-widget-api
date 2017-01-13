@@ -25,7 +25,7 @@ that contains simple widgets prepared for use.
       myNamespace:WidgetPanoramio semwidgets:widgetIcon "fa fa-file-text".
       myNamespace:WidgetPanoramio semwidgets:notificationEmail "notification@email.address".
       myNamespace:WidgetPanoramio semwidgets:timeoutInSeconds "30".
-      myNamespace:WidgetPanoramio semwidgets:allowedRole teamwork:viewer .
+      myNamespace:WidgetPanoramio semwidgets:allowedRole sempermissions:viewer .
       <urn:x-evn-master:WidgetTest.tch> semwidgets:hasWidget myNamespace:WidgetWikipedia.   
       myNamespace:WidgetWikipedia a semwidgets:Widget.
       myNamespace:WidgetWikipedia rdfs:label "Wikipedia Example Widget" .
@@ -33,7 +33,7 @@ that contains simple widgets prepared for use.
       myNamespace:WidgetWikipedia semwidgets:widgetIcon "fa fa-wikipedia-w".
       myNamespace:WidgetWikipedia semwidgets:notificationEmail "notification@email.address".
       myNamespace:WidgetWikipedia semwidgets:timeoutInSeconds "30".
-      myNamespace:WidgetWikipedia semwidgets:allowedRole teamwork:viewer .
+      myNamespace:WidgetWikipedia semwidgets:allowedRole sempermissions:viewer .
       <urn:x-evn-master:WidgetTest.tch> semwidgets:hasWidget myNamespace:WidgetApi.   
       myNamespace:WidgetApi a semwidgets:Widget.
       myNamespace:WidgetApi rdfs:label "Api Presentation Example Widget" .
@@ -41,7 +41,7 @@ that contains simple widgets prepared for use.
       myNamespace:WidgetApi semwidgets:widgetIcon "fa fa-list".
       myNamespace:WidgetApi semwidgets:notificationEmail "notification@email.address".
       myNamespace:WidgetApi semwidgets:timeoutInSeconds "30".
-      myNamespace:WidgetApi semwidgets:allowedRole teamwork:viewer
+      myNamespace:WidgetApi semwidgets:allowedRole sempermissions:viewer
     }
     WHERE {}
 ```

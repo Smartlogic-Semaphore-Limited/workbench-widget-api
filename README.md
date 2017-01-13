@@ -52,7 +52,7 @@
         semwidgets:widgetIcon "fa fa-wikipedia-w";
         semwidgets:notificationEmail "notification@email.address[4]";
         semwidgets:timeoutInSeconds "30";
-        semwidgets:allowedRole teamwork:viewer .
+        semwidgets:allowedRole sempermissions:viewer .
     } WHERE {}
       
     
