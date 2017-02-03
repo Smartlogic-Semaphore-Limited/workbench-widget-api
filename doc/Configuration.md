@@ -12,6 +12,7 @@
  ```
   PREFIX myNamespace: <http://myCompany.com/#> 
   PREFIX semwidgets: <http://www.smartlogic.com/2016/02/semaphore-widgets#> 
+  PREFIX sempermissions: <http://www.smartlogic.com/2015/11/semaphore-permissions#>
   WITH <urn:x-evn-master:myExample.tch> 
   INSERT {
     <urn:x-evn-master:myExample.tch> semwidgets:hasWidget myNamespace:Widget1.   

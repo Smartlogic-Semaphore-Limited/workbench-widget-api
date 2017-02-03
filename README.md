@@ -42,6 +42,7 @@
 
     PREFIX myNamespace: <http://myCompany.com/#>[1] 
     PREFIX semwidgets: <http://www.smartlogic.com/2016/02/semaphore-widgets#> 
+    PREFIX sempermissions: <http://www.smartlogic.com/2015/11/semaphore-permissions#>
     WITH <urn:x-evn-master:WidgetTest.tch> [2]
     INSERT {
       <urn:x-evn-master:WidgetTest.tch>[2] semwidgets:hasWidget myNamespace:WidgetWikipedia.   
