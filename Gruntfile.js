@@ -53,8 +53,7 @@ module.exports = function (grunt) {
       main: {
         files: {
           'examples_dist/widgetApiPresentation.html': 'examples_src/widgetApiPresentation.html',
-          'examples_dist/widgetWikipedia.html': 'examples_src/widgetWikipedia.html',
-          'examples_dist/widgetPanoramio.html': 'examples_src/widgetPanoramio.html',
+          'examples_dist/widgetWikipedia.html': 'examples_src/widgetWikipedia.html'
         }
       }
     }
