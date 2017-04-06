@@ -18,14 +18,6 @@ that contains simple widgets prepared for use.
     PREFIX semwidgets: <http://www.smartlogic.com/2016/02/semaphore-widgets#> 
     WITH <urn:x-evn-master:WidgetTest.tch> 
     INSERT {
-      <urn:x-evn-master:WidgetTest.tch> semwidgets:hasWidget myNamespace:WidgetPanoramio.   
-      myNamespace:WidgetPanoramio a semwidgets:Widget.
-      myNamespace:WidgetPanoramio rdfs:label "Panoramio Example Widget" .
-      myNamespace:WidgetPanoramio semwidgets:widgetUrl "http://widget.full.url.address/widgetPanoramio.html" .
-      myNamespace:WidgetPanoramio semwidgets:widgetIcon "fa fa-file-text".
-      myNamespace:WidgetPanoramio semwidgets:notificationEmail "notification@email.address".
-      myNamespace:WidgetPanoramio semwidgets:timeoutInSeconds "30".
-      myNamespace:WidgetPanoramio semwidgets:allowedRole sempermissions:viewer .
       <urn:x-evn-master:WidgetTest.tch> semwidgets:hasWidget myNamespace:WidgetWikipedia.   
       myNamespace:WidgetWikipedia a semwidgets:Widget.
       myNamespace:WidgetWikipedia rdfs:label "Wikipedia Example Widget" .
@@ -54,7 +46,7 @@ that contains simple widgets prepared for use.
  5. open __WidgetTest__ model
  6. create a new concept scheme
   
-  __View menu__ should contain 3 additional positions 
-  ("Panoramio Example Widget", "Wikipedia Example Widget", "Api Presentation Example Widget")
+  __View menu__ should contain 2 additional positions 
+  ("Wikipedia Example Widget", "Api Presentation Example Widget")
  
 Please refer to [(Configuration Documentation)](../doc/Configuration.md) for further details.
