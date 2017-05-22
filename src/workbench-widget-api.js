@@ -268,10 +268,128 @@
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
-      "getTopConcepts": _dataSourcesWithTaskAndItemUriAndPaging("getTopConcepts")
+      "getTopConcepts": _dataSourcesWithTaskAndItemUriAndPaging("getTopConcepts"),
+
+      /**
+       * Actions can be used to use Workbench functionality directly.
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+
+      actions: {
+        /**
+         * Calls action.
+         * @param {String} action - name of the particular action.
+         * @param {Object} data - data needed for particular action.
+         * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+         */
+        call: _actionCall,
+        /**
+         * Shows form for add new Preferred Label.
+         * @param name - default value for the name field.
+         * @param langCode - default language code to be selected - if not exist
+         * default code for the system is used.
+         * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+         */
+        showFormAddPrefLabel: function (name, langCode) {
+          return _actionCall("showFormAddPrefLabel", {
+            name: name,
+            langCode: langCode
+          });
+        },
+        /**
+         * Shows form for add new Alternative Label.
+         * @param name - default value for the name field.
+         * @param langCode - default language code to be selected - if not exist
+         * @param typeUri - default type uri to be selected - if not exist
+         * default type for the system is used.
+         * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+         */
+        showFormAddAltLabel: function (name, langCode, typeUri) {
+          return _actionCall("showFormAddAltLabel", {
+            name: name,
+            langCode: langCode,
+            typeUri: typeUri
+          });
+        },
+        /**
+         * Shows form for add new Multiple Alternative Labels.
+         * @param names {Array} - default value for the names field.
+         * @param langCode - default language code to be selected - if not exist
+         * @param typeUri - default type uri to be selected - if not exist
+         * default type for the system is used.
+         * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+         */
+        showFormAddMultipleAltLabel: function (names, langCode, typeUri) {
+          return _actionCall("showFormAddMultipleAltLabel", {
+            names: names,
+            langCode: langCode,
+            typeUri: typeUri
+          });
+        },
+        /**
+         * Shows form for add new Related relation to the target Concept.
+         * @param typeUri - default type uri to be selected - if not exist
+         * default type for the system is used.
+         * @param targetUri - Target concept uri to be selected - if not exist
+         * empty value is used.
+         * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+         */
+        showFormAddRelated: function (typeUri, targetUri, targetName) {
+          return _actionCall("showFormAddRelated", {
+            typeUri: typeUri,
+            targetUri: targetUri,
+            targetName: targetName
+          });
+        },
+        /**
+         * Shows form for add new Broader relation to the target Concept.
+         * @param typeUri - default type uri to be selected - if not exist
+         * default type for the system is used.
+         * @param targetUri - Target concept uri to be selected - if not exist
+         * empty value is used.
+         * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+         */
+        showFormAddBroader: function (typeUri, targetUri, targetName) {
+          return _actionCall("showFormAddBroader", {
+            typeUri: typeUri,
+            targetUri: targetUri,
+            targetName: targetName
+          });
+        },
+        /**
+         * Shows form for add new Narrower relation to the target Concept.
+         * @param typeUri - default type uri to be selected - if not exist
+         * default type for the system is used.
+         * @param targetUri - Target concept uri to be selected - if not exist
+         * empty value is used.
+         * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+         */
+        showFormAddNarrower: function (typeUri, targetUri, targetName) {
+          return _actionCall("showFormAddNarrower", {
+            typeUri: typeUri,
+            targetUri: targetUri,
+            targetName: targetName
+          });
+        }
+      }
 
     };
 
+
+  }
+
+  function _actionCall (action, data) {
+    var message = _createMessage(_widgetId, "callAction"),
+      needs = [
+        {name: "action", type: "String"},
+        {name: "data", type: "Object"}
+      ],
+      preparedArguments = _prepareArguments(needs, arguments, "callAction");
+    if (preparedArguments.valid) {
+      message.data.action = preparedArguments.argumentsObj.action;
+      message.data.data = preparedArguments.argumentsObj.data;
+      return _postMessage(message);
+    }
   }
 
   function _addCallee(array, calle) {

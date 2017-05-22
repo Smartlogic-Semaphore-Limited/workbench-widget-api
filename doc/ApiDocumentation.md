@@ -4,6 +4,9 @@
 <dt><a href="#widgetId">widgetId</a></dt>
 <dd><p>Current widget id.</p>
 </dd>
+<dt><a href="#actions">actions</a> ⇒ <code>Promise</code></dt>
+<dd><p>Actions can be used to use Workbench functionality directly.</p>
+</dd>
 </dl>
 
 ## Functions
@@ -95,6 +98,116 @@
 Current widget id.
 
 **Kind**: global variable  
+<a name="actions"></a>
+
+## actions ⇒ <code>Promise</code>
+Actions can be used to use Workbench functionality directly.
+
+**Kind**: global variable  
+**Returns**: <code>Promise</code> - Promise - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+* [actions](#actions) ⇒ <code>Promise</code>
+    * [.call](#actions.call) ⇒ <code>Promise</code>
+    * [.showFormAddPrefLabel(name, langCode)](#actions.showFormAddPrefLabel) ⇒ <code>Promise</code>
+    * [.showFormAddAltLabel(name, langCode, typeUri)](#actions.showFormAddAltLabel) ⇒ <code>Promise</code>
+    * [.showFormAddMultipleAltLabel(names, langCode, typeUri)](#actions.showFormAddMultipleAltLabel) ⇒ <code>Promise</code>
+    * [.showFormAddRelated(typeUri, targetUri)](#actions.showFormAddRelated) ⇒ <code>Promise</code>
+    * [.showFormAddBroader(typeUri, targetUri)](#actions.showFormAddBroader) ⇒ <code>Promise</code>
+    * [.showFormAddNarrower(typeUri, targetUri)](#actions.showFormAddNarrower) ⇒ <code>Promise</code>
+
+<a name="actions.call"></a>
+
+### actions.call ⇒ <code>Promise</code>
+Calls action.
+
+**Kind**: static property of <code>[actions](#actions)</code>  
+**Returns**: <code>Promise</code> - Promise - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| action | <code>String</code> | name of the particular action. |
+| data | <code>Object</code> | data needed for particular action. |
+
+<a name="actions.showFormAddPrefLabel"></a>
+
+### actions.showFormAddPrefLabel(name, langCode) ⇒ <code>Promise</code>
+Shows form for add new Preferred Label.
+
+**Kind**: static method of <code>[actions](#actions)</code>  
+**Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Description |
+| --- | --- |
+| name | default value for the name field. |
+| langCode | default language code to be selected - if not exist default code for the system is used. |
+
+<a name="actions.showFormAddAltLabel"></a>
+
+### actions.showFormAddAltLabel(name, langCode, typeUri) ⇒ <code>Promise</code>
+Shows form for add new Alternative Label.
+
+**Kind**: static method of <code>[actions](#actions)</code>  
+**Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Description |
+| --- | --- |
+| name | default value for the name field. |
+| langCode | default language code to be selected - if not exist |
+| typeUri | default type uri to be selected - if not exist default type for the system is used. |
+
+<a name="actions.showFormAddMultipleAltLabel"></a>
+
+### actions.showFormAddMultipleAltLabel(names, langCode, typeUri) ⇒ <code>Promise</code>
+Shows form for add new Multiple Alternative Labels.
+
+**Kind**: static method of <code>[actions](#actions)</code>  
+**Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| names | <code>Array</code> | default value for the names field. |
+| langCode |  | default language code to be selected - if not exist |
+| typeUri |  | default type uri to be selected - if not exist default type for the system is used. |
+
+<a name="actions.showFormAddRelated"></a>
+
+### actions.showFormAddRelated(typeUri, targetUri) ⇒ <code>Promise</code>
+Shows form for add new Related relation to the target Concept.
+
+**Kind**: static method of <code>[actions](#actions)</code>  
+**Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Description |
+| --- | --- |
+| typeUri | default type uri to be selected - if not exist default type for the system is used. |
+| targetUri | Target concept uri to be selected - if not exist empty value is used. |
+
+<a name="actions.showFormAddBroader"></a>
+
+### actions.showFormAddBroader(typeUri, targetUri) ⇒ <code>Promise</code>
+Shows form for add new Broader relation to the target Concept.
+
+**Kind**: static method of <code>[actions](#actions)</code>  
+**Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Description |
+| --- | --- |
+| typeUri | default type uri to be selected - if not exist default type for the system is used. |
+| targetUri | Target concept uri to be selected - if not exist empty value is used. |
+
+<a name="actions.showFormAddNarrower"></a>
+
+### actions.showFormAddNarrower(typeUri, targetUri) ⇒ <code>Promise</code>
+Shows form for add new Narrower relation to the target Concept.
+
+**Kind**: static method of <code>[actions](#actions)</code>  
+**Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Description |
+| --- | --- |
+| typeUri | default type uri to be selected - if not exist default type for the system is used. |
+| targetUri | Target concept uri to be selected - if not exist empty value is used. |
+
 <a name="getStateParams"></a>
 
 ## getStateParams() ⇒ <code>Promise</code>
