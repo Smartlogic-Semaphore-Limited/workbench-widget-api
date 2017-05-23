@@ -33,7 +33,15 @@ that contains simple widgets prepared for use.
       myNamespace:WidgetApi semwidgets:widgetIcon "fa fa-list".
       myNamespace:WidgetApi semwidgets:notificationEmail "notification@email.address".
       myNamespace:WidgetApi semwidgets:timeoutInSeconds "30".
-      myNamespace:WidgetApi semwidgets:allowedRole sempermissions:viewer
+      myNamespace:WidgetApi semwidgets:allowedRole sempermissions:viewer .
+      <urn:x-evn-master:WidgetTest.tch> semwidgets:hasWidget myNamespace:WidgetSolr.   
+      myNamespace:WidgetSolr a semwidgets:Widget.
+      myNamespace:WidgetSolr rdfs:label "Lexical Resources Example Widget" .
+      myNamespace:WidgetSolr semwidgets:widgetUrl "http://widget.full.url.address/widgetLexicalResources.html" .
+      myNamespace:WidgetSolr semwidgets:widgetIcon "fa fa-puzzle-piece".
+      myNamespace:WidgetSolr semwidgets:notificationEmail "notification@email.address".
+      myNamespace:WidgetSolr semwidgets:timeoutInSeconds "30".
+      myNamespace:WidgetSolr semwidgets:allowedRole sempermissions:viewer
     }
     WHERE {}
 ```

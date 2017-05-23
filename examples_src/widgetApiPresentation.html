@@ -85,6 +85,11 @@
         });
       };
 
+      $scope.callAction = function() {
+        var name = arguments[0];
+        var params = Array.prototype.slice.call(arguments, 1);
+        api.actions[name].apply(this, params);
+      };
 
       $scope.getCurrentTaskUri().then(function (stateParams) {
         $scope.stateParams = stateParams;
@@ -290,6 +295,88 @@
                 class="btn btn-xs">Close widget
         </button>
         <hr/>
+
+
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingFour">
+      <h4 class="panel-title">
+        <a class="collapsed" role="button" data-toggle="collapse"
+           data-parent="#accordion" href="#collapseFour"
+           aria-expanded="false"
+           aria-controls="collapseFour">
+         Call action api
+
+        </a>
+      </h4>
+    </div>
+    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel"
+         aria-labelledby="headingThree">
+      <div class="panel-body">
+        <h3>Call action api</h3>
+
+        <div>
+          <h2>Add Pref label</h2>
+          <input type="text" ng-model="prefLabelName" placeholder="name" />
+          <input type="text" ng-model="prefLabelLang" placeholder="lang code" />
+          <button id="showFormAddPrefLabel"
+                  ng-click="callAction('showFormAddPrefLabel', prefLabelName, prefLabelLang)"
+                  class="btn btn-xs">open
+          </button>
+        </div>
+        <div>
+          <h2>Add Alt label</h2>
+          <input type="text" ng-model="altLabelName" placeholder="name" />
+          <input type="text" ng-model="altLabelLang" placeholder="lang code" />
+          <input type="text" ng-model="altTypeUri" placeholder="type uri" />
+          <button id="showFormAddAltLabel"
+                  ng-click="callAction('showFormAddAltLabel', altLabelName, altLabelLang, altTypeUri)"
+                  class="btn btn-xs">open
+          </button>
+        </div>
+        <div>
+          <h2>Add Multiple Alt label</h2>
+          <textarea ng-model="altMultiLabelName" placeholder="Labels (One per row)" ></textarea>
+          <input type="text" ng-model="altMultiLabelLang" placeholder="lang code" />
+          <input type="text" ng-model="altMultiLabelType" placeholder="type uri" />
+          <button id="showFormAddMultipleAltLabel"
+                  ng-click="callAction('showFormAddMultipleAltLabel', altMultiLabelName.split('\n'), altMultiLabelLang, altMultiLabelType)"
+                  class="btn btn-xs">open
+          </button>
+        </div>
+
+        <div>
+          <h2>Add Related</h2>
+          <input type="text" ng-model="relatedTypeUri" placeholder="type uri" />
+          <input type="text" ng-model="relatedTargetUri" placeholder="target uri" />
+          <input type="text" ng-model="relatedTargetName" placeholder="target name" />
+          <button id="showFormAddRelated"
+                  ng-click="callAction('showFormAddRelated', relatedTypeUri, relatedTargetUri, relatedTargetName)"
+                  class="btn btn-xs">open
+          </button>
+        </div>
+        <div>
+          <h2>Add Broader</h2>
+          <input type="text" ng-model="broaderTypeUri" placeholder="type uri" />
+          <input type="text" ng-model="broaderTargetUri" placeholder="target uri" />
+          <input type="text" ng-model="broaderTargetName" placeholder="target name" />
+          <button id="showFormAddBroader"
+                  ng-click="callAction('showFormAddBroader', broaderTypeUri, broaderTargetUri, broaderTargetName)"
+                  class="btn btn-xs">open
+          </button>
+        </div>
+        <div>
+          <h2>Add Narrower</h2>
+          <input type="text" ng-model="narrowerTypeUri" placeholder="type uri" />
+          <input type="text" ng-model="narrowerTargetUri" placeholder="target uri" />
+          <input type="text" ng-model="narrowerTargetName" placeholder="target name" />
+          <button id="showFormAddNarrower"
+                  ng-click="callAction('showFormAddNarrower', narrowerTypeUri, narrowerTargetUri, narrowerTargetName)"
+                  class="btn btn-xs">open
+          </button>
+        </div>
 
 
       </div>

@@ -18,7 +18,7 @@ module.exports = function (grunt) {
     },
     uglify: {
       options: {
-        banner: '<%= info.banner %>',
+        banner: '<%= info.banner %>'
       },
       dist: {
         src: ['bower_components/q/q.js', 'lib/*.js', 'src/*.js'],
@@ -53,6 +53,7 @@ module.exports = function (grunt) {
       main: {
         files: {
           'examples_dist/widgetApiPresentation.html': 'examples_src/widgetApiPresentation.html',
+          'examples_dist/widgetLexicalResources.html': 'examples_src/widgetLexicalResources.html',
           'examples_dist/widgetWikipedia.html': 'examples_src/widgetWikipedia.html'
         }
       }
@@ -68,4 +69,4 @@ module.exports = function (grunt) {
 
   grunt.registerTask('default', ['clean', 'uglify', 'jsdoc2md', 'copy', 'embed', 'karma']);
 
-}
+};

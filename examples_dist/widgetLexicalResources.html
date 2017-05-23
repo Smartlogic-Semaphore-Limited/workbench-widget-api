@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="widgetApp">
+
+<html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <title>Widget Api Presentation</title>
-  <!-- grunt embed task will embed content of workbench-widget-api.min.js into html -->
+
+  <title>Solr :: Concept usage</title>
   <script>
   /****
    * WorkbenchWidgetApi
@@ -19,382 +22,271 @@
   </script>
   <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
   <script
-    src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+  src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
-        crossorigin="anonymous">
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+  integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+  crossorigin="anonymous">
 
   <!-- Optional theme -->
   <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
-        integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
-        crossorigin="anonymous">
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+  integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
+  crossorigin="anonymous">
 
-  <link rel="stylesheet"
-        href="https://bootswatch.com/lumen/bootstrap.min.css">
-  <!-- Latest compiled and minified JavaScript -->
+  
+  <link rel="stylesheet" crossorigin="anonymous"
+  href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
+
+
+  <link rel="stylesheet" crossorigin="anonymous"
+  href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/flatly/bootstrap.min.css">
+
   <script
-    src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-    integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-    crossorigin="anonymous"></script>
+  src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+  integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+  crossorigin="anonymous"></script>
+
   <script>
-    var widgetApp = angular.module('widgetApp', []);
     var api = new WorkbenchWidgetApi();
-    widgetApp.controller('mainCtrl', function ($scope) {
+    var labelCount = 0;
 
-      $scope.data = {};
-      $scope.taskGraphUri = "...";
-      $scope.goToConcept = "...";
-      $scope.goToConceptScheme = "...";
-      $scope.goToRelationship = "...";
+    api.getStateParams().then(function (data) {
+    // Get the guid of the current concept, that's what content is tagged with in Solr
+    api.getConceptGuid(data.taskGraphUri, data.itemUri).then(function (concept) {
+      var guid = concept["sem:guid"][0]["@value"];
 
-      $scope.getCurrentTaskUri = function () {
-        return api.getStateParams();
-      };
+		// Get the pref label of the concept in the current language so we can show it.
+		api.getConceptDetails(data.taskGraphUri, data.itemUri).then(function (concept) {
+			// Note that this is nested as we could otherwise call solr before the GUID call has returned
+			
+			var conceptName = concept["meta:displayName"]["@value"];
+			//console.log("guid: " + guid + " concept: " + conceptName);
 
-      $scope.navigateToItem = function (item) {
-        api.navigateToItem(item);
-      };
-
-      $scope.closeWidget = function () {
-        api.closeWidget();
-      };
-
-      $scope.openWidget = function (targetWidgetId) {
-        api.openWidget(targetWidgetId);
-      };
-
-      $scope.getBackendData = function (dataSource) {
-        return dataSource.example().then(function success(results) {
-          $scope.data[dataSource.name + 'Results'] = JSON.decycle(results);
-          $scope.$apply();
-        }, function error(reason) {
-          $scope.data[dataSource.name + 'Error'] = JSON.decycle(reason);
-          $scope.$apply();
-        });
-      };
-
-      $scope.fetchTopConceptOf = function (conceptScheme) {
-        api.getTopConcepts($scope.stateParams.taskGraphUri, conceptScheme["@id"]).then(function (results) {
-          $scope.goToConcept = results["skos:hasTopConcept"][Math.floor(results["skos:hasTopConcept"].length * Math.random())];
-          $scope.$apply();
-        });
-      };
-
-      $scope.fetchInitialData = function () {
-        api.getConceptSchemes($scope.stateParams.taskGraphUri).
-        then(function (results) {
-          $scope.goToConceptScheme = results[Math.floor(results.length * Math.random())];
-          $scope.$apply();
-          $scope.fetchTopConceptOf($scope.goToConceptScheme);
-        });
-        api.getNarrowerUnfilteredTypes($scope.stateParams.taskGraphUri).then(function (results) {
-          $scope.goToRelationship = results[Math.floor(results.length * Math.random())];
-          $scope.$apply();
-        });
-      };
-
-      $scope.callAction = function() {
-        var name = arguments[0];
-        var params = Array.prototype.slice.call(arguments, 1);
-        api.actions[name].apply(this, params);
-      };
-
-      $scope.getCurrentTaskUri().then(function (stateParams) {
-        $scope.stateParams = stateParams;
-        prepareDataSources();
-        $scope.fetchInitialData();
-        $scope.$apply();
-      });
-
-      function prepareDataSources() {
-
-
-        var config = {
-            showLoadingOverlay: false
-          },
-          dataSourceWitNoParameters = ["getClasses", "getAssociativeUnfilteredTypes", "getBroaderUnfilteredTypes", "getNarrowerUnfilteredTypes", "getSemaphoreSettings"],
-          dataSourceWithItemUri = ["getAssociativeTypes", "getAltLabelProperties", "getAltLabelUnfilteredProperties", "getBroaderTypes", "getMetadataTypes", "getNarrowerTypes"],
-          dataSourceWithItemAndDomainUri = ["getMetadataForDomain"],
-          dataSourcesWithTaskUri = ["getConceptSchemes"],
-          dataSourcesWithTaskAndItemUri = ["getConceptDetails", "getConceptGuid", "getConceptPrefLabels", "getDetailsWithMetadata", "getConceptAltLabels"],
-          dataSourcesWithTaskAndItemUriAndPaging = ["getConceptRelated", "getConceptNarrower", "getConceptBroader", "getTopConcepts"];
-        $scope.dataSources = [];
-        dataSourceWitNoParameters.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "()",
-            example: api[dataSource]
+			// Call out to Solr to find tagged documents
+			$.ajax({
+				dataType: "json",
+				crossDomain: true,
+				dataType: "json",
+        url: "//ironman.smartlogic.com/LexicalResources/lookup?q=" + conceptName,
+        success: function (data) {
+         var items = [];
+         $.each(data["WordNetEntries"], function (index, elt) {
+          line = "<li id=" + elt["id"] + "><h4 class='wd-label'>" + elt["label"];
+          line += " <small>(" + elt["pos"] + ")</small></h4>";
+          var alt = elt["alternatives"];
+          line += "<div class='add-to-concept'>";
+          if (alt && alt.length) {
+           $.each(alt, function(i,e) {
+            line += "<a title='Add as an alternative label' class='btn btn-sm btn-default' id='" + elt["id"] + "-" + i + "'>" + e + "</a>";
           });
-        });
-        dataSourceWithItemUri.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(itemUri)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.itemUri)
-            }
-          });
-        });
-        dataSourcesWithTaskAndItemUri.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(taskGraphUri, itemUri)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.taskGraphUri, $scope.stateParams.itemUri)
-            }
-          });
-        });
-        dataSourcesWithTaskAndItemUriAndPaging.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(taskGraphUri, itemUri, limit, offset)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.taskGraphUri, $scope.stateParams.itemUri, 5, 0)
-            }
-          });
-        });
-        dataSourceWithItemAndDomainUri.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(taskGraphUri, domainUri)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.taskGraphUri, 'skos:Concept')
-            }
-          });
-        });
-        dataSourcesWithTaskUri.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(taskGraphUri)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.taskGraphUri)
-            }
-          });
-        });
+         }
+         line += "</div><div class='wd-description'><em>";
+         line += elt["gloss"] + "</em></div>";						
+         line += "</li>";
+         items.push(line);
+       });
 
-      }
-    });
-  </script>
+
+         if (items.length) {
+           $("<h4><strong>" + conceptName + "</strong> has the following senses on WordNet :</h4>").appendTo("#widget-content");
+           $("<ul/>", {
+            "class": "wd-results",
+            "id": "wd-results",
+            html: items.join("")
+          }).appendTo("#widget-content");
+         } else {
+           $("<span class='wd-no-results wrapper text-center'><h4>There is no content tagged with the &laquo;" + conceptName + "&raquo; concept in your Solr index</h4></span>").appendTo("#widget-content");
+         }
+         $('#widget-content').show();
+         $('#widget-error').hide();
+         $('#widget-progress').hide();
+       },
+       error: function() {
+         $('#widget-content').hide();
+         $('#widget-error').show();
+         $('#widget-progress').hide();
+       }
+     });
+			setupLinks();
+		});
+	});
+  });
+
+
+function setupLinks() {
+  $('#widget-content')
+  .off('click', '#wd-results li a')
+  .on('click', '#wd-results li a', function () {
+    if($(this).hasClass('active')){
+      removeLexicalResource($(this));
+    } else {
+      selectLexicalResource($(this));
+    }	
+  });
+
+};
+
+function closeWidget() {
+   api.closeWidget();
+}
+var names = [];
+function add() {
+   api.actions.showFormAddMultipleAltLabel(names);
+}
+
+function selectLexicalResource(el) {
+  var label = $(el).text();
+  var labelId = $(el).attr('id');
+names.push(label);
+  $(el).addClass('active'); 
+  //Update button label 
+  labelCount++;
+  $('#concept-count').text(labelCount); 
+}
+
+function removeLexicalResource(el) {
+  $(el).removeClass('active');  
+  var labelId = $(el).attr('id');
+  $('a[data-id="'+ labelId +'"]').remove();
+var index = names.indexOf(label);
+if(index>-1){
+names.splice(index, 1);
+}
+  if (labelCount > 0) {
+    labelCount--;
+    $('#concept-count').text(labelCount);
+  } 
+}
+
+</script>
+
+<style>
+
+  body{
+    padding-top:58px;
+  }
+
+  .navbar {
+    background-color: #f9fafc;
+    min-height: 48px;
+    border: 1px solid transparent;
+  }
+
+  .navbar .btn {margin-top:8px;}
+
+  .container{
+    word-wrap: break-word; 
+    font-size: 14px;
+  }
+
+  button{
+    outline:none !important;  
+    color:inherit !important;
+  }
+
+  .wrapper{
+    padding:20px;
+  }
+
+  ul, ol{
+    padding:0 15px;
+  }
+
+  #wd-results {
+    list-style: none;
+    padding:0;
+  }
+
+  #wd-results li{
+    border-bottom: 1px solid #efefef;
+  }
+
+  #wd-results .wd-description{
+    margin-bottom: 10px !important;
+    display:block;
+  }
+
+  .wd-label {
+    color: #0094cc;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .add-to-concept{
+    margin:5px 0;
+  }
+
+  .btn{
+    border-width: 0;
+    text-shadow: none;
+  }
+
+  .wd-results .btn{
+    margin:0 3px 3px 0;
+  }
+
+  .btn-default{
+    background-color: #aeb6cb;
+    border-color: #aeb6cb;
+  }
+
+  .btn-default:hover{
+    background-color: #95a0bb;
+    border-color: #8994b3;
+  }
+
+  .btn-primary{
+    color:#fff !important;
+    background-color: #0094cc;
+    border-color: #0094cc;
+  }
+
+  .btn-primary:hover, .btn-primary:active, .btn-primary:focus{
+    background-color: #0076a3 !important;
+    border-color: #00688f !important;
+  }
+
+  .list-group-item i{
+    margin-top:2px;
+  }
+
+</style>
+
 </head>
-<body ng-controller="mainCtrl" class="container">
-<header class="header bg-info">
-  <div class="row">
-    <div class="col-xs-10">
-      <p class="m-t"></p>
-    </div>
-    <div class="col-xs-2 text-right">
-      <a class="close m-t" uib-tooltip="Close" tooltip-placement="bottom"
-         ng-click="closeWidget();">×</a>
-    </div>
-  </div>
-</header>
-<h1>Demo Widget</h1>
 
-<div class="panel-group" id="accordion" role="tablist"
-     aria-multiselectable="true">
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab">
-      <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#accordion"
-           href="#getUri" aria-expanded="true" aria-controls="getUri">
-          Get current modelGraphUri, taskGraphUri and itemUri
-        </a>
-      </h4>
-    </div>
-    <div id="getUri" class="panel-collapse collapse in" role="tabpanel"
-         aria-labelledby="headingOne">
-      <div class="panel-body">
-        <dl class="dl-horizontal">
-          <dt>modelGraphUri</dt>
-          <dd><span
-            class="label label-success">{{ stateParams.modelGraphUri }}</span>
-          </dd>
-          <dt>taskGraphUri</dt>
-          <dd><span
-            class="label label-success">{{ stateParams.taskGraphUri }}</span>
-          </dd>
-          <dt>itemUri</dt>
-          <dd><span class="label label-success">{{ stateParams.itemUri }}</span>
-          </dd>
-        </dl>
-      </div>
+<body>
+
+  <div class="navbar navbar-default navbar-fixed-top animated fadeIn">
+    <div class="container">
+      <button id="concept-clipboard" title="Labels to add to concept" class="btn btn-sm btn-primary" onclick="add()">
+        (<span id="concept-count">0</span>) Add
+      </button>     
+      <button class="btn btn-sm btn-close pull-right" title="Close" onclick="closeWidget()">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+      </button>
     </div>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingTwo">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse"
-           data-parent="#accordion" href="#collapseTwo"
-           aria-expanded="false"
-           aria-controls="collapseTwo">
-          Get data api
-        </a>
-      </h4>
-    </div>
-    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
-         aria-labelledby="headingTwo">
-      <div class="panel-body">
-        <div ng-repeat="dataSource in dataSources">
-          <h3>{{ dataSource.name }}
-            <button class="btn btn-xs"
-                    ng-click="dataSource.showExample = !dataSource.showExample">
-              example
-            </button>
-          </h3>
-          <pre class="bg-info" ng-if="dataSource.showExample">{{ dataSource.help   | json }}</pre>
-          <button class="btn btn-primary btn-xs"
-                  ng-click="getBackendData(dataSource)">load real data
-          </button>
-          <pre ng-if="data[dataSource.name + 'Results']"
-               style="max-height: 250px;" class="bg-success">{{ data[dataSource.name + "Results"]  | json }}</pre>
-          <pre ng-if="data[dataSource.name + 'Error']"
-               class="bg-danger">{{ data[dataSource.name + "Error"]  | json}}</pre>
-        </div>
-      </div>
+
+  <div class="container animated fadeIn" id="widget-error" style="display:none;">
+    <div class="wrapper text-center">
+      <h1><span class="text-warning glyphicon glyphicon-alert" aria-hidden="true"></span></h1>
+      <h4>Sorry, we can not find what you are looking for...</h4>
     </div>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingThree">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse"
-           data-parent="#accordion" href="#collapseThree"
-           aria-expanded="false"
-           aria-controls="collapseThree">
-          Send command api
 
-        </a>
-      </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
-         aria-labelledby="headingThree">
-      <div class="panel-body">
-        <h3>Navigate to item</h3>
+  <div class="container animated fadeIn" id="widget-content" style="display:none;">
+  </div>
 
-
-        <div>
-          <h2>random concept</h2>
-          <pre style="height: 100px;">{{ goToConcept | json }}</pre>
-          <button ng-click="navigateToItem(goToConcept)"
-                  class="btn btn-xs">go
-            to concept
-          </button>
-        </div>
-        <div>
-          <h2>random concept scheme</h2>
-          <pre style="height: 100px;">{{ goToConceptScheme | json }}</pre>
-          <button ng-click="navigateToItem(goToConceptScheme)"
-                  class="btn btn-xs">go to concept scheme
-          </button>
-        </div>
-        <div>
-          <h2>random relationship</h2>
-          <pre style="height: 100px;">{{ goToRelationship | json }}</pre>
-          <button ng-click="navigateToItem(goToRelationship)"
-                  class="btn btn-xs">go to relationship
-          </button>
-        </div>
-        <hr/>
-
-        <button ng-click="openWidget('http://myCompany.com/#WidgetWikipedia')"
-                class="btn btn-xs">Open widget 'Wikipedia'
-        </button>
-
-        <button ng-click="closeWidget()"
-                class="btn btn-xs">Close widget
-        </button>
-        <hr/>
-
-
-      </div>
+  <div class="container animated fadeIn" id="widget-progress">
+    <div class="wrapper text-center">
+      <h4><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Loading...</h4>   
     </div>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingFour">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse"
-           data-parent="#accordion" href="#collapseFour"
-           aria-expanded="false"
-           aria-controls="collapseFour">
-         Call action api
-
-        </a>
-      </h4>
-    </div>
-    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel"
-         aria-labelledby="headingThree">
-      <div class="panel-body">
-        <h3>Call action api</h3>
-
-        <div>
-          <h2>Add Pref label</h2>
-          <input type="text" ng-model="prefLabelName" placeholder="name" />
-          <input type="text" ng-model="prefLabelLang" placeholder="lang code" />
-          <button id="showFormAddPrefLabel"
-                  ng-click="callAction('showFormAddPrefLabel', prefLabelName, prefLabelLang)"
-                  class="btn btn-xs">open
-          </button>
-        </div>
-        <div>
-          <h2>Add Alt label</h2>
-          <input type="text" ng-model="altLabelName" placeholder="name" />
-          <input type="text" ng-model="altLabelLang" placeholder="lang code" />
-          <input type="text" ng-model="altTypeUri" placeholder="type uri" />
-          <button id="showFormAddAltLabel"
-                  ng-click="callAction('showFormAddAltLabel',altLabelName, altLabelLang, altTypeUri)"
-                  class="btn btn-xs">open
-          </button>
-        </div>
-        <div>
-          <h2>Add Multiple Alt label</h2>
-          <textarea ng-model="altMultiLabelName" placeholder="Labels (One per row)" ></textarea>
-          <input type="text" ng-model="altMultiLabelLang" placeholder="lang code" />
-          <input type="text" ng-model="altMultiLabelType" placeholder="type uri" />
-          <button id="showFormAddMultipleAltLabel"
-                  ng-click="callAction('showFormAddMultipleAltLabel',altMultiLabelName.split('\n'), altMultiLabelLang, altMultiLabelType)"
-                  class="btn btn-xs">open
-          </button>
-        </div>
-
-        <div>
-          <h2>Add Related</h2>
-          <input type="text" ng-model="relatedTypeUri" placeholder="type uri" />
-          <input type="text" ng-model="relatedTargetUri" placeholder="target uri" />
-          <input type="text" ng-model="relatedTargetName" placeholder="target name" />
-          <button id="showFormAddRelated"
-                  ng-click="callAction('showFormAddRelated',relatedTypeUri, relatedTargetUri, relatedTargetName)"
-                  class="btn btn-xs">open
-          </button>
-        </div>
-        <div>
-          <h2>Add Broader</h2>
-          <input type="text" ng-model="broaderTypeUri" placeholder="type uri" />
-          <input type="text" ng-model="broaderTargetUri" placeholder="target uri" />
-          <input type="text" ng-model="broaderTargetName" placeholder="target name" />
-          <button id="showFormAddBroader"
-                  ng-click="callAction('showFormAddBroader',broaderTypeUri, broaderTargetUri, broaderTargetName)"
-                  class="btn btn-xs">open
-          </button>
-        </div>
-        <div>
-          <h2>Add Narrower</h2>
-          <input type="text" ng-model="narrowerTypeUri" placeholder="type uri" />
-          <input type="text" ng-model="narrowerTargetUri" placeholder="target uri" />
-          <input type="text" ng-model="narrowerTargetName" placeholder="target name" />
-          <button id="showFormAddNarrower"
-                  ng-click="callAction('showFormAddNarrower', narrowerTypeUri, narrowerTargetUri, narrowerTargetName)"
-                  class="btn btn-xs">open
-          </button>
-        </div>
-
-
-      </div>
-    </div>
-  </div>
-</div>
-
 
 </body>
+
 </html>
+
+
