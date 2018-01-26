@@ -38,33 +38,36 @@
  
 ## Configuring the widget ##
 
-  Once you have written the widget and installed it on a web server somewhere, you tell Ontology Editor about it by adding triples to the model. For example, to add in the widgetWikepedia.html example you would add the following triples:
+  Once you have written the widget and installed it on a web server somewhere, you tell Ontology Editor about it by adding triples to the model. For example, to add in the widgetWikepedia.html example you would use the following SPARQL:
 
     PREFIX myNamespace: <http://myCompany.com/#>[1] 
     PREFIX semwidgets: <http://www.smartlogic.com/2016/02/semaphore-widgets#> 
     PREFIX sempermissions: <http://www.smartlogic.com/2015/11/semaphore-permissions#>
-    WITH <urn:x-evn-master:WidgetTest.tch> [2]
+    PREFIX semfun: <http://www.smartlogic.com/2015/02/semaphore-functions#>
     INSERT {
-      <urn:x-evn-master:WidgetTest.tch>[2] semwidgets:hasWidget myNamespace:WidgetWikipedia.   
-      myNamespace:WidgetWikipedia 
-        a semwidgets:Widget;
-        rdfs:label "Wikipedia Example Widget";
-        semwidgets:widgetUrl "http://widget.full.url.address/widgetWikipedia.html[3]";
-        semwidgets:widgetIcon "fa fa-wikipedia-w";
-        semwidgets:notificationEmail "notification@email.address[4]";
-        semwidgets:timeoutInSeconds "30";
-        semwidgets:allowedRole sempermissions:viewer .
-    } WHERE {}
-      
+      GRAPH ?tchGraphUri {
+        ?tchGraphUri semwidgets:hasWidget myNamespace:WidgetWikipedia.   
+        myNamespace:WidgetWikipedia 
+          a semwidgets:Widget;
+          rdfs:label "Wikipedia Example Widget";
+          semwidgets:widgetUrl "http://widget.full.url.address/widgetWikipedia.html[2]";
+          semwidgets:widgetIcon "fa fa-wikipedia-w";
+          semwidgets:notificationEmail "notification@email.address[3]";
+          semwidgets:timeoutInSeconds "30";
+          semwidgets:allowedRole sempermissions:viewer .
+      }
+    } WHERE {
+      BIND( semfun:currentTchGraphUri()[4] as ?tchGraphUri )
+    }
     
  This will need tuning for your particular installation.
    
-1. replace the value of this prefix with some sensible value for your installation
-2. this the URI of the model to which you are adding the widget - with .tch appended to it (two locations to amend).
-3. this should be the full URL of the widget application
-4. replace this with a relevant email address for issue reporting. Please refer to [(Provider notifications)](doc/ProviderNotifications.md) for further details.
+1. Replace the value of this prefix with some sensible value for your installation
+2. This should be the full URL of the widget application
+3. Replace this with a relevant email address for issue reporting. Please refer to [(Provider notifications)](doc/ProviderNotifications.md) for further details.
+4. If you are using the SPARQL editor for the model you wish to add the widget to then you can use this SPARQL as written.  However, if you wish to add the widget to a different model you will need to replace "semfun:currentTchGraphUri()" with the URI of the model to which you are adding the widget with .tch appended to it, for example "<urn:x-evn-master:WidgetTest.tch>" (without the quotes).
 
-Once you have run this SPARQL in the SPARQL editor, you can return to the model editing pane. Once a concept or concept scheme is selected, the "View" menu will appear in the editing panel. From this select this widget - and you will see wikipedia documents appearing as concepts and concept schemes are selected.
+Once you have run this SPARQL in the SPARQL editor, you can return to the model editing pane. Once a concept or concept scheme is selected, the "View" menu will appear in the editing panel. From this select this widget - and you will see wikipedia documents appearing as concepts and concept schemes are selected.  Note that you may need to refresh the browser page before the widget appears.
 
 
 Please refer to [(Api Documentation)](doc/ApiDocumentation.md) for more details.
