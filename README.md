@@ -38,7 +38,7 @@
  
 ## Configuring the widget ##
 
-  Once you have written the widget and installed it on a web server somewhere, you tell Ontology Editor about it by adding triples to the model. For example, to add in the widgetWikepedia.html example you would use the following SPARQL:
+  Once you have written the widget and installed it on a web server somewhere, you tell Ontology Editor about it by adding triples to the model. For example, to add in the "widgetWikepedia.html" example you would use the following SPARQL:
 
     PREFIX myNamespace: <http://myCompany.com/#>[1] 
     PREFIX semwidgets: <http://www.smartlogic.com/2016/02/semaphore-widgets#> 
@@ -65,7 +65,7 @@
 1. Replace the value of this prefix with some sensible value for your installation
 2. This should be the full URL of the widget application
 3. Replace this with a relevant email address for issue reporting. Please refer to [(Provider notifications)](doc/ProviderNotifications.md) for further details.
-4. If you are using the SPARQL editor for the model you wish to add the widget to then you can use this SPARQL as written.  However, if you wish to add the widget to a different model you will need to replace "semfun:currentTchGraphUri()" with the URI of the model to which you are adding the widget with .tch appended to it, for example "<urn:x-evn-master:WidgetTest.tch>" (without the quotes).
+4. If you are using the SPARQL editor for the model you wish to add the widget to then you can use this SPARQL as written.  However, if you wish to add the widget to a different model you will need to replace "semfun:currentTchGraphUri()" with the URI of the model to which you are adding the widget with .tch appended to it, for example "&lt;urn:x-evn-master:WidgetTest.tch&gt;" (without the quotes).
 
 Once you have run this SPARQL in the SPARQL editor, you can return to the model editing pane. Once a concept or concept scheme is selected, the "View" menu will appear in the editing panel. From this select this widget - and you will see wikipedia documents appearing as concepts and concept schemes are selected.  Note that you may need to refresh the browser page before the widget appears.
 

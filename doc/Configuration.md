@@ -46,7 +46,7 @@ OM Application tries to send e-mail notifications about issues with widgets
 the widget to then you can use this SPARQL as written.  However, if you wish to add the widget to 
 a different model you will need to replace "semfun:currentTchGraphUri()" with the URI of the model 
 to which you are adding the widget with .tch appended to it, for example 
-"<urn:x-evn-master:WidgetTest.tch>" (without the quotes).
+"&lt;urn:x-evn-master:WidgetTest.tch&gt;" (without the quotes).
 - for more details about Widget Email Notifications please refer to 
 [(ProviderNotifications Configuration Details)](ProviderNotifications.md)
 
