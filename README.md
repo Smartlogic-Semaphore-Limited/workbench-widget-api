@@ -38,7 +38,7 @@
  
 ## Configuring the widget ##
 
-  Once you have written the widget and installed it on a web server somewhere, you tell Ontology Editor about it by adding triples to the model. For example, to add in the "widgetWikepedia.html" example you would use the following SPARQL:
+  Once you have written the widget and installed it on a web server somewhere, you tell Ontology Editor about it by adding triples to the model. For example, to add in the "widgetWikipedia.html" example you would use the following SPARQL:
 
     PREFIX myNamespace: <http://myCompany.com/#>[1] 
     PREFIX semwidgets: <http://www.smartlogic.com/2016/02/semaphore-widgets#> 
