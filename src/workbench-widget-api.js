@@ -574,7 +574,7 @@
   }
 
   function _getIdFromHash() {
-    return decodeURIComponent(window.location.hash.substr(1).replace(/\+/g, " "));
+    return decodeURIComponent(window.location.hash.substr(1).replace(/^\//, '').replace(/\+/g, " "));
   }
 
   function _logMessage() {
