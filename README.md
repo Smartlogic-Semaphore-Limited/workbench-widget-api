@@ -78,7 +78,10 @@ Please refer to [(Api Documentation)](doc/ApiDocumentation.md) for more details.
    
 Please refer to [(Configuration Documentation)](doc/Configuration.md) for further details.
  
+## Compatibility
+
+Version 1.2.0 of the API is compatible with Semaphore WOM version after the release 4.2.8.
+
 ## Details
 
-For more details on low-level communication protol used by the library, see [(Low-level communication)](doc/Communication.md)
-
+For more details on low-level communication protocol used by the library, see [(Low-level communication)](doc/Communication.md)

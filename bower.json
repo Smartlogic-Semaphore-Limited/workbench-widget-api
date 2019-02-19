@@ -1,9 +1,0 @@
-{
-  "name": "WorkbenchWidgetApi",
-  "version": "1.0.0",
-  "description": "Library helper to integrate widgets with Smartlogic Semaphore Workbench.",
-  "main": "dist/workbench-widget-api.js",
-  "dependencies": {
-    "q": "1.0.1"
-  }
-}
