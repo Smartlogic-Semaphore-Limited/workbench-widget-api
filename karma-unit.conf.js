@@ -13,7 +13,7 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      "bower_components/q/q.js",
+      "node_modules/q/q.js",
       "lib/**/*.js",
       "src/**/*.js",
       "test/**/*.js"

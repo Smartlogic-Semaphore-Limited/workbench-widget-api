@@ -24,70 +24,73 @@
 <dt><a href="#openWidget">openWidget()</a> ⇒ <code>Promise</code></dt>
 <dd><p>Open different widget exist in same model.</p>
 </dd>
-<dt><a href="#getClasses">getClasses()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getClasses">getClasses(taskGraphUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return class data for current item.</p>
 </dd>
-<dt><a href="#getAssociativeUnfilteredTypes">getAssociativeUnfilteredTypes()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getAssociativeUnfilteredTypes">getAssociativeUnfilteredTypes(taskGraphUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return all Associative Types.</p>
 </dd>
-<dt><a href="#getAssociativeTypes">getAssociativeTypes()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getAssociativeTypes">getAssociativeTypes(taskGraphUri, itemUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return Associative Types valid for current item.</p>
 </dd>
-<dt><a href="#getBroaderUnfilteredTypes">getBroaderUnfilteredTypes()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getBroaderUnfilteredTypes">getBroaderUnfilteredTypes(taskGraphUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return all Broader Types.</p>
 </dd>
-<dt><a href="#getBroaderTypes">getBroaderTypes()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getBroaderTypes">getBroaderTypes(taskGraphUri, itemUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return Broader Types valid for current item.</p>
 </dd>
-<dt><a href="#getNarrowerUnfilteredTypes">getNarrowerUnfilteredTypes()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getNarrowerUnfilteredTypes">getNarrowerUnfilteredTypes(taskGraphUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return all Narrower Types.</p>
 </dd>
-<dt><a href="#getNarrowerTypes">getNarrowerTypes()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getNarrowerTypes">getNarrowerTypes(taskGraphUri, itemUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return Narrower Types valid for current item.</p>
 </dd>
-<dt><a href="#getSemaphoreSettings">getSemaphoreSettings()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getSemaphoreSettings">getSemaphoreSettings(taskGraphUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return Semaphore Settings.</p>
 </dd>
-<dt><a href="#getAltLabelUnfilteredProperties">getAltLabelUnfilteredProperties()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getAltLabelUnfilteredProperties">getAltLabelUnfilteredProperties(taskGraphUri, itemUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return All Alternative Labels Types.</p>
 </dd>
-<dt><a href="#getAltLabelProperties">getAltLabelProperties()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getAltLabelProperties">getAltLabelProperties(taskGraphUri, itemUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return Alternative Labels Types valid for item.</p>
 </dd>
-<dt><a href="#getMetadataTypes">getMetadataTypes()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getMetadataUnfilteredTypes">getMetadataUnfilteredTypes(taskGraphUri)</a> ⇒ <code>Promise</code></dt>
+<dd><p>Return Metadata types.</p>
+</dd>
+<dt><a href="#getMetadataTypes">getMetadataTypes(taskGraphUri, itemUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return Metadata types valid for item.</p>
 </dd>
-<dt><a href="#getDetailsWithMetadata">getDetailsWithMetadata()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getDetailsWithMetadata">getDetailsWithMetadata(taskGraphUri, itemUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return Item with metadata properties.</p>
 </dd>
-<dt><a href="#getMetadataForDomain">getMetadataForDomain()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getMetadataForDomain">getMetadataForDomain(taskGraphUri, domainUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return both default metadata and metadata specific for given domain.</p>
 </dd>
-<dt><a href="#getConceptSchemes">getConceptSchemes()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getConceptSchemes">getConceptSchemes(taskGraphUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return all concept schemes for given task.</p>
 </dd>
-<dt><a href="#getConceptDetails">getConceptDetails()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getConceptDetails">getConceptDetails(taskGraphUri, itemUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return concept details.</p>
 </dd>
-<dt><a href="#getConceptGuid">getConceptGuid()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getConceptGuid">getConceptGuid(taskGraphUri, itemUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return concept guid data.</p>
 </dd>
-<dt><a href="#getConceptPrefLabels">getConceptPrefLabels()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getConceptPrefLabels">getConceptPrefLabels(taskGraphUri, itemUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return concept details with preferred labels.</p>
 </dd>
-<dt><a href="#getConceptAltLabels">getConceptAltLabels()</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getConceptAltLabels">getConceptAltLabels(taskGraphUri, itemUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return concept details with alternative labels.</p>
 </dd>
-<dt><a href="#getConceptRelated">getConceptRelated(limit, offset)</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getConceptRelated">getConceptRelated(taskGraphUri, itemUri, limit, offset)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return concept details with associative concepts grouped by relation type.</p>
 </dd>
-<dt><a href="#getConceptNarrower">getConceptNarrower(limit, offset)</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getConceptNarrower">getConceptNarrower(taskGraphUri, itemUri, limit, offset)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return concept details with narrower concepts grouped by relation type.</p>
 </dd>
-<dt><a href="#getConceptBroader">getConceptBroader(limit, offset)</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getConceptBroader">getConceptBroader(taskGraphUri, itemUri, limit, offset)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return concept details with broader concepts grouped by relation type.</p>
 </dd>
-<dt><a href="#getTopConcepts">getTopConcepts(limit, offset)</a> ⇒ <code>Promise</code></dt>
+<dt><a href="#getTopConcepts">getTopConcepts(taskGraphUri, itemUri, limit, offset)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return concept scheme details with top concepts.</p>
 </dd>
 </dl>
@@ -120,7 +123,7 @@ Actions can be used to use Workbench functionality directly.
 ### actions.call ⇒ <code>Promise</code>
 Calls action.
 
-**Kind**: static property of <code>[actions](#actions)</code>  
+**Kind**: static property of [<code>actions</code>](#actions)  
 **Returns**: <code>Promise</code> - Promise - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
 
 | Param | Type | Description |
@@ -133,7 +136,7 @@ Calls action.
 ### actions.showFormAddPrefLabel(name, langCode) ⇒ <code>Promise</code>
 Shows form for add new Preferred Label.
 
-**Kind**: static method of <code>[actions](#actions)</code>  
+**Kind**: static method of [<code>actions</code>](#actions)  
 **Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
 
 | Param | Description |
@@ -146,7 +149,7 @@ Shows form for add new Preferred Label.
 ### actions.showFormAddAltLabel(name, langCode, typeUri) ⇒ <code>Promise</code>
 Shows form for add new Alternative Label.
 
-**Kind**: static method of <code>[actions](#actions)</code>  
+**Kind**: static method of [<code>actions</code>](#actions)  
 **Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
 
 | Param | Description |
@@ -160,7 +163,7 @@ Shows form for add new Alternative Label.
 ### actions.showFormAddMultipleAltLabel(names, langCode, typeUri) ⇒ <code>Promise</code>
 Shows form for add new Multiple Alternative Labels.
 
-**Kind**: static method of <code>[actions](#actions)</code>  
+**Kind**: static method of [<code>actions</code>](#actions)  
 **Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
 
 | Param | Type | Description |
@@ -174,7 +177,7 @@ Shows form for add new Multiple Alternative Labels.
 ### actions.showFormAddRelated(typeUri, targetUri) ⇒ <code>Promise</code>
 Shows form for add new Related relation to the target Concept.
 
-**Kind**: static method of <code>[actions](#actions)</code>  
+**Kind**: static method of [<code>actions</code>](#actions)  
 **Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
 
 | Param | Description |
@@ -187,7 +190,7 @@ Shows form for add new Related relation to the target Concept.
 ### actions.showFormAddBroader(typeUri, targetUri) ⇒ <code>Promise</code>
 Shows form for add new Broader relation to the target Concept.
 
-**Kind**: static method of <code>[actions](#actions)</code>  
+**Kind**: static method of [<code>actions</code>](#actions)  
 **Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
 
 | Param | Description |
@@ -200,7 +203,7 @@ Shows form for add new Broader relation to the target Concept.
 ### actions.showFormAddNarrower(typeUri, targetUri) ⇒ <code>Promise</code>
 Shows form for add new Narrower relation to the target Concept.
 
-**Kind**: static method of <code>[actions](#actions)</code>  
+**Kind**: static method of [<code>actions</code>](#actions)  
 **Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
 
 | Param | Description |
@@ -243,21 +246,31 @@ Open different widget exist in same model.
 **Returns**: <code>Promise</code> - Promise - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
 <a name="getClasses"></a>
 
-## getClasses() ⇒ <code>Promise</code>
+## getClasses(taskGraphUri) ⇒ <code>Promise</code>
 Return class data for current item.
 
 **Kind**: global function  
 **Returns**: <code>Promise</code> - Promise - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Type |
+| --- | --- |
+| taskGraphUri | <code>String</code> | 
+
 <a name="getAssociativeUnfilteredTypes"></a>
 
-## getAssociativeUnfilteredTypes() ⇒ <code>Promise</code>
+## getAssociativeUnfilteredTypes(taskGraphUri) ⇒ <code>Promise</code>
 Return all Associative Types.
 
 **Kind**: global function  
 **Returns**: <code>Promise</code> - Promise - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Type |
+| --- | --- |
+| taskGraphUri | <code>String</code> | 
+
 <a name="getAssociativeTypes"></a>
 
-## getAssociativeTypes() ⇒ <code>Promise</code>
+## getAssociativeTypes(taskGraphUri, itemUri) ⇒ <code>Promise</code>
 Return Associative Types valid for current item.
 
 **Kind**: global function  
@@ -265,46 +278,74 @@ Return Associative Types valid for current item.
 
 | Param | Type |
 | --- | --- |
-| itemUri. | <code>String</code> | 
+| taskGraphUri | <code>String</code> | 
+| itemUri | <code>String</code> | 
 
 <a name="getBroaderUnfilteredTypes"></a>
 
-## getBroaderUnfilteredTypes() ⇒ <code>Promise</code>
+## getBroaderUnfilteredTypes(taskGraphUri) ⇒ <code>Promise</code>
 Return all Broader Types.
 
 **Kind**: global function  
 **Returns**: <code>Promise</code> - Promise - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Type |
+| --- | --- |
+| taskGraphUri | <code>String</code> | 
+
 <a name="getBroaderTypes"></a>
 
-## getBroaderTypes() ⇒ <code>Promise</code>
+## getBroaderTypes(taskGraphUri, itemUri) ⇒ <code>Promise</code>
 Return Broader Types valid for current item.
 
 **Kind**: global function  
 **Returns**: <code>Promise</code> - Promise - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Type |
+| --- | --- |
+| taskGraphUri | <code>String</code> | 
+| itemUri | <code>String</code> | 
+
 <a name="getNarrowerUnfilteredTypes"></a>
 
-## getNarrowerUnfilteredTypes() ⇒ <code>Promise</code>
+## getNarrowerUnfilteredTypes(taskGraphUri) ⇒ <code>Promise</code>
 Return all Narrower Types.
 
 **Kind**: global function  
 **Returns**: <code>Promise</code> - Promise - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Type |
+| --- | --- |
+| taskGraphUri | <code>String</code> | 
+
 <a name="getNarrowerTypes"></a>
 
-## getNarrowerTypes() ⇒ <code>Promise</code>
+## getNarrowerTypes(taskGraphUri, itemUri) ⇒ <code>Promise</code>
 Return Narrower Types valid for current item.
 
 **Kind**: global function  
 **Returns**: <code>Promise</code> - Promise - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Type |
+| --- | --- |
+| taskGraphUri | <code>String</code> | 
+| itemUri | <code>String</code> | 
+
 <a name="getSemaphoreSettings"></a>
 
-## getSemaphoreSettings() ⇒ <code>Promise</code>
+## getSemaphoreSettings(taskGraphUri) ⇒ <code>Promise</code>
 Return Semaphore Settings.
 
 **Kind**: global function  
 **Returns**: <code>Promise</code> - Promise - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Type |
+| --- | --- |
+| taskGraphUri | <code>String</code> | 
+
 <a name="getAltLabelUnfilteredProperties"></a>
 
-## getAltLabelUnfilteredProperties() ⇒ <code>Promise</code>
+## getAltLabelUnfilteredProperties(taskGraphUri, itemUri) ⇒ <code>Promise</code>
 Return All Alternative Labels Types.
 
 **Kind**: global function  
@@ -312,11 +353,12 @@ Return All Alternative Labels Types.
 
 | Param | Type |
 | --- | --- |
-| itemUri. | <code>String</code> | 
+| taskGraphUri | <code>String</code> | 
+| itemUri | <code>String</code> | 
 
 <a name="getAltLabelProperties"></a>
 
-## getAltLabelProperties() ⇒ <code>Promise</code>
+## getAltLabelProperties(taskGraphUri, itemUri) ⇒ <code>Promise</code>
 Return Alternative Labels Types valid for item.
 
 **Kind**: global function  
@@ -324,11 +366,24 @@ Return Alternative Labels Types valid for item.
 
 | Param | Type |
 | --- | --- |
-| itemUri. | <code>String</code> | 
+| taskGraphUri | <code>String</code> | 
+| itemUri | <code>String</code> | 
+
+<a name="getMetadataUnfilteredTypes"></a>
+
+## getMetadataUnfilteredTypes(taskGraphUri) ⇒ <code>Promise</code>
+Return Metadata types.
+
+**Kind**: global function  
+**Returns**: <code>Promise</code> - Promise - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Type |
+| --- | --- |
+| taskGraphUri | <code>String</code> | 
 
 <a name="getMetadataTypes"></a>
 
-## getMetadataTypes() ⇒ <code>Promise</code>
+## getMetadataTypes(taskGraphUri, itemUri) ⇒ <code>Promise</code>
 Return Metadata types valid for item.
 
 **Kind**: global function  
@@ -336,11 +391,12 @@ Return Metadata types valid for item.
 
 | Param | Type |
 | --- | --- |
-| itemUri. | <code>String</code> | 
+| taskGraphUri | <code>String</code> | 
+| itemUri | <code>String</code> | 
 
 <a name="getDetailsWithMetadata"></a>
 
-## getDetailsWithMetadata() ⇒ <code>Promise</code>
+## getDetailsWithMetadata(taskGraphUri, itemUri) ⇒ <code>Promise</code>
 Return Item with metadata properties.
 
 **Kind**: global function  
@@ -348,12 +404,12 @@ Return Item with metadata properties.
 
 | Param | Type |
 | --- | --- |
-| taskGraphUri. | <code>String</code> | 
-| itemUri. | <code>String</code> | 
+| taskGraphUri | <code>String</code> | 
+| itemUri | <code>String</code> | 
 
 <a name="getMetadataForDomain"></a>
 
-## getMetadataForDomain() ⇒ <code>Promise</code>
+## getMetadataForDomain(taskGraphUri, domainUri) ⇒ <code>Promise</code>
 Return both default metadata and metadata specific for given domain.
 
 **Kind**: global function  
@@ -361,12 +417,12 @@ Return both default metadata and metadata specific for given domain.
 
 | Param | Type |
 | --- | --- |
-| taskGraphUri. | <code>String</code> | 
-| domainUri. | <code>String</code> | 
+| taskGraphUri | <code>String</code> | 
+| domainUri | <code>String</code> | 
 
 <a name="getConceptSchemes"></a>
 
-## getConceptSchemes() ⇒ <code>Promise</code>
+## getConceptSchemes(taskGraphUri) ⇒ <code>Promise</code>
 Return all concept schemes for given task.
 
 **Kind**: global function  
@@ -374,11 +430,11 @@ Return all concept schemes for given task.
 
 | Param | Type |
 | --- | --- |
-| taskGraphUri. | <code>String</code> | 
+| taskGraphUri | <code>String</code> | 
 
 <a name="getConceptDetails"></a>
 
-## getConceptDetails() ⇒ <code>Promise</code>
+## getConceptDetails(taskGraphUri, itemUri) ⇒ <code>Promise</code>
 Return concept details.
 
 **Kind**: global function  
@@ -386,12 +442,12 @@ Return concept details.
 
 | Param | Type |
 | --- | --- |
-| taskGraphUri. | <code>String</code> | 
-| itemUri. | <code>String</code> | 
+| taskGraphUri | <code>String</code> | 
+| itemUri | <code>String</code> | 
 
 <a name="getConceptGuid"></a>
 
-## getConceptGuid() ⇒ <code>Promise</code>
+## getConceptGuid(taskGraphUri, itemUri) ⇒ <code>Promise</code>
 Return concept guid data.
 
 **Kind**: global function  
@@ -399,12 +455,12 @@ Return concept guid data.
 
 | Param | Type |
 | --- | --- |
-| taskGraphUri. | <code>String</code> | 
-| itemUri. | <code>String</code> | 
+| taskGraphUri | <code>String</code> | 
+| itemUri | <code>String</code> | 
 
 <a name="getConceptPrefLabels"></a>
 
-## getConceptPrefLabels() ⇒ <code>Promise</code>
+## getConceptPrefLabels(taskGraphUri, itemUri) ⇒ <code>Promise</code>
 Return concept details with preferred labels.
 
 **Kind**: global function  
@@ -412,12 +468,12 @@ Return concept details with preferred labels.
 
 | Param | Type |
 | --- | --- |
-| taskGraphUri. | <code>String</code> | 
-| itemUri. | <code>String</code> | 
+| taskGraphUri | <code>String</code> | 
+| itemUri | <code>String</code> | 
 
 <a name="getConceptAltLabels"></a>
 
-## getConceptAltLabels() ⇒ <code>Promise</code>
+## getConceptAltLabels(taskGraphUri, itemUri) ⇒ <code>Promise</code>
 Return concept details with alternative labels.
 
 **Kind**: global function  
@@ -425,12 +481,12 @@ Return concept details with alternative labels.
 
 | Param | Type |
 | --- | --- |
-| taskGraphUri. | <code>String</code> | 
-| itemUri. | <code>String</code> | 
+| taskGraphUri | <code>String</code> | 
+| itemUri | <code>String</code> | 
 
 <a name="getConceptRelated"></a>
 
-## getConceptRelated(limit, offset) ⇒ <code>Promise</code>
+## getConceptRelated(taskGraphUri, itemUri, limit, offset) ⇒ <code>Promise</code>
 Return concept details with associative concepts grouped by relation type.
 
 **Kind**: global function  
@@ -438,14 +494,14 @@ Return concept details with associative concepts grouped by relation type.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| taskGraphUri. | <code>String</code> |  |
-| itemUri. | <code>String</code> |  |
+| taskGraphUri | <code>String</code> |  |
+| itemUri | <code>String</code> |  |
 | limit | <code>Number</code> | optional, default 10. |
 | offset | <code>Number</code> | optional, default 0. |
 
 <a name="getConceptNarrower"></a>
 
-## getConceptNarrower(limit, offset) ⇒ <code>Promise</code>
+## getConceptNarrower(taskGraphUri, itemUri, limit, offset) ⇒ <code>Promise</code>
 Return concept details with narrower concepts grouped by relation type.
 
 **Kind**: global function  
@@ -453,14 +509,14 @@ Return concept details with narrower concepts grouped by relation type.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| taskGraphUri. | <code>String</code> |  |
-| itemUri. | <code>String</code> |  |
+| taskGraphUri | <code>String</code> |  |
+| itemUri | <code>String</code> |  |
 | limit | <code>Number</code> | optional, default 10. |
 | offset | <code>Number</code> | optional, default 0. |
 
 <a name="getConceptBroader"></a>
 
-## getConceptBroader(limit, offset) ⇒ <code>Promise</code>
+## getConceptBroader(taskGraphUri, itemUri, limit, offset) ⇒ <code>Promise</code>
 Return concept details with broader concepts grouped by relation type.
 
 **Kind**: global function  
@@ -468,14 +524,14 @@ Return concept details with broader concepts grouped by relation type.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| taskGraphUri. | <code>String</code> |  |
-| itemUri. | <code>String</code> |  |
+| taskGraphUri | <code>String</code> |  |
+| itemUri | <code>String</code> |  |
 | limit | <code>Number</code> | optional, default 10. |
 | offset | <code>Number</code> | optional, default 0. |
 
 <a name="getTopConcepts"></a>
 
-## getTopConcepts(limit, offset) ⇒ <code>Promise</code>
+## getTopConcepts(taskGraphUri, itemUri, limit, offset) ⇒ <code>Promise</code>
 Return concept scheme details with top concepts.
 
 **Kind**: global function  
@@ -483,8 +539,8 @@ Return concept scheme details with top concepts.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| taskGraphUri. | <code>String</code> |  |
-| itemUri. | <code>String</code> |  |
+| taskGraphUri | <code>String</code> |  |
+| itemUri | <code>String</code> |  |
 | limit | <code>Number</code> | optional, default 10. |
 | offset | <code>Number</code> | optional, default 0. |
 

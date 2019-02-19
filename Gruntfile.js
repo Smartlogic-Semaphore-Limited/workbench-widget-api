@@ -21,8 +21,8 @@ module.exports = function (grunt) {
         banner: '<%= info.banner %>'
       },
       dist: {
-        src: ['bower_components/q/q.js', 'lib/*.js', 'src/*.js'],
-        dest: 'dist/workbench-widget-api.min.js'
+        src: ["node_modules/q/q.js", "lib/*.js", "src/*.js"],
+        dest: "dist/workbench-widget-api.min.js"
       }
     },
     jsdoc2md: {

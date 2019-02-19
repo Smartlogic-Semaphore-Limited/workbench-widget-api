@@ -83,91 +83,112 @@
 
       /**
        * Return class data for current item.
+       * @param {String} taskGraphUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
-      "getClasses": _dataSourceWithNoParameters("getClasses"),
+      "getClasses": _dataSourcesWithTaskUri("getClasses"),
 
 
       /**
        * Return all Associative Types.
+       * @param {String} taskGraphUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
-      "getAssociativeUnfilteredTypes": _dataSourceWithNoParameters("getAssociativeUnfilteredTypes"),
+      "getAssociativeUnfilteredTypes": _dataSourcesWithTaskUri("getAssociativeUnfilteredTypes"),
 
       /**
        * Return Associative Types valid for current item.
-       * @param {String} itemUri.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
-      "getAssociativeTypes": _dataSourceWithItemUri("getAssociativeTypes"),
+      "getAssociativeTypes": _dataSourcesWithTaskAndItemUri("getAssociativeTypes"),
 
 
       /**
        * Return all Broader Types.
+       * @param {String} taskGraphUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
-      "getBroaderUnfilteredTypes": _dataSourceWithNoParameters("getBroaderUnfilteredTypes"),
+      "getBroaderUnfilteredTypes": _dataSourcesWithTaskUri("getBroaderUnfilteredTypes"),
 
       /**
        * Return Broader Types valid for current item.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
-      "getBroaderTypes": _dataSourceWithItemUri("getBroaderTypes"),
+      "getBroaderTypes": _dataSourcesWithTaskAndItemUri("getBroaderTypes"),
 
       /**
        * Return all Narrower Types.
+       * @param {String} taskGraphUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
-      "getNarrowerUnfilteredTypes": _dataSourceWithNoParameters("getNarrowerUnfilteredTypes"),
+      "getNarrowerUnfilteredTypes": _dataSourcesWithTaskUri("getNarrowerUnfilteredTypes"),
 
       /**
        * Return Narrower Types valid for current item.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
-      "getNarrowerTypes": _dataSourceWithItemUri("getNarrowerTypes"),
+      "getNarrowerTypes": _dataSourcesWithTaskAndItemUri("getNarrowerTypes"),
 
       /**
        * Return Semaphore Settings.
+       * @param {String} taskGraphUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
-      "getSemaphoreSettings": _dataSourceWithNoParameters("getSemaphoreSettings"),
+      "getSemaphoreSettings": _dataSourcesWithTaskUri("getSemaphoreSettings"),
 
       /**
        * Return All Alternative Labels Types.
-       * @param {String} itemUri.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
-      "getAltLabelUnfilteredProperties": _dataSourceWithItemUri("getAltLabelUnfilteredProperties"),
+      "getAltLabelUnfilteredProperties": _dataSourcesWithTaskAndItemUri("getAltLabelUnfilteredProperties"),
 
       /**
        * Return Alternative Labels Types valid for item.
-       * @param {String} itemUri.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
-      "getAltLabelProperties": _dataSourceWithItemUri("getAltLabelProperties"),
+      "getAltLabelProperties": _dataSourcesWithTaskAndItemUri("getAltLabelProperties"),
+
+      /**
+       * Return Metadata types.
+       * @param {String} taskGraphUri
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getMetadataUnfilteredTypes": _dataSourcesWithTaskAndItemUri("getMetadataUnfilteredTypes"),
 
       /**
        * Return Metadata types valid for item.
-       * @param {String} itemUri.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
-      "getMetadataTypes": _dataSourceWithItemUri("getMetadataTypes"),
+      "getMetadataTypes": _dataSourcesWithTaskAndItemUri("getMetadataTypes"),
 
       /**
        * Return Item with metadata properties.
-       * @param {String} taskGraphUri.
-       * @param {String} itemUri.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
@@ -175,8 +196,8 @@
 
       /**
        *  Return both default metadata and metadata specific for given domain.
-       * @param {String} taskGraphUri.
-       * @param {String} domainUri.
+       * @param {String} taskGraphUri
+       * @param {String} domainUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
@@ -184,7 +205,7 @@
 
       /**
        *  Return all concept schemes for given task.
-       * @param {String} taskGraphUri.
+       * @param {String} taskGraphUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
@@ -192,8 +213,8 @@
 
       /**
        *  Return concept details.
-       * @param {String} taskGraphUri.
-       * @param {String} itemUri.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
@@ -201,8 +222,8 @@
 
       /**
        *  Return concept guid data.
-       * @param {String} taskGraphUri.
-       * @param {String} itemUri.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
@@ -210,8 +231,8 @@
 
       /**
        *  Return concept details with preferred labels.
-       * @param {String} taskGraphUri.
-       * @param {String} itemUri.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
@@ -219,8 +240,8 @@
 
       /**
        *  Return concept details with alternative labels.
-       * @param {String} taskGraphUri.
-       * @param {String} itemUri.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @function
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
@@ -228,8 +249,8 @@
 
       /**
        *  Return concept details with associative concepts grouped by relation type.
-       * @param {String} taskGraphUri.
-       * @param {String} itemUri.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @param {Number} limit - optional, default 10.
        * @param {Number} offset - optional, default 0.
        * @function
@@ -239,8 +260,8 @@
 
       /**
        *  Return concept details with narrower concepts grouped by relation type.
-       * @param {String} taskGraphUri.
-       * @param {String} itemUri.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @param {Number} limit - optional, default 10.
        * @param {Number} offset - optional, default 0.
        * @function
@@ -250,8 +271,8 @@
 
       /**
        *  Return concept details with broader concepts grouped by relation type.
-       * @param {String} taskGraphUri.
-       * @param {String} itemUri.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @param {Number} limit - optional, default 10.
        * @param {Number} offset - optional, default 0.
        * @function
@@ -261,8 +282,8 @@
 
       /**
        *  Return concept scheme details with top concepts.
-       * @param {String} taskGraphUri.
-       * @param {String} itemUri.
+       * @param {String} taskGraphUri
+       * @param {String} itemUri
        * @param {Number} limit - optional, default 10.
        * @param {Number} offset - optional, default 0.
        * @function
@@ -403,32 +424,6 @@
     message.data.backendArguments = backendArguments;
     message.data.backendFunction = backendFunction;
     return _postMessage(message);
-  }
-
-  function _dataSourceWithNoParameters(backendFunction) {
-    return function () {
-      return _getBackendData(_widgetId, backendFunction, {});
-    };
-  }
-
-  function _dataSourceWithItem(backendFunction) {
-    return function (item) {
-      var needs = [{name: "item", type: "Object"}],
-        preparedArguments = _prepareArguments(needs, arguments, backendFunction);
-      if (preparedArguments.valid) {
-        return _getBackendData(_widgetId, backendFunction, preparedArguments.argumentsObj);
-      }
-    };
-  }
-
-  function _dataSourceWithItemUri(backendFunction) {
-    return function (itemUri) {
-      var needs = [{name: "itemUri", type: "String"}],
-        preparedArguments = _prepareArguments(needs, arguments, backendFunction);
-      if (preparedArguments.valid) {
-        return _getBackendData(_widgetId, backendFunction, preparedArguments.argumentsObj);
-      }
-    };
   }
 
   function _dataSourcesWithTaskAndItemUri(backendFunction) {
