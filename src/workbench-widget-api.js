@@ -1,11 +1,3 @@
-/****
- * WorkbenchWidgetApi
- * https://github.com/smatrlogic/workbench-widget-api
- *
- * @version 1.0.0
- *
- *
- * Released under License. See LICENSE.txt*/
 
 /*global window*/
 (function () {
