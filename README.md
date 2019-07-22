@@ -85,3 +85,10 @@ Version 1.2.0 of the API is compatible with Semaphore WOM version after the rele
 ## Details
 
 For more details on low-level communication protocol used by the library, see [(Low-level communication)](doc/Communication.md)
+
+## Build
+To build just run:
+`grunt`
+
+To solve vulnerabilities with **lodash** and **marked** the [NPM Force Resolutions](https://github.com/rogeriochaves/npm-force-resolutions) has been used to force the installation of specific version of a transitive dependency (dependency of dependency).
+Please follow the instruction to update these libs to the latest version if it is needed.
