@@ -67,7 +67,10 @@
 
       $scope.fetchTopConceptOf = function (conceptScheme) {
         api.getTopConcepts($scope.stateParams.taskGraphUri, conceptScheme["@id"]).then(function (results) {
-          $scope.goToConcept = results["skos:hasTopConcept"][Math.floor(results["skos:hasTopConcept"].length * Math.random())];
+          $scope.goToConcept = Object.assign(
+            {"meta:transitiveType":["skos:Concept"]},
+            results["skos:hasTopConcept"][Math.floor(results["skos:hasTopConcept"].length * Math.random())]
+          );
           $scope.$apply();
         });
       };
@@ -75,12 +78,18 @@
       $scope.fetchInitialData = function () {
         api.getConceptSchemes($scope.stateParams.taskGraphUri).
         then(function (results) {
-          $scope.goToConceptScheme = results[Math.floor(results.length * Math.random())];
+          $scope.goToConceptScheme =  Object.assign(
+            {"meta:transitiveType":["skos:ConceptScheme"]},
+            results[Math.floor(results.length * Math.random())]
+          );
           $scope.$apply();
           $scope.fetchTopConceptOf($scope.goToConceptScheme);
         });
         api.getNarrowerUnfilteredTypes($scope.stateParams.taskGraphUri).then(function (results) {
-          $scope.goToRelationship = results[Math.floor(results.length * Math.random())];
+          $scope.goToRelationship =  Object.assign(
+            {"meta:transitiveType":["rdf:Property"], "meta:transitiveSubPropertyOf":[{"@id":"skos:narrower"}]},
+            results[Math.floor(results.length * Math.random())]
+          );
           $scope.$apply();
         });
       };
