@@ -29,9 +29,9 @@
     integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
     crossorigin="anonymous"></script>
   <script>
-    var widgetApp = angular.module('widgetApp', []);
+    var widgetApp = angular.module("widgetApp", []);
     var api = new WorkbenchWidgetApi();
-    widgetApp.controller('mainCtrl', function ($scope) {
+    widgetApp.controller("mainCtrl", function ($scope) {
 
       $scope.data = {};
       $scope.taskGraphUri = "...";
@@ -56,11 +56,11 @@
       };
 
       $scope.getBackendData = function (dataSource) {
-        return dataSource.example().then(function success(results) {
-          $scope.data[dataSource.name + 'Results'] = JSON.decycle(results);
+        return dataSource.example().then(function success (results) {
+          $scope.data[dataSource.name + "Results"] = JSON.decycle(results);
           $scope.$apply();
-        }, function error(reason) {
-          $scope.data[dataSource.name + 'Error'] = JSON.decycle(reason);
+        }, function error (reason) {
+          $scope.data[dataSource.name + "Error"] = JSON.decycle(reason);
           $scope.$apply();
         });
       };
@@ -68,7 +68,7 @@
       $scope.fetchTopConceptOf = function (conceptScheme) {
         api.getTopConcepts($scope.stateParams.taskGraphUri, conceptScheme["@id"]).then(function (results) {
           $scope.goToConcept = Object.assign(
-            {"meta:transitiveType":["skos:Concept"]},
+            {"meta:transitiveType": ["skos:Concept"]},
             results["skos:hasTopConcept"][Math.floor(results["skos:hasTopConcept"].length * Math.random())]
           );
           $scope.$apply();
@@ -76,25 +76,24 @@
       };
 
       $scope.fetchInitialData = function () {
-        api.getConceptSchemes($scope.stateParams.taskGraphUri).
-        then(function (results) {
-          $scope.goToConceptScheme =  Object.assign(
-            {"meta:transitiveType":["skos:ConceptScheme"]},
+        api.getConceptSchemes($scope.stateParams.taskGraphUri).then(function (results) {
+          $scope.goToConceptScheme = Object.assign(
+            {"meta:transitiveType": ["skos:ConceptScheme"]},
             results[Math.floor(results.length * Math.random())]
           );
           $scope.$apply();
           $scope.fetchTopConceptOf($scope.goToConceptScheme);
         });
         api.getNarrowerUnfilteredTypes($scope.stateParams.taskGraphUri).then(function (results) {
-          $scope.goToRelationship =  Object.assign(
-            {"meta:transitiveType":["rdf:Property"], "meta:transitiveSubPropertyOf":[{"@id":"skos:narrower"}]},
+          $scope.goToRelationship = Object.assign(
+            {"meta:transitiveType": ["rdf:Property"], "meta:transitiveSubPropertyOf": [{"@id": "skos:narrower"}]},
             results[Math.floor(results.length * Math.random())]
           );
           $scope.$apply();
         });
       };
 
-      $scope.callAction = function() {
+      $scope.callAction = function () {
         var name = arguments[0];
         var params = Array.prototype.slice.call(arguments, 1);
         api.actions[name].apply(this, params);
@@ -107,7 +106,7 @@
         $scope.$apply();
       });
 
-      function prepareDataSources() {
+      function prepareDataSources () {
 
 
         var config = {
@@ -159,7 +158,7 @@
             name: dataSource,
             help: "api." + dataSource + "(taskGraphUri, domainUri)",
             example: function () {
-              return api[dataSource]($scope.stateParams.taskGraphUri, 'skos:Concept')
+              return api[dataSource]($scope.stateParams.taskGraphUri, "skos:Concept")
             }
           });
         });
@@ -316,7 +315,7 @@
            data-parent="#accordion" href="#collapseFour"
            aria-expanded="false"
            aria-controls="collapseFour">
-         Call action api
+          Call action api
 
         </a>
       </h4>
@@ -328,8 +327,8 @@
 
         <div>
           <h2>Add Pref label</h2>
-          <input type="text" ng-model="prefLabelName" placeholder="name" />
-          <input type="text" ng-model="prefLabelLang" placeholder="lang code" />
+          <input type="text" ng-model="prefLabelName" placeholder="name"/>
+          <input type="text" ng-model="prefLabelLang" placeholder="lang code"/>
           <button id="showFormAddPrefLabel"
                   ng-click="callAction('showFormAddPrefLabel', prefLabelName, prefLabelLang)"
                   class="btn btn-xs">open
@@ -337,9 +336,9 @@
         </div>
         <div>
           <h2>Add Alt label</h2>
-          <input type="text" ng-model="altLabelName" placeholder="name" />
-          <input type="text" ng-model="altLabelLang" placeholder="lang code" />
-          <input type="text" ng-model="altTypeUri" placeholder="type uri" />
+          <input type="text" ng-model="altLabelName" placeholder="name"/>
+          <input type="text" ng-model="altLabelLang" placeholder="lang code"/>
+          <input type="text" ng-model="altTypeUri" placeholder="type uri"/>
           <button id="showFormAddAltLabel"
                   ng-click="callAction('showFormAddAltLabel', altLabelName, altLabelLang, altTypeUri)"
                   class="btn btn-xs">open
@@ -347,9 +346,9 @@
         </div>
         <div>
           <h2>Add Multiple Alt label</h2>
-          <textarea ng-model="altMultiLabelName" placeholder="Labels (One per row)" ></textarea>
-          <input type="text" ng-model="altMultiLabelLang" placeholder="lang code" />
-          <input type="text" ng-model="altMultiLabelType" placeholder="type uri" />
+          <textarea ng-model="altMultiLabelName" placeholder="Labels (One per row)"></textarea>
+          <input type="text" ng-model="altMultiLabelLang" placeholder="lang code"/>
+          <input type="text" ng-model="altMultiLabelType" placeholder="type uri"/>
           <button id="showFormAddMultipleAltLabel"
                   ng-click="callAction('showFormAddMultipleAltLabel', altMultiLabelName.split('\n'), altMultiLabelLang, altMultiLabelType)"
                   class="btn btn-xs">open
@@ -358,9 +357,9 @@
 
         <div>
           <h2>Add Related</h2>
-          <input type="text" ng-model="relatedTypeUri" placeholder="type uri" />
-          <input type="text" ng-model="relatedTargetUri" placeholder="target uri" />
-          <input type="text" ng-model="relatedTargetName" placeholder="target name" />
+          <input type="text" ng-model="relatedTypeUri" placeholder="type uri"/>
+          <input type="text" ng-model="relatedTargetUri" placeholder="target uri"/>
+          <input type="text" ng-model="relatedTargetName" placeholder="target name"/>
           <button id="showFormAddRelated"
                   ng-click="callAction('showFormAddRelated', relatedTypeUri, relatedTargetUri, relatedTargetName)"
                   class="btn btn-xs">open
@@ -368,9 +367,9 @@
         </div>
         <div>
           <h2>Add Broader</h2>
-          <input type="text" ng-model="broaderTypeUri" placeholder="type uri" />
-          <input type="text" ng-model="broaderTargetUri" placeholder="target uri" />
-          <input type="text" ng-model="broaderTargetName" placeholder="target name" />
+          <input type="text" ng-model="broaderTypeUri" placeholder="type uri"/>
+          <input type="text" ng-model="broaderTargetUri" placeholder="target uri"/>
+          <input type="text" ng-model="broaderTargetName" placeholder="target name"/>
           <button id="showFormAddBroader"
                   ng-click="callAction('showFormAddBroader', broaderTypeUri, broaderTargetUri, broaderTargetName)"
                   class="btn btn-xs">open
@@ -378,9 +377,9 @@
         </div>
         <div>
           <h2>Add Narrower</h2>
-          <input type="text" ng-model="narrowerTypeUri" placeholder="type uri" />
-          <input type="text" ng-model="narrowerTargetUri" placeholder="target uri" />
-          <input type="text" ng-model="narrowerTargetName" placeholder="target name" />
+          <input type="text" ng-model="narrowerTypeUri" placeholder="type uri"/>
+          <input type="text" ng-model="narrowerTargetUri" placeholder="target uri"/>
+          <input type="text" ng-model="narrowerTargetName" placeholder="target name"/>
           <button id="showFormAddNarrower"
                   ng-click="callAction('showFormAddNarrower', narrowerTypeUri, narrowerTargetUri, narrowerTargetName)"
                   class="btn btn-xs">open
