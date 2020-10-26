@@ -11,6 +11,7 @@
   <!-- grunt embed task will embed content of workbench-widget-api.min.js into html -->
   <script
     src="workbench-widget-api.min.js" data-embed></script>
+
   <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
   <script
     src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
@@ -51,10 +52,9 @@
 
         // Call out to Wikipedia to find out related resources
         $.ajax({
-          dataType: "json",
           crossDomain: true,
-          dataType: "jsonp",
-          url: "//en.m.wikipedia.org/w/api.php?action=opensearch&format=json&language=en&uselang=en&type=item&continue=0&search=" + conceptName,
+          dataType: "json",
+          url: "https://en.m.wikipedia.org/w/api.php?action=opensearch&format=json&language=en&uselang=en&type=item&continue=0&origin=*&search=" + conceptName,
           success: function (data) {
             var dLabels = data[1], dDescriptions = data[2], dUrls = data[3],
               items = [],
@@ -63,7 +63,6 @@
             // Note: if description is empty or it end in "may refer to:" it is a disambiguation page
 
             // If there is a single match or if there is a direct match for the name let's open that one. Same thing if there is a disambiguation page
-
 
             if (dUrls.length === 1) {
               pageUrl = dUrls[0];
@@ -190,10 +189,9 @@
       $('#widget-error').hide();
       $('#widget-progress').show();
       $.ajax({
-        dataType: "json",
         crossDomain: true,
         dataType: "json",
-        url: "//en.wikipedia.org/api/rest_v1/page/mobile-sections/" + page,
+        url: "https://en.wikipedia.org/api/rest_v1/page/mobile-sections/" + page,
         success: function success(data) {console.log("loadPage success",page, data)
           $('#widget-content').show();
           $('#widget-progress').hide();
