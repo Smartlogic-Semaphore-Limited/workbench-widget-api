@@ -49,7 +49,10 @@ module.exports = function (grunt) {
     clean: {
       build:['dist/', 'examples_dist/']
     },
-    embed: {
+    assets_inline: {
+      options: {
+        minify: true
+      },
       main: {
         files: {
           'examples_dist/widgetApiPresentation.html': 'examples_src/widgetApiPresentation.html',
@@ -64,8 +67,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-embed');
+  grunt.loadNpmTasks('grunt-assets-inline');
 
-  grunt.registerTask('default', ['clean', 'uglify', 'jsdoc2md', 'copy', 'embed', 'karma']);
+  grunt.registerTask('default', ['clean', 'uglify', 'jsdoc2md', 'copy', 'assets_inline', 'karma']);
 
 };
