@@ -23,7 +23,7 @@
     "karma-jasmine": "^2.0.1"
   },
   "resolutions": {
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.20",
     "marked": "^0.7.0"
   }
 }
