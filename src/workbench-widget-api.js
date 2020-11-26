@@ -135,6 +135,14 @@
       "getNarrowerTypes": _dataSourcesWithTaskAndItemUri("getNarrowerTypes"),
 
       /**
+       * Return Languages valid for the model.
+       * @param {String} modelGraphUri
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getModelLanguages": _dataSourcesWithModelUri("getModelLanguages"),
+
+      /**
        * Return Semaphore Settings.
        * @param {String} taskGraphUri
        * @function
@@ -340,6 +348,25 @@
           });
         },
         /**
+         * Shows form for add new Multiple Translations Labels.
+         * @param {Object[]} rows - Translations that needs to be populated to the form.
+         * @param {String} rows.typeUri - The uri of type of the label.
+         * @param {Object[]} text - The label
+         * @param {String} text.@value - The value of the label
+         * @param {String} text.@language - The language tag of the label
+         * @param {Object[]} config - The configuration of the form
+         * @param {Boolean} config.editableLanguage - the true value makes the language code editable in the form
+         * @param {Boolean} config.editableType - the false value makes the type of the label not editable. The type is editable by default for all alternative labels and it is always disabled for pref labels.
+         * @param {Boolean} initialSave - The true value initialise an attempt of .
+         * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+         */
+        showFormAddMultipleTranslation: function (rows, initialSave) {
+          return _actionCall("showFormAddMultipleTranslation", {
+            rows: rows,
+            initialSave: initialSave,
+          });
+        },
+        /**
          * Shows form for add new Related relation to the target Concept.
          * @param typeUri - default type uri to be selected - if not exist
          * default type for the system is used.
@@ -429,7 +456,18 @@
         return _getBackendData(_widgetId, backendFunction, preparedArguments.argumentsObj);
       }
     };
+  }
 
+  function _dataSourcesWithModelUri(backendFunction) {
+    return function (taskGraphUri, itemUri) {
+      var needs = [
+          {name: "modelGraphUri", type: "String"},
+        ],
+        preparedArguments = _prepareArguments(needs, arguments, backendFunction);
+      if (preparedArguments.valid) {
+        return _getBackendData(_widgetId, backendFunction, preparedArguments.argumentsObj);
+      }
+    };
   }
 
   function _dataSourcesWithTaskAndItemUriAndPaging(backendFunction) {

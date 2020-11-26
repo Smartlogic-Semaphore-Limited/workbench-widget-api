@@ -45,6 +45,9 @@
 <dt><a href="#getNarrowerTypes">getNarrowerTypes(taskGraphUri, itemUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return Narrower Types valid for current item.</p>
 </dd>
+<dt><a href="#getModelLanguages">getModelLanguages(modelGraphUri)</a> ⇒ <code>Promise</code></dt>
+<dd><p>Return Languages valid for the model.</p>
+</dd>
 <dt><a href="#getSemaphoreSettings">getSemaphoreSettings(taskGraphUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return Semaphore Settings.</p>
 </dd>
@@ -114,6 +117,7 @@ Actions can be used to use Workbench functionality directly.
     * [.showFormAddPrefLabel(name, langCode)](#actions.showFormAddPrefLabel) ⇒ <code>Promise</code>
     * [.showFormAddAltLabel(name, langCode, typeUri)](#actions.showFormAddAltLabel) ⇒ <code>Promise</code>
     * [.showFormAddMultipleAltLabel(names, langCode, typeUri)](#actions.showFormAddMultipleAltLabel) ⇒ <code>Promise</code>
+    * [.showFormAddMultipleTranslation(rows, text, config, initialSave)](#actions.showFormAddMultipleTranslation) ⇒ <code>Promise</code>
     * [.showFormAddRelated(typeUri, targetUri)](#actions.showFormAddRelated) ⇒ <code>Promise</code>
     * [.showFormAddBroader(typeUri, targetUri)](#actions.showFormAddBroader) ⇒ <code>Promise</code>
     * [.showFormAddNarrower(typeUri, targetUri)](#actions.showFormAddNarrower) ⇒ <code>Promise</code>
@@ -171,6 +175,26 @@ Shows form for add new Multiple Alternative Labels.
 | names | <code>Array</code> | default value for the names field. |
 | langCode |  | default language code to be selected - if not exist |
 | typeUri |  | default type uri to be selected - if not exist default type for the system is used. |
+
+<a name="actions.showFormAddMultipleTranslation"></a>
+
+### actions.showFormAddMultipleTranslation(rows, text, config, initialSave) ⇒ <code>Promise</code>
+Shows form for add new Multiple Translations Labels.
+
+**Kind**: static method of [<code>actions</code>](#actions)  
+**Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| rows | <code>Array.&lt;Object&gt;</code> | Translations that needs to be populated to the form. |
+| rows.typeUri | <code>String</code> | The uri of type of the label. |
+| text | <code>Array.&lt;Object&gt;</code> | The label |
+| text.@value | <code>String</code> | The value of the label |
+| text.@language | <code>String</code> | The language tag of the label |
+| config | <code>Array.&lt;Object&gt;</code> | The configuration of the form |
+| config.editableLanguage | <code>Boolean</code> | the true value makes the language code editable in the form |
+| config.editableType | <code>Boolean</code> | the false value makes the type of the label not editable. The type is editable by default for all alternative labels and it is always disabled for pref labels. |
+| initialSave | <code>Boolean</code> | The true value initialise an attempt of . |
 
 <a name="actions.showFormAddRelated"></a>
 
@@ -330,6 +354,18 @@ Return Narrower Types valid for current item.
 | --- | --- |
 | taskGraphUri | <code>String</code> | 
 | itemUri | <code>String</code> | 
+
+<a name="getModelLanguages"></a>
+
+## getModelLanguages(modelGraphUri) ⇒ <code>Promise</code>
+Return Languages valid for the model.
+
+**Kind**: global function  
+**Returns**: <code>Promise</code> - Promise - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Type |
+| --- | --- |
+| modelGraphUri | <code>String</code> | 
 
 <a name="getSemaphoreSettings"></a>
 
