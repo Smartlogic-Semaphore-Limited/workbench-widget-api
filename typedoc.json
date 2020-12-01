@@ -1,0 +1,10 @@
+{
+  "inputFiles": ["./src/"],
+  "mode": "modules",
+  "out": "doc/ApiDocumentation",
+  "readme": "none",
+  "excludeNotExported": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "stripInternal": true
+}
