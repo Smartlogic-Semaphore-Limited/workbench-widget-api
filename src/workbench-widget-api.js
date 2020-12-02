@@ -309,14 +309,14 @@
          * @param name - default value for the name field.
          * @param langCode - default language code to be selected - if not exist
          * default code for the system is used.
-         * @param {Boolean} initialSave - If it is true the save action is called and inf it succeed the form will disappear.
+         * @param {Boolean} [initialSave = false] - If it is true the save action is called and inf it succeed the form will disappear.
          * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
          */
         showFormAddPrefLabel: function (name, langCode, initialSave) {
           return _actionCall("showFormAddPrefLabel", {
             name: name,
             langCode: langCode,
-            initialSave: initialSave
+            initialSave: Boolean(initialSave)
           });
         },
         /**
@@ -325,7 +325,7 @@
          * @param langCode - default language code to be selected - if not exist
          * @param typeUri - default type uri to be selected - if not exist
          * default type for the system is used.
-         * @param {Boolean} initialSave - If it is true the save action is called and inf it succeed the form will disappear.
+         * @param {Boolean} [initialSave = false] - If it is true the save action is called and inf it succeed the form will disappear.
          * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
          */
         showFormAddAltLabel: function (name, langCode, typeUri, initialSave) {
@@ -333,7 +333,7 @@
             name: name,
             langCode: langCode,
             typeUri: typeUri,
-            initialSave: initialSave
+            initialSave: Boolean(initialSave)
           });
         },
         /**
@@ -342,7 +342,7 @@
          * @param langCode - default language code to be selected - if not exist
          * @param typeUri - default type uri to be selected - if not exist
          * default type for the system is used.
-         * @param {Boolean} initialSave - If it is true the save action is called and inf it succeed the form will disappear.
+         * @param {Boolean} [initialSave = false] - If it is true the save action is called and inf it succeed the form will disappear.
          * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
          */
         showFormAddMultipleAltLabel: function (names, langCode, typeUri, initialSave) {
@@ -350,27 +350,27 @@
             names: names,
             langCode: langCode,
             typeUri: typeUri,
-            initialSave: initialSave
+            initialSave: Boolean(initialSave)
           });
         },
         /**
          * Shows form for add new Multiple Translations Labels.
          * @param {Object[]} rows - Translations that needs to be populated to the form.
-         * @param {String} rows.typeUri - The uri of type of the label.
-         * @param {Object[]} rows.text - The label
-         * @param {String} rows.text.@value - The value of the label
-         * @param {String} rows.text.@language - The language tag of the label
-         * @param {Object[]} rows.config - The configuration of the form
+         * @param {Object} rows.data - The data of the form.
+         * @param {String} rows.data.typeUri - The uri of type of the label.
+         * @param {String} rows.data.labelValue - The value of the label
+         * @param {String} rows.data.labelLanguage - The language tag of the label
+         * @param {Object} rows.config - The configuration of the form
          * @param {Boolean} rows.config.editableLanguage - the true value makes the language code editable in the form
          * @param {Boolean} rows.config.editableType - the false value makes the type of the label not editable.
          * The type is editable by default for all alternative labels and it is always disabled for pref labels.
-         * @param {Boolean} initialSave - If it is true the save action is called and inf it succeed the form will disappear.
+         * @param {Boolean} [initialSave = false] - If it is true the save action is called and inf it succeed the form will disappear.
          * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
          */
         showFormAddMultipleTranslation: function (rows, initialSave) {
           return _actionCall("showFormAddMultipleTranslation", {
             rows: rows,
-            initialSave: initialSave,
+            initialSave: Boolean(initialSave),
           });
         },
         /**
@@ -380,7 +380,7 @@
          * @param targetUri - Target concept uri to be selected - if not exist
          * empty value is used.
          * @param targetName - Target concept name to be selected - if not exist empty value is used.
-         * @param {Boolean} initialSave - If it is true the save action is called and inf it succeed the form will disappear.
+         * @param {Boolean} [initialSave = false] - If it is true the save action is called and inf it succeed the form will disappear.
          * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
          */
         showFormAddRelated: function (typeUri, targetUri, targetName, initialSave) {
@@ -388,7 +388,7 @@
             typeUri: typeUri,
             targetUri: targetUri,
             targetName: targetName,
-            initialSave: initialSave
+            initialSave: Boolean(initialSave)
           });
         },
         /**
@@ -398,7 +398,7 @@
          * @param targetUri - Target concept uri to be selected - if not exist
          * empty value is used.
          * @param targetName - Target concept name to be selected - if not exist empty value is used.
-         * @param {Boolean} initialSave - If it is true the save action is called and inf it succeed the form will disappear.
+         * @param {Boolean} [initialSave = false] - If it is true the save action is called and inf it succeed the form will disappear.
          * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
          */
         showFormAddBroader: function (typeUri, targetUri, targetName, initialSave) {
@@ -406,7 +406,7 @@
             typeUri: typeUri,
             targetUri: targetUri,
             targetName: targetName,
-            initialSave: initialSave
+            initialSave: Boolean(initialSave)
           });
         },
         /**
@@ -416,7 +416,7 @@
          * @param targetUri - Target concept uri to be selected - if not exist
          * empty value is used.
          * @param targetName
-         * @param {Boolean} initialSave - If it is true the save action is called and inf it succeed the form will disappear.
+         * @param {Boolean} [initialSave = false] - If it is true the save action is called and inf it succeed the form will disappear.
          * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
          */
         showFormAddNarrower: function (typeUri, targetUri, targetName, initialSave) {
@@ -424,7 +424,7 @@
             typeUri: typeUri,
             targetUri: targetUri,
             targetName: targetName,
-            initialSave: initialSave
+            initialSave: Boolean(initialSave)
           });
         }
       }
@@ -475,7 +475,7 @@
   }
 
   function _dataSourcesWithModelUri (backendFunction) {
-    return function (taskGraphUri, itemUri) {
+    return function (modelGraphUri) {
       var needs = [
           {name: "modelGraphUri", type: "String"},
         ],
