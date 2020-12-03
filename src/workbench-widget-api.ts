@@ -1,10 +1,4 @@
-/** @internal */
-declare global {
-  interface JSON {
-    retrocycle(obj: any): any;
-    decycle(obj: any): any;
-  }
-}
+import { decycle, retrocycle } from "./cycle";
 
 /** @internal */
 type WaitForResponse = {
@@ -76,7 +70,7 @@ export class WorkbenchWidgetApi {
   /**
    * Open different widget in the same model.
    */
-  openWidget(targetWidgetId: string): Promise<any> {
+  openWidget(targetWidgetId: string) {
     var message = this._createMessage(targetWidgetId, "openWidget");
     return this._postMessage<void>(message);
   }
@@ -535,7 +529,7 @@ export class WorkbenchWidgetApi {
       waitForResponse.reject = reject;
     });
     this._promises.set(tag, waitForResponse as WaitForResponse);
-    window.parent.postMessage(JSON.decycle(message), "*");
+    window.parent.postMessage(decycle(message), "*");
     this._logMessage("postMessage", message);
     return waitForResponse.promise;
   }
@@ -561,9 +555,9 @@ export class WorkbenchWidgetApi {
       const waitForResponse = this._promises.get(responseTag)!;
       if (event.data.type === "response") {
         if (event.data.results !== undefined) {
-          waitForResponse.resolve(JSON.retrocycle(event.data.results));
+          waitForResponse.resolve(retrocycle(event.data.results));
         } else if (event.data.reason !== undefined) {
-          waitForResponse.reject(JSON.retrocycle(event.data.reason));
+          waitForResponse.reject(retrocycle(event.data.reason));
         } else {
           this._logError("Response message need results or reason in data.");
         }

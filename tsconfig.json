@@ -6,10 +6,10 @@
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "allowSyntheticDefaultImports": false,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
@@ -19,7 +19,6 @@
     "isolatedModules": true,
     "declaration": true,
     "declarationDir": "typings",
-    "outDir": "build"
   },
   "include": [
     "src"

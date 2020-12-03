@@ -1,0 +1,7 @@
+<%= pkg.name %>
+
+@author <%= pkg.author %>
+@link <%= pkg.link %>
+@version <%= pkg.version %>
+
+Released under <%= pkg.license %> License. See LICENSE.txt

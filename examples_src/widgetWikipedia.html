@@ -40,7 +40,7 @@
     crossorigin="anonymous"></script>
 
   <script>
-    var api = new WorkbenchWidgetApi();
+    var api = new Semaphore.WorkbenchWidgetApi();
     api.getStateParams().then(function (data) {
 
       api.getConceptDetails(data.taskGraphUri, data.itemUri).then(function (concept) {
