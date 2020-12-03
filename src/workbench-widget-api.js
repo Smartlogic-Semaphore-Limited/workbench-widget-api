@@ -1,4 +1,3 @@
-
 /*global window*/
 (function () {
 
@@ -9,13 +8,14 @@
     _promises = {};
   window.addEventListener("message", _receiveMessage, false);
   window.WorkbenchWidgetApi = WorkbenchWidgetApi;
+
   /**
    * Library helper to integrate widgets with Smartlogic Semaphore Workbench.
    * @param widgetId - optional parameter to override automatic ID receiver.
    * @returns {{widgetId: *, ready: ready, getStateParams: getStateParams, navigateToItem: navigateToItem, closeWidget: closeWidget, openWidget: openWidget, backendData: {getClasses: *, getAssociativeUnfilteredTypes: *, getBroaderUnfilteredTypes: *, getNarrowerUnfilteredTypes: *, getSemaphoreSettings: *, getAssociativeTypes: *, getAltLabelProperties: *, getAltLabelUnfilteredProperties: *, getBroaderTypes: *, getDetailsWithMetadata: *, getMetadataTypes: *, getNarrowerTypes: *, getConceptMetadata: *, getConceptSchemes: *, getConceptDetails: *, getConceptGuid: *, getConceptGetPrefLabels: *, getConceptAltLabels: *, getConceptRelated: *, getConceptNarrower: *, getConceptBroader: *, getTopConcepts: *}}}
    * @constructor
    */
-  function WorkbenchWidgetApi(widgetId, debug) {
+  function WorkbenchWidgetApi (widgetId, debug) {
     _widgetId = (widgetId || _getIdFromHash());
     _debug = debug;
     _postMessage(_createMessage(_widgetId, "ready"));
@@ -133,6 +133,14 @@
        * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
        */
       "getNarrowerTypes": _dataSourcesWithTaskAndItemUri("getNarrowerTypes"),
+
+      /**
+       * Return Languages valid for the model.
+       * @param {String} modelGraphUri
+       * @function
+       * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+       */
+      "getModelLanguages": _dataSourcesWithModelUri("getModelLanguages"),
 
       /**
        * Return Semaphore Settings.
@@ -301,12 +309,14 @@
          * @param name - default value for the name field.
          * @param langCode - default language code to be selected - if not exist
          * default code for the system is used.
+         * @param {Boolean} [initialSave = false] - If it is true the save action is called and inf it succeed the form will disappear.
          * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
          */
-        showFormAddPrefLabel: function (name, langCode) {
+        showFormAddPrefLabel: function (name, langCode, initialSave) {
           return _actionCall("showFormAddPrefLabel", {
             name: name,
-            langCode: langCode
+            langCode: langCode,
+            initialSave: Boolean(initialSave)
           });
         },
         /**
@@ -315,13 +325,15 @@
          * @param langCode - default language code to be selected - if not exist
          * @param typeUri - default type uri to be selected - if not exist
          * default type for the system is used.
+         * @param {Boolean} [initialSave = false] - If it is true the save action is called and inf it succeed the form will disappear.
          * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
          */
-        showFormAddAltLabel: function (name, langCode, typeUri) {
+        showFormAddAltLabel: function (name, langCode, typeUri, initialSave) {
           return _actionCall("showFormAddAltLabel", {
             name: name,
             langCode: langCode,
-            typeUri: typeUri
+            typeUri: typeUri,
+            initialSave: Boolean(initialSave)
           });
         },
         /**
@@ -330,13 +342,35 @@
          * @param langCode - default language code to be selected - if not exist
          * @param typeUri - default type uri to be selected - if not exist
          * default type for the system is used.
+         * @param {Boolean} [initialSave = false] - If it is true the save action is called and inf it succeed the form will disappear.
          * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
          */
-        showFormAddMultipleAltLabel: function (names, langCode, typeUri) {
+        showFormAddMultipleAltLabel: function (names, langCode, typeUri, initialSave) {
           return _actionCall("showFormAddMultipleAltLabel", {
             names: names,
             langCode: langCode,
-            typeUri: typeUri
+            typeUri: typeUri,
+            initialSave: Boolean(initialSave)
+          });
+        },
+        /**
+         * Shows form for add new Multiple Translations Labels.
+         * @param {Object[]} rows - Translations that needs to be populated to the form.
+         * @param {Object} rows.data - The data of the form.
+         * @param {String} rows.data.typeUri - The uri of type of the label.
+         * @param {String} rows.data.labelValue - The value of the label
+         * @param {String} rows.data.labelLanguage - The language tag of the label
+         * @param {Object} rows.config - The configuration of the form
+         * @param {Boolean} rows.config.editableLanguage - the true value makes the language code editable in the form
+         * @param {Boolean} rows.config.editableType - the false value makes the type of the label not editable.
+         * The type is editable by default for all alternative labels and it is always disabled for pref labels.
+         * @param {Boolean} [initialSave = false] - If it is true the save action is called and inf it succeed the form will disappear.
+         * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+         */
+        showFormAddMultipleTranslation: function (rows, initialSave) {
+          return _actionCall("showFormAddMultipleTranslation", {
+            rows: rows,
+            initialSave: Boolean(initialSave),
           });
         },
         /**
@@ -345,13 +379,16 @@
          * default type for the system is used.
          * @param targetUri - Target concept uri to be selected - if not exist
          * empty value is used.
+         * @param targetName - Target concept name to be selected - if not exist empty value is used.
+         * @param {Boolean} [initialSave = false] - If it is true the save action is called and inf it succeed the form will disappear.
          * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
          */
-        showFormAddRelated: function (typeUri, targetUri, targetName) {
+        showFormAddRelated: function (typeUri, targetUri, targetName, initialSave) {
           return _actionCall("showFormAddRelated", {
             typeUri: typeUri,
             targetUri: targetUri,
-            targetName: targetName
+            targetName: targetName,
+            initialSave: Boolean(initialSave)
           });
         },
         /**
@@ -360,13 +397,16 @@
          * default type for the system is used.
          * @param targetUri - Target concept uri to be selected - if not exist
          * empty value is used.
+         * @param targetName - Target concept name to be selected - if not exist empty value is used.
+         * @param {Boolean} [initialSave = false] - If it is true the save action is called and inf it succeed the form will disappear.
          * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
          */
-        showFormAddBroader: function (typeUri, targetUri, targetName) {
+        showFormAddBroader: function (typeUri, targetUri, targetName, initialSave) {
           return _actionCall("showFormAddBroader", {
             typeUri: typeUri,
             targetUri: targetUri,
-            targetName: targetName
+            targetName: targetName,
+            initialSave: Boolean(initialSave)
           });
         },
         /**
@@ -375,13 +415,16 @@
          * default type for the system is used.
          * @param targetUri - Target concept uri to be selected - if not exist
          * empty value is used.
+         * @param targetName
+         * @param {Boolean} [initialSave = false] - If it is true the save action is called and inf it succeed the form will disappear.
          * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
          */
-        showFormAddNarrower: function (typeUri, targetUri, targetName) {
+        showFormAddNarrower: function (typeUri, targetUri, targetName, initialSave) {
           return _actionCall("showFormAddNarrower", {
             typeUri: typeUri,
             targetUri: targetUri,
-            targetName: targetName
+            targetName: targetName,
+            initialSave: Boolean(initialSave)
           });
         }
       }
@@ -405,20 +448,20 @@
     }
   }
 
-  function _addCallee(array, calle) {
+  function _addCallee (array, calle) {
     if (_matchType(calle, "Function")) {
       array.push(calle);
     }
   }
 
-  function _getBackendData(widgetID, backendFunction, backendArguments) {
+  function _getBackendData (widgetID, backendFunction, backendArguments) {
     var message = _createMessage(widgetID, "getBackendData");
     message.data.backendArguments = backendArguments;
     message.data.backendFunction = backendFunction;
     return _postMessage(message);
   }
 
-  function _dataSourcesWithTaskAndItemUri(backendFunction) {
+  function _dataSourcesWithTaskAndItemUri (backendFunction) {
     return function (taskGraphUri, itemUri) {
       var needs = [
           {name: "taskGraphUri", type: "String"},
@@ -429,10 +472,21 @@
         return _getBackendData(_widgetId, backendFunction, preparedArguments.argumentsObj);
       }
     };
-
   }
 
-  function _dataSourcesWithTaskAndItemUriAndPaging(backendFunction) {
+  function _dataSourcesWithModelUri (backendFunction) {
+    return function (modelGraphUri) {
+      var needs = [
+          {name: "modelGraphUri", type: "String"},
+        ],
+        preparedArguments = _prepareArguments(needs, arguments, backendFunction);
+      if (preparedArguments.valid) {
+        return _getBackendData(_widgetId, backendFunction, preparedArguments.argumentsObj);
+      }
+    };
+  }
+
+  function _dataSourcesWithTaskAndItemUriAndPaging (backendFunction) {
     return function (taskGraphUri, itemUri, limit, offset) {
       var needs = [
           {name: "taskGraphUri", type: "String"},
@@ -447,7 +501,7 @@
     };
   }
 
-  function _dataSourceWithItemAndDomainUri(backendFunction) {
+  function _dataSourceWithItemAndDomainUri (backendFunction) {
     return function (taskGraphUri, domainUri) {
       var needs = [
           {name: "taskGraphUri", type: "String"},
@@ -460,7 +514,7 @@
     };
   }
 
-  function _dataSourcesWithTaskUri(backendFunction) {
+  function _dataSourcesWithTaskUri (backendFunction) {
     return function (taskGraphUri) {
       var needs = [
           {name: "taskGraphUri", type: "String"}
@@ -473,17 +527,17 @@
   }
 
 
-  function _set(target, key, value, optional) {
+  function _set (target, key, value, optional) {
     if (!optional || !_isEmpty(value)) {
       target[key] = value;
     }
   }
 
-  function _isEmpty(value) {
+  function _isEmpty (value) {
     return value === undefined || value === null;
   }
 
-  function _createMessage(widgetID, key) {
+  function _createMessage (widgetID, key) {
     var message = {
       type: "action",
       key: key,
@@ -494,22 +548,22 @@
     return message;
   }
 
-  function _postMessage(message) {
+  function _postMessage (message) {
     var tag = _generateTag(message.data.widgetId);
     message.data.tag = tag;
     _promises[tag] = Q.defer();
-    window.top.postMessage(JSON.decycle(message), '*');
+    window.parent.postMessage(JSON.decycle(message), "*");
     _logMessage("postMessage", message);
     return _promises[tag].promise;
   }
 
-  function _generateTag(widgetId) {
+  function _generateTag (widgetId) {
     _postIndex++;
     return widgetId + "_" + _postIndex;
   }
 
 
-  function _receiveMessage(event) {
+  function _receiveMessage (event) {
 
     _logMessage("receiveMessage", event);
     //var origin = event.origin || event.originalEvent.origin; // For Chrome, the origin property is in the event.originalEvent object.
@@ -529,15 +583,15 @@
 
   }
 
-  function _getType(obj) {
+  function _getType (obj) {
     return Object.prototype.toString.call(obj);
   }
 
-  function _matchType(value, typeName) {
-    return _getType(value) === '[object ' + typeName + ']';
+  function _matchType (value, typeName) {
+    return _getType(value) === "[object " + typeName + "]";
   }
 
-  function _prepareArguments(needs, got, functionName) {
+  function _prepareArguments (needs, got, functionName) {
     var errors = [], argumentsObj = {};
     if (needs.length) {
       needs.forEach(function (need, index) {
@@ -560,17 +614,17 @@
     return {valid: !(errors.length), argumentsObj: argumentsObj};
   }
 
-  function _getIdFromHash() {
-    return decodeURIComponent(window.location.hash.substr(1).replace(/^\//, '').replace(/\+/g, " "));
+  function _getIdFromHash () {
+    return decodeURIComponent(window.location.hash.substr(1).replace(/^\//, "").replace(/\+/g, " "));
   }
 
-  function _logMessage() {
+  function _logMessage () {
     if (_debug) {
       console.log.apply(this, arguments);
     }
   }
 
-  function _logError() {
+  function _logError () {
     if (_debug) {
       console.error.apply(this, arguments);
     }

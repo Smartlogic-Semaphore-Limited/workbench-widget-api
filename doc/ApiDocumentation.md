@@ -45,6 +45,9 @@
 <dt><a href="#getNarrowerTypes">getNarrowerTypes(taskGraphUri, itemUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return Narrower Types valid for current item.</p>
 </dd>
+<dt><a href="#getModelLanguages">getModelLanguages(modelGraphUri)</a> ⇒ <code>Promise</code></dt>
+<dd><p>Return Languages valid for the model.</p>
+</dd>
 <dt><a href="#getSemaphoreSettings">getSemaphoreSettings(taskGraphUri)</a> ⇒ <code>Promise</code></dt>
 <dd><p>Return Semaphore Settings.</p>
 </dd>
@@ -111,12 +114,13 @@ Actions can be used to use Workbench functionality directly.
 
 * [actions](#actions) ⇒ <code>Promise</code>
     * [.call](#actions.call) ⇒ <code>Promise</code>
-    * [.showFormAddPrefLabel(name, langCode)](#actions.showFormAddPrefLabel) ⇒ <code>Promise</code>
-    * [.showFormAddAltLabel(name, langCode, typeUri)](#actions.showFormAddAltLabel) ⇒ <code>Promise</code>
-    * [.showFormAddMultipleAltLabel(names, langCode, typeUri)](#actions.showFormAddMultipleAltLabel) ⇒ <code>Promise</code>
-    * [.showFormAddRelated(typeUri, targetUri)](#actions.showFormAddRelated) ⇒ <code>Promise</code>
-    * [.showFormAddBroader(typeUri, targetUri)](#actions.showFormAddBroader) ⇒ <code>Promise</code>
-    * [.showFormAddNarrower(typeUri, targetUri)](#actions.showFormAddNarrower) ⇒ <code>Promise</code>
+    * [.showFormAddPrefLabel(name, langCode, [initialSave])](#actions.showFormAddPrefLabel) ⇒ <code>Promise</code>
+    * [.showFormAddAltLabel(name, langCode, typeUri, [initialSave])](#actions.showFormAddAltLabel) ⇒ <code>Promise</code>
+    * [.showFormAddMultipleAltLabel(names, langCode, typeUri, [initialSave])](#actions.showFormAddMultipleAltLabel) ⇒ <code>Promise</code>
+    * [.showFormAddMultipleTranslation(rows, [initialSave])](#actions.showFormAddMultipleTranslation) ⇒ <code>Promise</code>
+    * [.showFormAddRelated(typeUri, targetUri, targetName, [initialSave])](#actions.showFormAddRelated) ⇒ <code>Promise</code>
+    * [.showFormAddBroader(typeUri, targetUri, targetName, [initialSave])](#actions.showFormAddBroader) ⇒ <code>Promise</code>
+    * [.showFormAddNarrower(typeUri, targetUri, targetName, [initialSave])](#actions.showFormAddNarrower) ⇒ <code>Promise</code>
 
 <a name="actions.call"></a>
 
@@ -133,83 +137,112 @@ Calls action.
 
 <a name="actions.showFormAddPrefLabel"></a>
 
-### actions.showFormAddPrefLabel(name, langCode) ⇒ <code>Promise</code>
+### actions.showFormAddPrefLabel(name, langCode, [initialSave]) ⇒ <code>Promise</code>
 Shows form for add new Preferred Label.
 
 **Kind**: static method of [<code>actions</code>](#actions)  
 **Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
 
-| Param | Description |
-| --- | --- |
-| name | default value for the name field. |
-| langCode | default language code to be selected - if not exist default code for the system is used. |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| name |  |  | default value for the name field. |
+| langCode |  |  | default language code to be selected - if not exist default code for the system is used. |
+| [initialSave] | <code>Boolean</code> | <code>false</code> | If it is true the save action is called and inf it succeed the form will disappear. |
 
 <a name="actions.showFormAddAltLabel"></a>
 
-### actions.showFormAddAltLabel(name, langCode, typeUri) ⇒ <code>Promise</code>
+### actions.showFormAddAltLabel(name, langCode, typeUri, [initialSave]) ⇒ <code>Promise</code>
 Shows form for add new Alternative Label.
 
 **Kind**: static method of [<code>actions</code>](#actions)  
 **Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
 
-| Param | Description |
-| --- | --- |
-| name | default value for the name field. |
-| langCode | default language code to be selected - if not exist |
-| typeUri | default type uri to be selected - if not exist default type for the system is used. |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| name |  |  | default value for the name field. |
+| langCode |  |  | default language code to be selected - if not exist |
+| typeUri |  |  | default type uri to be selected - if not exist default type for the system is used. |
+| [initialSave] | <code>Boolean</code> | <code>false</code> | If it is true the save action is called and inf it succeed the form will disappear. |
 
 <a name="actions.showFormAddMultipleAltLabel"></a>
 
-### actions.showFormAddMultipleAltLabel(names, langCode, typeUri) ⇒ <code>Promise</code>
+### actions.showFormAddMultipleAltLabel(names, langCode, typeUri, [initialSave]) ⇒ <code>Promise</code>
 Shows form for add new Multiple Alternative Labels.
 
 **Kind**: static method of [<code>actions</code>](#actions)  
 **Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| names | <code>Array</code> | default value for the names field. |
-| langCode |  | default language code to be selected - if not exist |
-| typeUri |  | default type uri to be selected - if not exist default type for the system is used. |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| names | <code>Array</code> |  | default value for the names field. |
+| langCode |  |  | default language code to be selected - if not exist |
+| typeUri |  |  | default type uri to be selected - if not exist default type for the system is used. |
+| [initialSave] | <code>Boolean</code> | <code>false</code> | If it is true the save action is called and inf it succeed the form will disappear. |
+
+<a name="actions.showFormAddMultipleTranslation"></a>
+
+### actions.showFormAddMultipleTranslation(rows, [initialSave]) ⇒ <code>Promise</code>
+Shows form for add new Multiple Translations Labels.
+
+**Kind**: static method of [<code>actions</code>](#actions)  
+**Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| rows | <code>Array.&lt;Object&gt;</code> |  | Translations that needs to be populated to the form. |
+| rows.data | <code>Object</code> |  | The data of the form. |
+| rows.data.typeUri | <code>String</code> |  | The uri of type of the label. |
+| rows.data.labelValue | <code>String</code> |  | The value of the label |
+| rows.data.labelLanguage | <code>String</code> |  | The language tag of the label |
+| rows.config | <code>Object</code> |  | The configuration of the form |
+| rows.config.editableLanguage | <code>Boolean</code> |  | the true value makes the language code editable in the form |
+| rows.config.editableType | <code>Boolean</code> |  | the false value makes the type of the label not editable. The type is editable by default for all alternative labels and it is always disabled for pref labels. |
+| [initialSave] | <code>Boolean</code> | <code>false</code> | If it is true the save action is called and inf it succeed the form will disappear. |
 
 <a name="actions.showFormAddRelated"></a>
 
-### actions.showFormAddRelated(typeUri, targetUri) ⇒ <code>Promise</code>
+### actions.showFormAddRelated(typeUri, targetUri, targetName, [initialSave]) ⇒ <code>Promise</code>
 Shows form for add new Related relation to the target Concept.
 
 **Kind**: static method of [<code>actions</code>](#actions)  
 **Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
 
-| Param | Description |
-| --- | --- |
-| typeUri | default type uri to be selected - if not exist default type for the system is used. |
-| targetUri | Target concept uri to be selected - if not exist empty value is used. |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| typeUri |  |  | default type uri to be selected - if not exist default type for the system is used. |
+| targetUri |  |  | Target concept uri to be selected - if not exist empty value is used. |
+| targetName |  |  | Target concept name to be selected - if not exist empty value is used. |
+| [initialSave] | <code>Boolean</code> | <code>false</code> | If it is true the save action is called and inf it succeed the form will disappear. |
 
 <a name="actions.showFormAddBroader"></a>
 
-### actions.showFormAddBroader(typeUri, targetUri) ⇒ <code>Promise</code>
+### actions.showFormAddBroader(typeUri, targetUri, targetName, [initialSave]) ⇒ <code>Promise</code>
 Shows form for add new Broader relation to the target Concept.
 
 **Kind**: static method of [<code>actions</code>](#actions)  
 **Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
 
-| Param | Description |
-| --- | --- |
-| typeUri | default type uri to be selected - if not exist default type for the system is used. |
-| targetUri | Target concept uri to be selected - if not exist empty value is used. |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| typeUri |  |  | default type uri to be selected - if not exist default type for the system is used. |
+| targetUri |  |  | Target concept uri to be selected - if not exist empty value is used. |
+| targetName |  |  | Target concept name to be selected - if not exist empty value is used. |
+| [initialSave] | <code>Boolean</code> | <code>false</code> | If it is true the save action is called and inf it succeed the form will disappear. |
 
 <a name="actions.showFormAddNarrower"></a>
 
-### actions.showFormAddNarrower(typeUri, targetUri) ⇒ <code>Promise</code>
+### actions.showFormAddNarrower(typeUri, targetUri, targetName, [initialSave]) ⇒ <code>Promise</code>
 Shows form for add new Narrower relation to the target Concept.
 
 **Kind**: static method of [<code>actions</code>](#actions)  
 **Returns**: <code>Promise</code> - - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
 
-| Param | Description |
-| --- | --- |
-| typeUri | default type uri to be selected - if not exist default type for the system is used. |
-| targetUri | Target concept uri to be selected - if not exist empty value is used. |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| typeUri |  |  | default type uri to be selected - if not exist default type for the system is used. |
+| targetUri |  |  | Target concept uri to be selected - if not exist empty value is used. |
+| targetName |  |  |  |
+| [initialSave] | <code>Boolean</code> | <code>false</code> | If it is true the save action is called and inf it succeed the form will disappear. |
 
 <a name="getStateParams"></a>
 
@@ -330,6 +363,18 @@ Return Narrower Types valid for current item.
 | --- | --- |
 | taskGraphUri | <code>String</code> | 
 | itemUri | <code>String</code> | 
+
+<a name="getModelLanguages"></a>
+
+## getModelLanguages(modelGraphUri) ⇒ <code>Promise</code>
+Return Languages valid for the model.
+
+**Kind**: global function  
+**Returns**: <code>Promise</code> - Promise - for further information see [https://github.com/kriskowal/q/wiki/API-Reference](https://github.com/kriskowal/q/wiki/API-Reference).  
+
+| Param | Type |
+| --- | --- |
+| modelGraphUri | <code>String</code> | 
 
 <a name="getSemaphoreSettings"></a>
 

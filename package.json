@@ -1,6 +1,6 @@
 {
   "name": "WorkbenchWidgetApi",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Library helper to integrate widgets with Smartlogic Semaphore Workbench.",
   "main": "src/workbench-widget-api.js",
   "author": "Smartlogic Semaphore",
@@ -13,7 +13,7 @@
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-uglify": "^4.0.0",
+    "grunt-contrib-uglify": "^5.0.0",
     "grunt-jsdoc": "^2.4.0",
     "grunt-jsdoc-to-markdown": "^5.0.0",
     "grunt-karma": "^3.0.1",
