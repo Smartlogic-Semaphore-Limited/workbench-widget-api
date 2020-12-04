@@ -84,9 +84,6 @@ export class WorkbenchWidgetApi {
 
   /**
    * Return all Associative Types.
-   * @param {String} taskGraphUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
   getAssociativeUnfilteredTypes(taskGraphUri: string) {
     return this._dataSourcesWithTaskUri(
@@ -102,15 +99,16 @@ export class WorkbenchWidgetApi {
    * @function
    * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getAssociativeTypes = this._dataSourcesWithTaskAndItemUri(
-    "getAssociativeTypes"
-  );
+  getAssociativeTypes(taskGraphUri: string, itemUri: string) {
+    return this._dataSourcesWithTaskAndItemUri(
+      "getAssociativeTypes",
+      taskGraphUri,
+      itemUri
+    );
+  }
 
   /**
    * Return all Broader Types.
-   * @param {String} taskGraphUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
   getBroaderUnfilteredTypes(taskGraphUri: string) {
     return this._dataSourcesWithTaskUri(
@@ -121,18 +119,17 @@ export class WorkbenchWidgetApi {
 
   /**
    * Return Broader Types valid for current item.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getBroaderTypes = this._dataSourcesWithTaskAndItemUri("getBroaderTypes");
+  getBroaderTypes(taskGraphUri: string, itemUri: string) {
+    return this._dataSourcesWithTaskAndItemUri(
+      "getBroaderTypes",
+      taskGraphUri,
+      itemUri
+    );
+  }
 
   /**
    * Return all Narrower Types.
-   * @param {String} taskGraphUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
   getNarrowerUnfilteredTypes(taskGraphUri: string) {
     return this._dataSourcesWithTaskUri(
@@ -143,18 +140,17 @@ export class WorkbenchWidgetApi {
 
   /**
    * Return Narrower Types valid for current item.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getNarrowerTypes = this._dataSourcesWithTaskAndItemUri("getNarrowerTypes");
+  getNarrowerTypes(taskGraphUri: string, itemUri: string) {
+    return this._dataSourcesWithTaskAndItemUri(
+      "getNarrowerTypes",
+      taskGraphUri,
+      itemUri
+    );
+  }
 
   /**
    * Return Semaphore Settings.
-   * @param {String} taskGraphUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
   getSemaphoreSettings(taskGraphUri: string) {
     return this._dataSourcesWithTaskUri("getSemaphoreSettings", taskGraphUri);
@@ -162,70 +158,72 @@ export class WorkbenchWidgetApi {
 
   /**
    * Return All Alternative Labels Types.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getAltLabelUnfilteredProperties = this._dataSourcesWithTaskAndItemUri(
-    "getAltLabelUnfilteredProperties"
-  );
+  getAltLabelUnfilteredProperties(taskGraphUri: string, itemUri: string) {
+    return this._dataSourcesWithTaskAndItemUri(
+      "getAltLabelUnfilteredProperties",
+      taskGraphUri,
+      itemUri
+    );
+  }
 
   /**
    * Return Alternative Labels Types valid for item.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getAltLabelProperties = this._dataSourcesWithTaskAndItemUri(
-    "getAltLabelProperties"
-  );
+  getAltLabelProperties(taskGraphUri: string, itemUri: string) {
+    return this._dataSourcesWithTaskAndItemUri(
+      "getAltLabelProperties",
+      taskGraphUri,
+      itemUri
+    );
+  }
 
   /**
    * Return Metadata types.
-   * @param {String} taskGraphUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getMetadataUnfilteredTypes = this._dataSourcesWithTaskAndItemUri(
-    "getMetadataUnfilteredTypes"
-  );
+  getMetadataUnfilteredTypes(taskGraphUri: string, itemUri: string) {
+    return this._dataSourcesWithTaskAndItemUri(
+      "getMetadataUnfilteredTypes",
+      taskGraphUri,
+      itemUri
+    );
+  }
 
   /**
    * Return Metadata types valid for item.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getMetadataTypes = this._dataSourcesWithTaskAndItemUri("getMetadataTypes");
+  getMetadataTypes(taskGraphUri: string, itemUri: string) {
+    return this._dataSourcesWithTaskAndItemUri(
+      "getMetadataTypes",
+      taskGraphUri,
+      itemUri
+    );
+  }
 
   /**
    * Return Item with metadata properties.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getDetailsWithMetadata = this._dataSourcesWithTaskAndItemUri(
-    "getDetailsWithMetadata"
-  );
+  getDetailsWithMetadata(taskGraphUri: string, itemUri: string) {
+    return this._dataSourcesWithTaskAndItemUri(
+      "getDetailsWithMetadata",
+      taskGraphUri,
+      itemUri
+    );
+  }
 
   /**
    *  Return both default metadata and metadata specific for given domain.
-   * @param {String} taskGraphUri
-   * @param {String} domainUri
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getMetadataForDomain = this._dataSourceWithItemAndDomainUri(
-    "getMetadataForDomain"
-  );
+  getMetadataForDomain(taskGraphUri: string, domainUri: string) {
+    return this._dataSourceWithItemAndDomainUri(
+      "getMetadataForDomain",
+      taskGraphUri,
+      domainUri
+    );
+  }
 
   /**
    *  Return all concept schemes for given task.
-   * @param taskGraphUri
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
   getConceptSchemes(taskGraphUri: string) {
     return this._dataSourcesWithTaskUri("getConceptSchemes", taskGraphUri);
@@ -233,107 +231,128 @@ export class WorkbenchWidgetApi {
 
   /**
    *  Return concept details.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getConceptDetails = this._dataSourcesWithTaskAndItemUri("getConceptDetails");
+  getConceptDetails(taskGraphUri: string, itemUri: string) {
+    return this._dataSourcesWithTaskAndItemUri(
+      "getConceptDetails",
+      taskGraphUri,
+      itemUri
+    );
+  }
 
   /**
    *  Return concept guid data.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getConceptGuid = this._dataSourcesWithTaskAndItemUri("getConceptGuid");
+  getConceptGuid(taskGraphUri: string, itemUri: string) {
+    return this._dataSourcesWithTaskAndItemUri(
+      "getConceptGuid",
+      taskGraphUri,
+      itemUri
+    );
+  }
 
   /**
    *  Return concept details with preferred labels.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getConceptPrefLabels = this._dataSourcesWithTaskAndItemUri(
-    "getConceptPrefLabels"
-  );
+  getConceptPrefLabels(taskGraphUri: string, itemUri: string) {
+    return this._dataSourcesWithTaskAndItemUri(
+      "getConceptPrefLabels",
+      taskGraphUri,
+      itemUri
+    );
+  }
 
   /**
    *  Return concept details with alternative labels.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getConceptAltLabels = this._dataSourcesWithTaskAndItemUri(
-    "getConceptAltLabels"
-  );
+  getConceptAltLabels(taskGraphUri: string, itemUri: string) {
+    return this._dataSourcesWithTaskAndItemUri(
+      "getConceptAltLabels",
+      taskGraphUri,
+      itemUri
+    );
+  }
 
   /**
    *  Return concept details with associative concepts grouped by relation type.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @param {Number} limit - optional, default 10.
-   * @param {Number} offset - optional, default 0.
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getConceptRelated = this._dataSourcesWithTaskAndItemUriAndPaging(
-    "getConceptRelated"
-  );
+  getConceptRelated(
+    taskGraphUri: string,
+    itemUri: string,
+    limit: number = 10,
+    offset: number = 0
+  ) {
+    return this._dataSourcesWithTaskAndItemUriAndPaging(
+      "getConceptRelated",
+      taskGraphUri,
+      itemUri,
+      limit,
+      offset
+    );
+  }
 
   /**
    *  Return concept details with narrower concepts grouped by relation type.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @param {Number} limit - optional, default 10.
-   * @param {Number} offset - optional, default 0.
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getConceptNarrower = this._dataSourcesWithTaskAndItemUriAndPaging(
-    "getConceptNarrower"
-  );
+  getConceptNarrower(
+    taskGraphUri: string,
+    itemUri: string,
+    limit: number = 10,
+    offset: number = 0
+  ) {
+    return this._dataSourcesWithTaskAndItemUriAndPaging(
+      "getConceptNarrower",
+      taskGraphUri,
+      itemUri,
+      limit,
+      offset
+    );
+  }
 
   /**
    *  Return concept details with broader concepts grouped by relation type.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @param {Number} limit - optional, default 10.
-   * @param {Number} offset - optional, default 0.
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getConceptBroader = this._dataSourcesWithTaskAndItemUriAndPaging(
-    "getConceptBroader"
-  );
+  getConceptBroader(
+    taskGraphUri: string,
+    itemUri: string,
+    limit: number = 10,
+    offset: number = 0
+  ) {
+    return this._dataSourcesWithTaskAndItemUriAndPaging(
+      "getConceptBroader",
+      taskGraphUri,
+      itemUri,
+      limit,
+      offset
+    );
+  }
 
   /**
    *  Return concept scheme details with top concepts.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @param {Number} limit - optional, default 10.
-   * @param {Number} offset - optional, default 0.
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-  getTopConcepts = this._dataSourcesWithTaskAndItemUriAndPaging(
-    "getTopConcepts"
-  );
+  getTopConcepts(
+    taskGraphUri: string,
+    itemUri: string,
+    limit: number = 10,
+    offset: number = 0
+  ) {
+    return this._dataSourcesWithTaskAndItemUriAndPaging(
+      "getTopConcepts",
+      taskGraphUri,
+      itemUri,
+      limit,
+      offset
+    );
+  }
 
   /**
    * Actions can be used to use Workbench functionality directly.
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
    */
-
   actions = {
     /**
      * Calls action.
      * @param action name of the particular action.
-     * @param data - data needed for particular action.
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+     * @param data data needed for particular action.
      */
     call: this._actionCall,
     /**
@@ -456,44 +475,44 @@ export class WorkbenchWidgetApi {
     return this._postMessage<Result>(message);
   }
 
-  private _dataSourcesWithTaskAndItemUri<Result = any>(
-    backendFunction: string
+  private _dataSourcesWithTaskAndItemUri<Result = unknown>(
+    backendFunction: string,
+    taskGraphUri: string,
+    itemUri: string
   ) {
-    return (taskGraphUri: string, itemUri: string) =>
-      this._getBackendData<Result>(backendFunction, {
-        taskGraphUri,
-        itemUri,
-      });
+    return this._getBackendData<Result>(backendFunction, {
+      taskGraphUri,
+      itemUri,
+    });
   }
 
-  private _dataSourcesWithTaskAndItemUriAndPaging<Result = any>(
-    backendFunction: string
+  private _dataSourcesWithTaskAndItemUriAndPaging<Result = unknown>(
+    backendFunction: string,
+    taskGraphUri: string,
+    itemUri: string,
+    limit: number,
+    offset: number
   ) {
-    return (
-      taskGraphUri: string,
-      itemUri: string,
-      limit?: number,
-      offset?: number
-    ) =>
-      this._getBackendData<Result>(backendFunction, {
-        taskGraphUri,
-        itemUri,
-        limit,
-        offset,
-      });
+    return this._getBackendData<Result>(backendFunction, {
+      taskGraphUri,
+      itemUri,
+      limit,
+      offset,
+    });
   }
 
-  private _dataSourceWithItemAndDomainUri<Result = any>(
-    backendFunction: string
+  private _dataSourceWithItemAndDomainUri<Result = unknown>(
+    backendFunction: string,
+    taskGraphUri: string,
+    domainUri: string
   ) {
-    return (taskGraphUri: string, domainUri: string) =>
-      this._getBackendData<Result>(backendFunction, {
-        taskGraphUri,
-        domainUri,
-      });
+    return this._getBackendData<Result>(backendFunction, {
+      taskGraphUri,
+      domainUri,
+    });
   }
 
-  private _dataSourcesWithTaskUri<Result = any>(
+  private _dataSourcesWithTaskUri<Result = unknown>(
     backendFunction: string,
     taskGraphUri: string
   ) {
@@ -520,7 +539,7 @@ export class WorkbenchWidgetApi {
     };
   }
 
-  private _postMessage<Result>(message: Message): Promise<Result> {
+  _postMessage = <Result>(message: Message): Promise<Result> => {
     var tag = this._generateTag();
     message.data.tag = tag;
     const waitForResponse: Partial<WaitForResponse> = {};
@@ -532,7 +551,7 @@ export class WorkbenchWidgetApi {
     window.parent.postMessage(decycle(message), "*");
     this._logMessage("postMessage", message);
     return waitForResponse.promise;
-  }
+  };
 
   private _postIndex = 0;
   private _generateTag() {

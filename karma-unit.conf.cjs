@@ -10,7 +10,7 @@ module.exports = function (config) {
     frameworks: ["jasmine"],
 
     // list of files / patterns to load in the browser
-    files: ["lib/**/*.js", "build/**/*.js", "test/**/*.js"],
+    files: ["lib/workbench-widget-api.js", "test/**/*.js"],
 
     // list of files to exclude
     exclude: [],

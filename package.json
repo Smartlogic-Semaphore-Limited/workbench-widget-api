@@ -1,9 +1,9 @@
 {
-  "name": "@semaphore/workbench-widget-api",
+  "name": "@smartlogic-semaphore/workbench-widget-api",
   "version": "2.0.0",
   "license": "MIT",
   "description": "Library helper to integrate widgets with Smartlogic Semaphore Workbench.",
-  "author": "Smartlogic Semaphore",
+  "author": "Smartlogic Semaphore Ltd",
   "repository": {
     "type": "git",
     "url": "https://github.com/Smartlogic-Semaphore-Limited/workbench-widget-api"
@@ -12,8 +12,9 @@
   "main": "./lib/workbench-widget-api.mjs",
   "exports": "./lib/workbench-widget-api.mjs",
   "files": [
-    "./lib",
-    "./typings"
+    "./lib/",
+    "./doc/",
+    "./typings/"
   ],
   "types": "./typings/workbench-widget-api.d.ts",
   "directories": {
@@ -23,10 +24,11 @@
     "example": "./examples_dist"
   },
   "scripts": {
+    "prepublishOnly": "npm run build",
     "build": "run-s build:sources build:examples",
     "build:sources": "rollup -c",
     "build:examples": "grunt --gruntfile Gruntfile.cjs build-examples",
-    "test": "grunt karma",
+    "test": "grunt --gruntfile Gruntfile.cjs karma",
     "docs": "typedoc"
   },
   "devDependencies": {

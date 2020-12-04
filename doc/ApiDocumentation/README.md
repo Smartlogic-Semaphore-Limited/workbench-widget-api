@@ -21,7 +21,7 @@
 
 ▸ **decycle**(`object`: any): any
 
-*Defined in src/cycle.ts:22*
+*Defined in [src/cycle.ts:22](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/ffebe54/src/cycle.ts#L22)*
 
 Make a deep copy of an object or array, assuring that there is at most
 one instance of each object or array in the resulting structure. The
@@ -57,7 +57,7 @@ ___
 
 ▸ **retrocycle**(`$`: any): any
 
-*Defined in src/cycle.ts:106*
+*Defined in [src/cycle.ts:106](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/ffebe54/src/cycle.ts#L106)*
 
 Restore an object that was reduced by decycle. Members whose values are
 objects of the form `{$ref: PATH}` are replaced with references to the

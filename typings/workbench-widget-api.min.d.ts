@@ -1,3 +1,13 @@
+/** @internal */
+interface MessageProps {
+    [key: string]: any;
+}
+/** @internal */
+type Message = {
+    type: "action";
+    key: string;
+    data: MessageProps;
+};
 declare class WorkbenchWidgetApi {
     private readonly widgetId;
     private readonly debug;
@@ -27,14 +37,11 @@ declare class WorkbenchWidgetApi {
     /**
      * Return class data for current item.
      */
-    getClasses(taskGraphUri: string): Promise<any>;
+    getClasses(taskGraphUri: string): Promise<unknown>;
     /**
      * Return all Associative Types.
-     * @param {String} taskGraphUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getAssociativeUnfilteredTypes(taskGraphUri: string): Promise<any>;
+    getAssociativeUnfilteredTypes(taskGraphUri: string): Promise<unknown>;
     /**
      * Return Associative Types valid for current item.
      * @param {String} taskGraphUri
@@ -42,171 +49,89 @@ declare class WorkbenchWidgetApi {
      * @function
      * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getAssociativeTypes: (taskGraphUri: string, itemUri: string) => Promise<any>;
+    getAssociativeTypes(taskGraphUri: string, itemUri: string): Promise<unknown>;
     /**
      * Return all Broader Types.
-     * @param {String} taskGraphUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getBroaderUnfilteredTypes(taskGraphUri: string): Promise<any>;
+    getBroaderUnfilteredTypes(taskGraphUri: string): Promise<unknown>;
     /**
      * Return Broader Types valid for current item.
-     * @param {String} taskGraphUri
-     * @param {String} itemUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getBroaderTypes: (taskGraphUri: string, itemUri: string) => Promise<any>;
+    getBroaderTypes(taskGraphUri: string, itemUri: string): Promise<unknown>;
     /**
      * Return all Narrower Types.
-     * @param {String} taskGraphUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getNarrowerUnfilteredTypes(taskGraphUri: string): Promise<any>;
+    getNarrowerUnfilteredTypes(taskGraphUri: string): Promise<unknown>;
     /**
      * Return Narrower Types valid for current item.
-     * @param {String} taskGraphUri
-     * @param {String} itemUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getNarrowerTypes: (taskGraphUri: string, itemUri: string) => Promise<any>;
+    getNarrowerTypes(taskGraphUri: string, itemUri: string): Promise<unknown>;
     /**
      * Return Semaphore Settings.
-     * @param {String} taskGraphUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getSemaphoreSettings(taskGraphUri: string): Promise<any>;
+    getSemaphoreSettings(taskGraphUri: string): Promise<unknown>;
     /**
      * Return All Alternative Labels Types.
-     * @param {String} taskGraphUri
-     * @param {String} itemUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getAltLabelUnfilteredProperties: (taskGraphUri: string, itemUri: string) => Promise<any>;
+    getAltLabelUnfilteredProperties(taskGraphUri: string, itemUri: string): Promise<unknown>;
     /**
      * Return Alternative Labels Types valid for item.
-     * @param {String} taskGraphUri
-     * @param {String} itemUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getAltLabelProperties: (taskGraphUri: string, itemUri: string) => Promise<any>;
+    getAltLabelProperties(taskGraphUri: string, itemUri: string): Promise<unknown>;
     /**
      * Return Metadata types.
-     * @param {String} taskGraphUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getMetadataUnfilteredTypes: (taskGraphUri: string, itemUri: string) => Promise<any>;
+    getMetadataUnfilteredTypes(taskGraphUri: string, itemUri: string): Promise<unknown>;
     /**
      * Return Metadata types valid for item.
-     * @param {String} taskGraphUri
-     * @param {String} itemUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getMetadataTypes: (taskGraphUri: string, itemUri: string) => Promise<any>;
+    getMetadataTypes(taskGraphUri: string, itemUri: string): Promise<unknown>;
     /**
      * Return Item with metadata properties.
-     * @param {String} taskGraphUri
-     * @param {String} itemUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getDetailsWithMetadata: (taskGraphUri: string, itemUri: string) => Promise<any>;
+    getDetailsWithMetadata(taskGraphUri: string, itemUri: string): Promise<unknown>;
     /**
      *  Return both default metadata and metadata specific for given domain.
-     * @param {String} taskGraphUri
-     * @param {String} domainUri
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getMetadataForDomain: (taskGraphUri: string, domainUri: string) => Promise<any>;
+    getMetadataForDomain(taskGraphUri: string, domainUri: string): Promise<unknown>;
     /**
      *  Return all concept schemes for given task.
-     * @param taskGraphUri
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getConceptSchemes(taskGraphUri: string): Promise<any>;
+    getConceptSchemes(taskGraphUri: string): Promise<unknown>;
     /**
      *  Return concept details.
-     * @param {String} taskGraphUri
-     * @param {String} itemUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getConceptDetails: (taskGraphUri: string, itemUri: string) => Promise<any>;
+    getConceptDetails(taskGraphUri: string, itemUri: string): Promise<unknown>;
     /**
      *  Return concept guid data.
-     * @param {String} taskGraphUri
-     * @param {String} itemUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getConceptGuid: (taskGraphUri: string, itemUri: string) => Promise<any>;
+    getConceptGuid(taskGraphUri: string, itemUri: string): Promise<unknown>;
     /**
      *  Return concept details with preferred labels.
-     * @param {String} taskGraphUri
-     * @param {String} itemUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getConceptPrefLabels: (taskGraphUri: string, itemUri: string) => Promise<any>;
+    getConceptPrefLabels(taskGraphUri: string, itemUri: string): Promise<unknown>;
     /**
      *  Return concept details with alternative labels.
-     * @param {String} taskGraphUri
-     * @param {String} itemUri
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getConceptAltLabels: (taskGraphUri: string, itemUri: string) => Promise<any>;
+    getConceptAltLabels(taskGraphUri: string, itemUri: string): Promise<unknown>;
     /**
      *  Return concept details with associative concepts grouped by relation type.
-     * @param {String} taskGraphUri
-     * @param {String} itemUri
-     * @param {Number} limit - optional, default 10.
-     * @param {Number} offset - optional, default 0.
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getConceptRelated: (taskGraphUri: string, itemUri: string, limit?: number | undefined, offset?: number | undefined) => Promise<any>;
+    getConceptRelated(taskGraphUri: string, itemUri: string, limit?: number, offset?: number): Promise<unknown>;
     /**
      *  Return concept details with narrower concepts grouped by relation type.
-     * @param {String} taskGraphUri
-     * @param {String} itemUri
-     * @param {Number} limit - optional, default 10.
-     * @param {Number} offset - optional, default 0.
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getConceptNarrower: (taskGraphUri: string, itemUri: string, limit?: number | undefined, offset?: number | undefined) => Promise<any>;
+    getConceptNarrower(taskGraphUri: string, itemUri: string, limit?: number, offset?: number): Promise<unknown>;
     /**
      *  Return concept details with broader concepts grouped by relation type.
-     * @param {String} taskGraphUri
-     * @param {String} itemUri
-     * @param {Number} limit - optional, default 10.
-     * @param {Number} offset - optional, default 0.
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getConceptBroader: (taskGraphUri: string, itemUri: string, limit?: number | undefined, offset?: number | undefined) => Promise<any>;
+    getConceptBroader(taskGraphUri: string, itemUri: string, limit?: number, offset?: number): Promise<unknown>;
     /**
      *  Return concept scheme details with top concepts.
-     * @param {String} taskGraphUri
-     * @param {String} itemUri
-     * @param {Number} limit - optional, default 10.
-     * @param {Number} offset - optional, default 0.
-     * @function
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
-    getTopConcepts: (taskGraphUri: string, itemUri: string, limit?: number | undefined, offset?: number | undefined) => Promise<any>;
+    getTopConcepts(taskGraphUri: string, itemUri: string, limit?: number, offset?: number): Promise<unknown>;
     /**
      * Actions can be used to use Workbench functionality directly.
-     * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
      */
     actions: {
         call: (action: string, data: object) => Promise<unknown>;
@@ -225,7 +150,7 @@ declare class WorkbenchWidgetApi {
     private _dataSourcesWithTaskUri;
     private withOnlyDefinedValues;
     private _createMessage;
-    private _postMessage;
+    _postMessage: <Result>(message: Message) => Promise<Result>;
     private _postIndex;
     private _generateTag;
     private _receiveMessage;
