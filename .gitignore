@@ -2,4 +2,5 @@
 /coverage
 /lib
 /typings
+/examples_dist
 /.idea
