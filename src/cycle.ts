@@ -18,6 +18,8 @@
  * JSONPath is used to locate the unique object. $ indicates the top level of
  * the object or array. `[NUMBER]` or `[STRING]` indicates a child member or
  * property.
+ *
+ * @category JSON helpers
  */
 export function decycle(object: any) {
   const objects: any[] = []; // Keep a reference to each unique object or array
@@ -102,6 +104,8 @@ export function decycle(object: any) {
  *      return retrocycle(JSON.parse(s));
  * ```
  * produces an array containing a single element which is the array itself.
+ *
+ * @category JSON helpers
  */
 export function retrocycle($: any) {
   const px = /^\$(?:\[(?:\d+|\"(?:[^\\\"\u0000-\u001f]|\\([\\\"\/bfnrt]|u[0-9a-zA-Z]{4}))*\")\])*$/;

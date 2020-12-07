@@ -24,6 +24,42 @@ const DEFAULT_WIDGET_ID = decodeURIComponent(
   window.location.hash.substr(1).replace(/^\//, "").replace(/\+/g, " ")
 );
 
+/**
+ * @category Widget Api
+ */
+type LabelFormValue = {
+  /** The uri of type of the label */
+  typeUri: string;
+  /** The value of the label */
+  labelValue: string;
+  /**The language tag of the label */
+  labelLanguage: string;
+};
+
+/**
+ * @category Widget Api
+ */
+type LabelFormConfig = {
+  /** `true` value makes the language code editable */
+  editableLanguage: boolean;
+  /** `true` value makes the type of the label editable. Type is editable by default for all alternative labels and it is always disabled for pref labels.*/
+  editableType: boolean;
+};
+
+/**
+ * Data transfer type for sending information about editing single label (alt or pref).
+ * Used in {@link showFormAddMultipleTranslation}
+ *
+ * @category Widget Api
+ */
+type LabelEditFormData = {
+  data: LabelFormValue;
+  config: LabelFormConfig;
+};
+
+/**
+ * @category Widget Api
+ */
 export class WorkbenchWidgetApi {
   private _promises: Map<string, WaitForResponse> = new Map();
 
@@ -94,10 +130,8 @@ export class WorkbenchWidgetApi {
 
   /**
    * Return Associative Types valid for current item.
-   * @param {String} taskGraphUri
-   * @param {String} itemUri
-   * @function
-   * @returns {Promise} Promise - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+   * @param taskGraphUri
+   * @param itemUri
    */
   getAssociativeTypes(taskGraphUri: string, itemUri: string) {
     return this._dataSourcesWithTaskAndItemUri(
@@ -147,6 +181,13 @@ export class WorkbenchWidgetApi {
       taskGraphUri,
       itemUri
     );
+  }
+
+  /**
+   * Return Languages valid for the model.
+   */
+  getModelLanguages(modelGraphUri: string) {
+    return this._dataSourcesWithModelUri("getModelLanguages", modelGraphUri);
   }
 
   /**
@@ -359,13 +400,18 @@ export class WorkbenchWidgetApi {
      * Shows form for add new Preferred Label.
      * @param name default value for the name field.
      * @param langCode - default language code to be selected - if not exist
-     * default code for the system is used.
-     * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+     *        default code for the system is used.
+     * @param initialSave - If it is true the save action is called and inf it succeed the form will disappear.
      */
-    showFormAddPrefLabel: (name: string, langCode: string) =>
+    showFormAddPrefLabel: (
+      name: string,
+      langCode: string,
+      initialSave = false
+    ) =>
       this._actionCall("showFormAddPrefLabel", {
         name: name,
         langCode: langCode,
+        initialSave: Boolean(initialSave),
       }),
     /**
      * Shows form for add new Alternative Label.
@@ -373,13 +419,19 @@ export class WorkbenchWidgetApi {
      * @param langCode - default language code to be selected - if not exist
      * @param typeUri - default type uri to be selected - if not exist
      * default type for the system is used.
-     * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+     * @param initialSave - If it is true the save action is called and inf it succeed the form will disappear.
      */
-    showFormAddAltLabel: (name: string, langCode: string, typeUri: string) =>
+    showFormAddAltLabel: (
+      name: string,
+      langCode: string,
+      typeUri: string,
+      initialSave = false
+    ) =>
       this._actionCall("showFormAddAltLabel", {
         name: name,
         langCode: langCode,
         typeUri: typeUri,
+        initialSave: Boolean(initialSave),
       }),
     /**
      * Shows form for add new Multiple Alternative Labels.
@@ -387,17 +439,32 @@ export class WorkbenchWidgetApi {
      * @param langCode - default language code to be selected - if not exist
      * @param typeUri - default type uri to be selected - if not exist
      * default type for the system is used.
-     * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+     * @param initialSave - If it is true the save action is called and inf it succeed the form will disappear.
      */
     showFormAddMultipleAltLabel: (
       names: string,
       langCode: string,
-      typeUri: string
+      typeUri: string,
+      initialSave = false
     ) =>
       this._actionCall("showFormAddMultipleAltLabel", {
         names: names,
         langCode: langCode,
         typeUri: typeUri,
+        initialSave: Boolean(initialSave),
+      }),
+    /**
+     * Shows form for add new Multiple Translations Labels.
+     * @param rows - Translations that needs to be populated to the form.
+     * @param initialSave - If it is true the save action is called and inf it succeed the form will disappear.
+     */
+    showFormAddMultipleTranslation: (
+      rows: Array<LabelEditFormData>,
+      initialSave = false
+    ) =>
+      this._actionCall("showFormAddMultipleTranslation", {
+        rows,
+        initialSave: Boolean(initialSave),
       }),
     /**
      * Shows form for add new Related relation to the target Concept.
@@ -405,17 +472,19 @@ export class WorkbenchWidgetApi {
      * default type for the system is used.
      * @param targetUri - Target concept uri to be selected - if not exist
      * empty value is used.
-     * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+     * @param initialSave - If it is true the save action is called and inf it succeed the form will disappear.
      */
     showFormAddRelated: (
       typeUri: string,
       targetUri: string,
-      targetName: string
+      targetName: string,
+      initialSave = false
     ) =>
       this._actionCall("showFormAddRelated", {
         typeUri: typeUri,
         targetUri: targetUri,
         targetName: targetName,
+        initialSave: Boolean(initialSave),
       }),
     /**
      * Shows form for add new Broader relation to the target Concept.
@@ -423,17 +492,19 @@ export class WorkbenchWidgetApi {
      * default type for the system is used.
      * @param targetUri - Target concept uri to be selected - if not exist
      * empty value is used.
-     * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+     * @param initialSave - If it is true the save action is called and inf it succeed the form will disappear.
      */
     showFormAddBroader: (
       typeUri: string,
       targetUri: string,
-      targetName: string
+      targetName: string,
+      initialSave = false
     ) =>
       this._actionCall("showFormAddBroader", {
         typeUri: typeUri,
         targetUri: targetUri,
         targetName: targetName,
+        initialSave: Boolean(initialSave),
       }),
 
     /**
@@ -442,17 +513,19 @@ export class WorkbenchWidgetApi {
      * default type for the system is used.
      * @param targetUri - Target concept uri to be selected - if not exist
      * empty value is used.
-     * @returns {Promise} - for further information see {@link https://github.com/kriskowal/q/wiki/API-Reference}.
+     * @param initialSave - If it is true the save action is called and inf it succeed the form will disappear.
      */
     showFormAddNarrower: (
       typeUri: string,
       targetUri: string,
-      targetName: string
+      targetName: string,
+      initialSave = false
     ) =>
       this._actionCall("showFormAddNarrower", {
         typeUri: typeUri,
         targetUri: targetUri,
         targetName: targetName,
+        initialSave: Boolean(initialSave),
       }),
   };
 
@@ -519,6 +592,13 @@ export class WorkbenchWidgetApi {
     return this._getBackendData<Result>(backendFunction, { taskGraphUri });
   }
 
+  private _dataSourcesWithModelUri<Result = unknown>(
+    backendFunction: string,
+    modelGraphUri: string
+  ) {
+    return this._getBackendData<Result>(backendFunction, { modelGraphUri });
+  }
+
   private withOnlyDefinedValues = (obj: MessageProps) =>
     Object.fromEntries(
       Object.entries(obj).filter(([key, value]) => value != null)
@@ -539,7 +619,7 @@ export class WorkbenchWidgetApi {
     };
   }
 
-  _postMessage = <Result>(message: Message): Promise<Result> => {
+  private _postMessage = <Result>(message: Message): Promise<Result> => {
     var tag = this._generateTag();
     message.data.tag = tag;
     const waitForResponse: Partial<WaitForResponse> = {};

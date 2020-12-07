@@ -6,37 +6,96 @@
 
 ## Index
 
-### Classes
+### Widget Api Classes
 
-* [WorkbenchWidgetApi](classes/workbenchwidgetapi.md)
+- [WorkbenchWidgetApi](classes/workbenchwidgetapi.md)
 
-### Functions
+### Widget Api Type aliases
 
-* [decycle](README.md#decycle)
-* [retrocycle](README.md#retrocycle)
+- [LabelEditFormData](README.md#labeleditformdata)
+- [LabelFormConfig](README.md#labelformconfig)
+- [LabelFormValue](README.md#labelformvalue)
 
-## Functions
+### JSON helpers Functions
+
+- [decycle](README.md#decycle)
+- [retrocycle](README.md#retrocycle)
+
+## Widget Api Type aliases
+
+### LabelEditFormData
+
+Ƭ **LabelEditFormData**: { config: [LabelFormConfig](README.md#labelformconfig) ; data: [LabelFormValue](README.md#labelformvalue) }
+
+_Defined in [src/workbench-widget-api.ts:55](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/2be3041/src/workbench-widget-api.ts#L55)_
+
+Data transfer type for sending information about editing single label (alt or pref).
+Used in [showFormAddMultipleTranslation](classes/workbenchwidgetapi.md#showformaddmultipletranslation)
+
+#### Type declaration:
+
+| Name     | Type                                         |
+| -------- | -------------------------------------------- |
+| `config` | [LabelFormConfig](README.md#labelformconfig) |
+| `data`   | [LabelFormValue](README.md#labelformvalue)   |
+
+---
+
+### LabelFormConfig
+
+Ƭ **LabelFormConfig**: { editableLanguage: boolean ; editableType: boolean }
+
+_Defined in [src/workbench-widget-api.ts:42](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/2be3041/src/workbench-widget-api.ts#L42)_
+
+#### Type declaration:
+
+| Name               | Type    | Description                                                                                                                                          |
+| ------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `editableLanguage` | boolean | `true` value makes the language code editable                                                                                                        |
+| `editableType`     | boolean | `true` value makes the type of the label editable. Type is editable by default for all alternative labels and it is always disabled for pref labels. |
+
+---
+
+### LabelFormValue
+
+Ƭ **LabelFormValue**: { labelLanguage: string ; labelValue: string ; typeUri: string }
+
+_Defined in [src/workbench-widget-api.ts:30](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/2be3041/src/workbench-widget-api.ts#L30)_
+
+#### Type declaration:
+
+| Name            | Type   | Description                   |
+| --------------- | ------ | ----------------------------- |
+| `labelLanguage` | string | The language tag of the label |
+| `labelValue`    | string | The value of the label        |
+| `typeUri`       | string | The uri of type of the label  |
+
+## JSON helpers Functions
 
 ### decycle
 
 ▸ **decycle**(`object`: any): any
 
-*Defined in [src/cycle.ts:22](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/ffebe54/src/cycle.ts#L22)*
+_Defined in [src/cycle.ts:24](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/2be3041/src/cycle.ts#L24)_
 
 Make a deep copy of an object or array, assuring that there is at most
 one instance of each object or array in the resulting structure. The
 duplicate references (which might be forming cycles) are replaced with
 an object of the form
+
 ```
 {$ref: PATH}
 ```
+
 where the `PATH` is a JSONPath string that locates the first occurance.
 So,
+
 ```javascript
-     let a = [];
-     a[0] = a;
-     return JSON.stringify(decycle(a));
+let a = [];
+a[0] = a;
+return JSON.stringify(decycle(a));
 ```
+
 produces the string `'[{"$ref":"$"}]'`.
 
 JSONPath is used to locate the unique object. $ indicates the top level of
@@ -45,19 +104,19 @@ property.
 
 #### Parameters:
 
-Name | Type |
------- | ------ |
-`object` | any |
+| Name     | Type |
+| -------- | ---- |
+| `object` | any  |
 
 **Returns:** any
 
-___
+---
 
 ### retrocycle
 
 ▸ **retrocycle**(`$`: any): any
 
-*Defined in [src/cycle.ts:106](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/ffebe54/src/cycle.ts#L106)*
+_Defined in [src/cycle.ts:110](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/2be3041/src/cycle.ts#L110)_
 
 Restore an object that was reduced by decycle. Members whose values are
 objects of the form `{$ref: PATH}` are replaced with references to the
@@ -66,22 +125,25 @@ value found by the PATH. This will restore cycles. The object will be mutated.
 The `eval` function is used to locate the values described by a PATH. The
 root object is kept in a `$` variable. A regular expression is used to
 assure that the PATH is extremely well formed. The regexp contains nested
-* quantifiers. That has been known to have extremely bad performance
-problems on some browsers for very long strings. A PATH is expected to be
-reasonably short. A PATH is allowed to belong to a very restricted subset of
-Goessner's JSONPath.
+
+- quantifiers. That has been known to have extremely bad performance
+  problems on some browsers for very long strings. A PATH is expected to be
+  reasonably short. A PATH is allowed to belong to a very restricted subset of
+  Goessner's JSONPath.
 
 So,
+
 ```javascript
-     let s = '[{"$ref":"$"}]';
-     return retrocycle(JSON.parse(s));
+let s = '[{"$ref":"$"}]';
+return retrocycle(JSON.parse(s));
 ```
+
 produces an array containing a single element which is the array itself.
 
 #### Parameters:
 
-Name | Type |
------- | ------ |
-`$` | any |
+| Name | Type |
+| ---- | ---- |
+| `$`  | any  |
 
 **Returns:** any
