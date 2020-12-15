@@ -9,19 +9,19 @@
     "url": "https://github.com/Smartlogic-Semaphore-Limited/workbench-widget-api"
   },
   "type": "module",
-  "main": "./lib/workbench-widget-api.mjs",
+  "main": "/lib/workbench-widget-api.mjs",
   "exports": "./lib/workbench-widget-api.mjs",
   "files": [
-    "./lib/",
-    "./doc/",
-    "./typings/"
+    "/lib/",
+    "/doc/",
+    "/typings/"
   ],
   "types": "./typings/workbench-widget-api.d.ts",
   "directories": {
-    "lib": " ./lib",
-    "doc": "./doc",
-    "test": "./test",
-    "example": "./examples_dist"
+    "lib": "/lib",
+    "doc": "/doc",
+    "test": "/test",
+    "example": "/examples_dist"
   },
   "scripts": {
     "prepublishOnly": "npm run build",
