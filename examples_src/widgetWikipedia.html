@@ -11,9 +11,9 @@
   <!-- grunt assets_inline task will embed content of workbench-widget-api.min.js into html -->
   <script
     src="workbench-widget-api.min.js"></script>
-  <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
   <script
-    src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
@@ -40,7 +40,7 @@
     crossorigin="anonymous"></script>
 
   <script>
-    var api = new WorkbenchWidgetApi();
+    var api = new Semaphore.WorkbenchWidgetApi();
     api.getStateParams().then(function (data) {
 
       api.getConceptDetails(data.taskGraphUri, data.itemUri).then(function (concept) {

@@ -1,397 +1,596 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="widgetApp">
-<head>
-  <meta charset="UTF-8">
-  <title>Widget Api Presentation</title>
-  <!-- grunt assets_inline task will embed content of workbench-widget-api.min.js into html -->
-  <script
-    src="workbench-widget-api.min.js"></script>
-  <script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
-  <script
-    src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet"
-        href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
-        crossorigin="anonymous">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Widget Api Presentation</title>
+    <!-- grunt assets_inline task will embed content of workbench-widget-api.min.js into html -->
+    <script src="workbench-widget-api.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+      integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+      crossorigin="anonymous"
+    />
 
-  <!-- Optional theme -->
-  <link rel="stylesheet"
-        href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
-        integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
-        crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+      integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
+      crossorigin="anonymous"
+    />
 
-  <link rel="stylesheet"
-        href="//bootswatch.com/lumen/bootstrap.min.css">
-  <!-- Latest compiled and minified JavaScript -->
-  <script
-    src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-    integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-    crossorigin="anonymous"></script>
-  <script>
-    var widgetApp = angular.module("widgetApp", []);
-    var api = new WorkbenchWidgetApi();
-    widgetApp.controller("mainCtrl", function ($scope) {
+    <link
+      rel="stylesheet"
+      href="https://bootswatch.com/lumen/bootstrap.min.css"
+    />
+    <!-- Latest compiled and minified JavaScript -->
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+      integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      var widgetApp = angular.module("widgetApp", []);
+      var api = new Semaphore.WorkbenchWidgetApi();
+      widgetApp.controller("mainCtrl", function ($scope) {
+        $scope.data = {};
+        $scope.taskGraphUri = "...";
+        $scope.goToConcept = "...";
+        $scope.goToConceptScheme = "...";
+        $scope.goToRelationship = "...";
 
-      $scope.data = {};
-      $scope.taskGraphUri = "...";
-      $scope.goToConcept = "...";
-      $scope.goToConceptScheme = "...";
-      $scope.goToRelationship = "...";
+        $scope.getCurrentTaskUri = function () {
+          return api.getStateParams();
+        };
 
-      $scope.getCurrentTaskUri = function () {
-        return api.getStateParams();
-      };
+        $scope.navigateToItem = function (item) {
+          api.navigateToItem(item);
+        };
 
-      $scope.navigateToItem = function (item) {
-        api.navigateToItem(item);
-      };
+        $scope.closeWidget = function () {
+          api.closeWidget();
+        };
 
-      $scope.closeWidget = function () {
-        api.closeWidget();
-      };
+        $scope.openWidget = function (targetWidgetId) {
+          api.openWidget(targetWidgetId);
+        };
 
-      $scope.openWidget = function (targetWidgetId) {
-        api.openWidget(targetWidgetId);
-      };
-
-      $scope.getBackendData = function (dataSource) {
-        return dataSource.example().then(function success (results) {
-          $scope.data[dataSource.name + "Results"] = JSON.decycle(results);
-          $scope.$apply();
-        }, function error (reason) {
-          $scope.data[dataSource.name + "Error"] = JSON.decycle(reason);
-          $scope.$apply();
-        });
-      };
-
-      $scope.fetchTopConceptOf = function (conceptScheme) {
-        api.getTopConcepts($scope.stateParams.taskGraphUri, conceptScheme["@id"]).then(function (results) {
-          $scope.goToConcept = Object.assign(
-            {"meta:transitiveType": ["skos:Concept"]},
-            results["skos:hasTopConcept"][Math.floor(results["skos:hasTopConcept"].length * Math.random())]
+        $scope.getBackendData = function (dataSource) {
+          return dataSource.example().then(
+            function success(results) {
+              $scope.data[dataSource.name + "Results"] = Semaphore.decycle(
+                results
+              );
+              $scope.$apply();
+            },
+            function error(reason) {
+              $scope.data[dataSource.name + "Error"] = Semaphore.decycle(
+                reason
+              );
+              $scope.$apply();
+            }
           );
+        };
+
+        $scope.fetchTopConceptOf = function (conceptScheme) {
+          api
+            .getTopConcepts(
+              $scope.stateParams.taskGraphUri,
+              conceptScheme["@id"]
+            )
+            .then(function (results) {
+              $scope.goToConcept = Object.assign(
+                { "meta:transitiveType": ["skos:Concept"] },
+                results["skos:hasTopConcept"][
+                  Math.floor(
+                    results["skos:hasTopConcept"].length * Math.random()
+                  )
+                ]
+              );
+              $scope.$apply();
+            });
+        };
+
+        $scope.fetchInitialData = function () {
+          api
+            .getConceptSchemes($scope.stateParams.taskGraphUri)
+            .then(function (results) {
+              $scope.goToConceptScheme = Object.assign(
+                { "meta:transitiveType": ["skos:ConceptScheme"] },
+                results[Math.floor(results.length * Math.random())]
+              );
+              $scope.$apply();
+              $scope.fetchTopConceptOf($scope.goToConceptScheme);
+            });
+          api
+            .getNarrowerUnfilteredTypes($scope.stateParams.taskGraphUri)
+            .then(function (results) {
+              $scope.goToRelationship = Object.assign(
+                {
+                  "meta:transitiveType": ["rdf:Property"],
+                  "meta:transitiveSubPropertyOf": [{ "@id": "skos:narrower" }],
+                },
+                results[Math.floor(results.length * Math.random())]
+              );
+              $scope.$apply();
+            });
+        };
+
+        $scope.callAction = function () {
+          var name = arguments[0];
+          var params = Array.prototype.slice.call(arguments, 1);
+          api.actions[name].apply(this, params);
+        };
+
+        $scope.getCurrentTaskUri().then(function (stateParams) {
+          $scope.stateParams = stateParams;
+          prepareDataSources();
+          $scope.fetchInitialData();
           $scope.$apply();
         });
-      };
 
-      $scope.fetchInitialData = function () {
-        api.getConceptSchemes($scope.stateParams.taskGraphUri).then(function (results) {
-          $scope.goToConceptScheme = Object.assign(
-            {"meta:transitiveType": ["skos:ConceptScheme"]},
-            results[Math.floor(results.length * Math.random())]
-          );
-          $scope.$apply();
-          $scope.fetchTopConceptOf($scope.goToConceptScheme);
-        });
-        api.getNarrowerUnfilteredTypes($scope.stateParams.taskGraphUri).then(function (results) {
-          $scope.goToRelationship = Object.assign(
-            {"meta:transitiveType": ["rdf:Property"], "meta:transitiveSubPropertyOf": [{"@id": "skos:narrower"}]},
-            results[Math.floor(results.length * Math.random())]
-          );
-          $scope.$apply();
-        });
-      };
-
-      $scope.callAction = function () {
-        var name = arguments[0];
-        var params = Array.prototype.slice.call(arguments, 1);
-        api.actions[name].apply(this, params);
-      };
-
-      $scope.getCurrentTaskUri().then(function (stateParams) {
-        $scope.stateParams = stateParams;
-        prepareDataSources();
-        $scope.fetchInitialData();
-        $scope.$apply();
+        function prepareDataSources() {
+          var config = {
+              showLoadingOverlay: false,
+            },
+            dataSourceWitNoParameters = [
+              "getClasses",
+              "getAssociativeUnfilteredTypes",
+              "getBroaderUnfilteredTypes",
+              "getNarrowerUnfilteredTypes",
+              "getSemaphoreSettings",
+            ],
+            dataSourceWithItemUri = [
+              "getAssociativeTypes",
+              "getAltLabelProperties",
+              "getAltLabelUnfilteredProperties",
+              "getBroaderTypes",
+              "getMetadataTypes",
+              "getNarrowerTypes",
+            ],
+            dataSourceWithItemAndDomainUri = ["getMetadataForDomain"],
+            dataSourcesWithTaskUri = ["getConceptSchemes"],
+            dataSourcesWithTaskAndItemUri = [
+              "getConceptDetails",
+              "getConceptGuid",
+              "getConceptPrefLabels",
+              "getDetailsWithMetadata",
+              "getConceptAltLabels",
+            ],
+            dataSourcesWithTaskAndItemUriAndPaging = [
+              "getConceptRelated",
+              "getConceptNarrower",
+              "getConceptBroader",
+              "getTopConcepts",
+            ];
+          $scope.dataSources = [];
+          dataSourceWitNoParameters.forEach(function (dataSource) {
+            $scope.dataSources.push({
+              name: dataSource,
+              help: "api." + dataSource + "()",
+              example: api[dataSource],
+            });
+          });
+          dataSourceWithItemUri.forEach(function (dataSource) {
+            $scope.dataSources.push({
+              name: dataSource,
+              help: "api." + dataSource + "(itemUri)",
+              example: function () {
+                return api[dataSource]($scope.stateParams.itemUri);
+              },
+            });
+          });
+          dataSourcesWithTaskAndItemUri.forEach(function (dataSource) {
+            $scope.dataSources.push({
+              name: dataSource,
+              help: "api." + dataSource + "(taskGraphUri, itemUri)",
+              example: function () {
+                return api[dataSource](
+                  $scope.stateParams.taskGraphUri,
+                  $scope.stateParams.itemUri
+                );
+              },
+            });
+          });
+          dataSourcesWithTaskAndItemUriAndPaging.forEach(function (dataSource) {
+            $scope.dataSources.push({
+              name: dataSource,
+              help:
+                "api." + dataSource + "(taskGraphUri, itemUri, limit, offset)",
+              example: function () {
+                return api[dataSource](
+                  $scope.stateParams.taskGraphUri,
+                  $scope.stateParams.itemUri,
+                  5,
+                  0
+                );
+              },
+            });
+          });
+          dataSourceWithItemAndDomainUri.forEach(function (dataSource) {
+            $scope.dataSources.push({
+              name: dataSource,
+              help: "api." + dataSource + "(taskGraphUri, domainUri)",
+              example: function () {
+                return api[dataSource](
+                  $scope.stateParams.taskGraphUri,
+                  "skos:Concept"
+                );
+              },
+            });
+          });
+          dataSourcesWithTaskUri.forEach(function (dataSource) {
+            $scope.dataSources.push({
+              name: dataSource,
+              help: "api." + dataSource + "(taskGraphUri)",
+              example: function () {
+                return api[dataSource]($scope.stateParams.taskGraphUri);
+              },
+            });
+          });
+        }
       });
-
-      function prepareDataSources () {
-
-
-        var config = {
-            showLoadingOverlay: false
-          },
-          dataSourceWitNoParameters = ["getClasses", "getAssociativeUnfilteredTypes", "getBroaderUnfilteredTypes", "getNarrowerUnfilteredTypes", "getSemaphoreSettings"],
-          dataSourceWithItemUri = ["getAssociativeTypes", "getAltLabelProperties", "getAltLabelUnfilteredProperties", "getBroaderTypes", "getMetadataTypes", "getNarrowerTypes"],
-          dataSourceWithItemAndDomainUri = ["getMetadataForDomain"],
-          dataSourcesWithTaskUri = ["getConceptSchemes"],
-          dataSourcesWithTaskAndItemUri = ["getConceptDetails", "getConceptGuid", "getConceptPrefLabels", "getDetailsWithMetadata", "getConceptAltLabels"],
-          dataSourcesWithTaskAndItemUriAndPaging = ["getConceptRelated", "getConceptNarrower", "getConceptBroader", "getTopConcepts"];
-        $scope.dataSources = [];
-        dataSourceWitNoParameters.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "()",
-            example: api[dataSource]
-          });
-        });
-        dataSourceWithItemUri.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(itemUri)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.itemUri)
-            }
-          });
-        });
-        dataSourcesWithTaskAndItemUri.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(taskGraphUri, itemUri)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.taskGraphUri, $scope.stateParams.itemUri)
-            }
-          });
-        });
-        dataSourcesWithTaskAndItemUriAndPaging.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(taskGraphUri, itemUri, limit, offset)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.taskGraphUri, $scope.stateParams.itemUri, 5, 0)
-            }
-          });
-        });
-        dataSourceWithItemAndDomainUri.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(taskGraphUri, domainUri)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.taskGraphUri, "skos:Concept")
-            }
-          });
-        });
-        dataSourcesWithTaskUri.forEach(function (dataSource) {
-          $scope.dataSources.push({
-            name: dataSource,
-            help: "api." + dataSource + "(taskGraphUri)",
-            example: function () {
-              return api[dataSource]($scope.stateParams.taskGraphUri)
-            }
-          });
-        });
-
-      }
-    });
-  </script>
-</head>
-<body ng-controller="mainCtrl" class="container">
-<header class="header bg-info">
-  <div class="row">
-    <div class="col-xs-10">
-      <p class="m-t"></p>
-    </div>
-    <div class="col-xs-2 text-right">
-      <a class="close m-t" uib-tooltip="Close" tooltip-placement="bottom"
-         ng-click="closeWidget();">×</a>
-    </div>
-  </div>
-</header>
-<h1>Demo Widget</h1>
-
-<div class="panel-group" id="accordion" role="tablist"
-     aria-multiselectable="true">
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab">
-      <h4 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#accordion"
-           href="#getUri" aria-expanded="true" aria-controls="getUri">
-          Get current modelGraphUri, taskGraphUri and itemUri
-        </a>
-      </h4>
-    </div>
-    <div id="getUri" class="panel-collapse collapse in" role="tabpanel"
-         aria-labelledby="headingOne">
-      <div class="panel-body">
-        <dl class="dl-horizontal">
-          <dt>modelGraphUri</dt>
-          <dd><span
-            class="label label-success">{{ stateParams.modelGraphUri }}</span>
-          </dd>
-          <dt>taskGraphUri</dt>
-          <dd><span
-            class="label label-success">{{ stateParams.taskGraphUri }}</span>
-          </dd>
-          <dt>itemUri</dt>
-          <dd><span class="label label-success">{{ stateParams.itemUri }}</span>
-          </dd>
-        </dl>
+    </script>
+  </head>
+  <body ng-controller="mainCtrl" class="container">
+    <header class="header bg-info">
+      <div class="row">
+        <div class="col-xs-10">
+          <p class="m-t"></p>
+        </div>
+        <div class="col-xs-2 text-right">
+          <a
+            class="close m-t"
+            uib-tooltip="Close"
+            tooltip-placement="bottom"
+            ng-click="closeWidget();"
+            >×</a
+          >
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingTwo">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse"
-           data-parent="#accordion" href="#collapseTwo"
-           aria-expanded="false"
-           aria-controls="collapseTwo">
-          Get data api
-        </a>
-      </h4>
-    </div>
-    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
-         aria-labelledby="headingTwo">
-      <div class="panel-body">
-        <div ng-repeat="dataSource in dataSources">
-          <h3>{{ dataSource.name }}
-            <button class="btn btn-xs"
-                    ng-click="dataSource.showExample = !dataSource.showExample">
-              example
+    </header>
+    <h1>Demo Widget</h1>
+
+    <div
+      class="panel-group"
+      id="accordion"
+      role="tablist"
+      aria-multiselectable="true"
+    >
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab">
+          <h4 class="panel-title">
+            <a
+              role="button"
+              data-toggle="collapse"
+              data-parent="#accordion"
+              href="#getUri"
+              aria-expanded="true"
+              aria-controls="getUri"
+            >
+              Get current modelGraphUri, taskGraphUri and itemUri
+            </a>
+          </h4>
+        </div>
+        <div
+          id="getUri"
+          class="panel-collapse collapse in"
+          role="tabpanel"
+          aria-labelledby="headingOne"
+        >
+          <div class="panel-body">
+            <dl class="dl-horizontal">
+              <dt>modelGraphUri</dt>
+              <dd>
+                <span class="label label-success"
+                  >{{ stateParams.modelGraphUri }}</span
+                >
+              </dd>
+              <dt>taskGraphUri</dt>
+              <dd>
+                <span class="label label-success"
+                  >{{ stateParams.taskGraphUri }}</span
+                >
+              </dd>
+              <dt>itemUri</dt>
+              <dd>
+                <span class="label label-success"
+                  >{{ stateParams.itemUri }}</span
+                >
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingTwo">
+          <h4 class="panel-title">
+            <a
+              class="collapsed"
+              role="button"
+              data-toggle="collapse"
+              data-parent="#accordion"
+              href="#collapseTwo"
+              aria-expanded="false"
+              aria-controls="collapseTwo"
+            >
+              Get data api
+            </a>
+          </h4>
+        </div>
+        <div
+          id="collapseTwo"
+          class="panel-collapse collapse"
+          role="tabpanel"
+          aria-labelledby="headingTwo"
+        >
+          <div class="panel-body">
+            <div ng-repeat="dataSource in dataSources">
+              <h3>
+                {{ dataSource.name }}
+                <button
+                  class="btn btn-xs"
+                  ng-click="dataSource.showExample = !dataSource.showExample"
+                >
+                  example
+                </button>
+              </h3>
+              <pre class="bg-info" ng-if="dataSource.showExample">
+{{ dataSource.help   | json }}</pre
+              >
+              <button
+                class="btn btn-primary btn-xs"
+                ng-click="getBackendData(dataSource)"
+              >
+                load real data
+              </button>
+              <pre
+                ng-if="data[dataSource.name + 'Results']"
+                style="max-height: 250px"
+                class="bg-success"
+              >
+{{ data[dataSource.name + "Results"]  | json }}</pre
+              >
+              <pre ng-if="data[dataSource.name + 'Error']" class="bg-danger">
+{{ data[dataSource.name + "Error"]  | json}}</pre
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingThree">
+          <h4 class="panel-title">
+            <a
+              class="collapsed"
+              role="button"
+              data-toggle="collapse"
+              data-parent="#accordion"
+              href="#collapseThree"
+              aria-expanded="false"
+              aria-controls="collapseThree"
+            >
+              Send command api
+            </a>
+          </h4>
+        </div>
+        <div
+          id="collapseThree"
+          class="panel-collapse collapse"
+          role="tabpanel"
+          aria-labelledby="headingThree"
+        >
+          <div class="panel-body">
+            <h3>Navigate to item</h3>
+
+            <div>
+              <h2>random concept</h2>
+              <pre style="height: 100px">{{ goToConcept | json }}</pre>
+              <button ng-click="navigateToItem(goToConcept)" class="btn btn-xs">
+                go to concept
+              </button>
+            </div>
+            <div>
+              <h2>random concept scheme</h2>
+              <pre style="height: 100px">{{ goToConceptScheme | json }}</pre>
+              <button
+                ng-click="navigateToItem(goToConceptScheme)"
+                class="btn btn-xs"
+              >
+                go to concept scheme
+              </button>
+            </div>
+            <div>
+              <h2>random relationship</h2>
+              <pre style="height: 100px">{{ goToRelationship | json }}</pre>
+              <button
+                ng-click="navigateToItem(goToRelationship)"
+                class="btn btn-xs"
+              >
+                go to relationship
+              </button>
+            </div>
+            <hr />
+
+            <button
+              ng-click="openWidget('http://myCompany.com/#WidgetWikipedia')"
+              class="btn btn-xs"
+            >
+              Open widget 'Wikipedia'
             </button>
-          </h3>
-          <pre class="bg-info" ng-if="dataSource.showExample">{{ dataSource.help   | json }}</pre>
-          <button class="btn btn-primary btn-xs"
-                  ng-click="getBackendData(dataSource)">load real data
-          </button>
-          <pre ng-if="data[dataSource.name + 'Results']"
-               style="max-height: 250px;" class="bg-success">{{ data[dataSource.name + "Results"]  | json }}</pre>
-          <pre ng-if="data[dataSource.name + 'Error']"
-               class="bg-danger">{{ data[dataSource.name + "Error"]  | json}}</pre>
+
+            <button ng-click="closeWidget()" class="btn btn-xs">
+              Close widget
+            </button>
+            <hr />
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingFour">
+          <h4 class="panel-title">
+            <a
+              class="collapsed"
+              role="button"
+              data-toggle="collapse"
+              data-parent="#accordion"
+              href="#collapseFour"
+              aria-expanded="false"
+              aria-controls="collapseFour"
+            >
+              Call action api
+            </a>
+          </h4>
+        </div>
+        <div
+          id="collapseFour"
+          class="panel-collapse collapse"
+          role="tabpanel"
+          aria-labelledby="headingThree"
+        >
+          <div class="panel-body">
+            <h3>Call action api</h3>
+
+            <div>
+              <h2>Add Pref label</h2>
+              <input type="text" ng-model="prefLabelName" placeholder="name" />
+              <input
+                type="text"
+                ng-model="prefLabelLang"
+                placeholder="lang code"
+              />
+              <button
+                id="showFormAddPrefLabel"
+                ng-click="callAction('showFormAddPrefLabel', prefLabelName, prefLabelLang)"
+                class="btn btn-xs"
+              >
+                open
+              </button>
+            </div>
+            <div>
+              <h2>Add Alt label</h2>
+              <input type="text" ng-model="altLabelName" placeholder="name" />
+              <input
+                type="text"
+                ng-model="altLabelLang"
+                placeholder="lang code"
+              />
+              <input type="text" ng-model="altTypeUri" placeholder="type uri" />
+              <button
+                id="showFormAddAltLabel"
+                ng-click="callAction('showFormAddAltLabel', altLabelName, altLabelLang, altTypeUri)"
+                class="btn btn-xs"
+              >
+                open
+              </button>
+            </div>
+            <div>
+              <h2>Add Multiple Alt label</h2>
+              <textarea
+                ng-model="altMultiLabelName"
+                placeholder="Labels (One per row)"
+              ></textarea>
+              <input
+                type="text"
+                ng-model="altMultiLabelLang"
+                placeholder="lang code"
+              />
+              <input
+                type="text"
+                ng-model="altMultiLabelType"
+                placeholder="type uri"
+              />
+              <button
+                id="showFormAddMultipleAltLabel"
+                ng-click="callAction('showFormAddMultipleAltLabel', altMultiLabelName.split('\n'), altMultiLabelLang, altMultiLabelType)"
+                class="btn btn-xs"
+              >
+                open
+              </button>
+            </div>
+
+            <div>
+              <h2>Add Related</h2>
+              <input
+                type="text"
+                ng-model="relatedTypeUri"
+                placeholder="type uri"
+              />
+              <input
+                type="text"
+                ng-model="relatedTargetUri"
+                placeholder="target uri"
+              />
+              <input
+                type="text"
+                ng-model="relatedTargetName"
+                placeholder="target name"
+              />
+              <button
+                id="showFormAddRelated"
+                ng-click="callAction('showFormAddRelated', relatedTypeUri, relatedTargetUri, relatedTargetName)"
+                class="btn btn-xs"
+              >
+                open
+              </button>
+            </div>
+            <div>
+              <h2>Add Broader</h2>
+              <input
+                type="text"
+                ng-model="broaderTypeUri"
+                placeholder="type uri"
+              />
+              <input
+                type="text"
+                ng-model="broaderTargetUri"
+                placeholder="target uri"
+              />
+              <input
+                type="text"
+                ng-model="broaderTargetName"
+                placeholder="target name"
+              />
+              <button
+                id="showFormAddBroader"
+                ng-click="callAction('showFormAddBroader', broaderTypeUri, broaderTargetUri, broaderTargetName)"
+                class="btn btn-xs"
+              >
+                open
+              </button>
+            </div>
+            <div>
+              <h2>Add Narrower</h2>
+              <input
+                type="text"
+                ng-model="narrowerTypeUri"
+                placeholder="type uri"
+              />
+              <input
+                type="text"
+                ng-model="narrowerTargetUri"
+                placeholder="target uri"
+              />
+              <input
+                type="text"
+                ng-model="narrowerTargetName"
+                placeholder="target name"
+              />
+              <button
+                id="showFormAddNarrower"
+                ng-click="callAction('showFormAddNarrower', narrowerTypeUri, narrowerTargetUri, narrowerTargetName)"
+                class="btn btn-xs"
+              >
+                open
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingThree">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse"
-           data-parent="#accordion" href="#collapseThree"
-           aria-expanded="false"
-           aria-controls="collapseThree">
-          Send command api
-
-        </a>
-      </h4>
-    </div>
-    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
-         aria-labelledby="headingThree">
-      <div class="panel-body">
-        <h3>Navigate to item</h3>
-
-
-        <div>
-          <h2>random concept</h2>
-          <pre style="height: 100px;">{{ goToConcept | json }}</pre>
-          <button ng-click="navigateToItem(goToConcept)"
-                  class="btn btn-xs">go
-            to concept
-          </button>
-        </div>
-        <div>
-          <h2>random concept scheme</h2>
-          <pre style="height: 100px;">{{ goToConceptScheme | json }}</pre>
-          <button ng-click="navigateToItem(goToConceptScheme)"
-                  class="btn btn-xs">go to concept scheme
-          </button>
-        </div>
-        <div>
-          <h2>random relationship</h2>
-          <pre style="height: 100px;">{{ goToRelationship | json }}</pre>
-          <button ng-click="navigateToItem(goToRelationship)"
-                  class="btn btn-xs">go to relationship
-          </button>
-        </div>
-        <hr/>
-
-        <button ng-click="openWidget('http://myCompany.com/#WidgetWikipedia')"
-                class="btn btn-xs">Open widget 'Wikipedia'
-        </button>
-
-        <button ng-click="closeWidget()"
-                class="btn btn-xs">Close widget
-        </button>
-        <hr/>
-
-
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading" role="tab" id="headingFour">
-      <h4 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse"
-           data-parent="#accordion" href="#collapseFour"
-           aria-expanded="false"
-           aria-controls="collapseFour">
-          Call action api
-
-        </a>
-      </h4>
-    </div>
-    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel"
-         aria-labelledby="headingThree">
-      <div class="panel-body">
-        <h3>Call action api</h3>
-
-        <div>
-          <h2>Add Pref label</h2>
-          <input type="text" ng-model="prefLabelName" placeholder="name"/>
-          <input type="text" ng-model="prefLabelLang" placeholder="lang code"/>
-          <button id="showFormAddPrefLabel"
-                  ng-click="callAction('showFormAddPrefLabel', prefLabelName, prefLabelLang)"
-                  class="btn btn-xs">open
-          </button>
-        </div>
-        <div>
-          <h2>Add Alt label</h2>
-          <input type="text" ng-model="altLabelName" placeholder="name"/>
-          <input type="text" ng-model="altLabelLang" placeholder="lang code"/>
-          <input type="text" ng-model="altTypeUri" placeholder="type uri"/>
-          <button id="showFormAddAltLabel"
-                  ng-click="callAction('showFormAddAltLabel', altLabelName, altLabelLang, altTypeUri)"
-                  class="btn btn-xs">open
-          </button>
-        </div>
-        <div>
-          <h2>Add Multiple Alt label</h2>
-          <textarea ng-model="altMultiLabelName" placeholder="Labels (One per row)"></textarea>
-          <input type="text" ng-model="altMultiLabelLang" placeholder="lang code"/>
-          <input type="text" ng-model="altMultiLabelType" placeholder="type uri"/>
-          <button id="showFormAddMultipleAltLabel"
-                  ng-click="callAction('showFormAddMultipleAltLabel', altMultiLabelName.split('\n'), altMultiLabelLang, altMultiLabelType)"
-                  class="btn btn-xs">open
-          </button>
-        </div>
-
-        <div>
-          <h2>Add Related</h2>
-          <input type="text" ng-model="relatedTypeUri" placeholder="type uri"/>
-          <input type="text" ng-model="relatedTargetUri" placeholder="target uri"/>
-          <input type="text" ng-model="relatedTargetName" placeholder="target name"/>
-          <button id="showFormAddRelated"
-                  ng-click="callAction('showFormAddRelated', relatedTypeUri, relatedTargetUri, relatedTargetName)"
-                  class="btn btn-xs">open
-          </button>
-        </div>
-        <div>
-          <h2>Add Broader</h2>
-          <input type="text" ng-model="broaderTypeUri" placeholder="type uri"/>
-          <input type="text" ng-model="broaderTargetUri" placeholder="target uri"/>
-          <input type="text" ng-model="broaderTargetName" placeholder="target name"/>
-          <button id="showFormAddBroader"
-                  ng-click="callAction('showFormAddBroader', broaderTypeUri, broaderTargetUri, broaderTargetName)"
-                  class="btn btn-xs">open
-          </button>
-        </div>
-        <div>
-          <h2>Add Narrower</h2>
-          <input type="text" ng-model="narrowerTypeUri" placeholder="type uri"/>
-          <input type="text" ng-model="narrowerTargetUri" placeholder="target uri"/>
-          <input type="text" ng-model="narrowerTargetName" placeholder="target name"/>
-          <button id="showFormAddNarrower"
-                  ng-click="callAction('showFormAddNarrower', narrowerTypeUri, narrowerTargetUri, narrowerTargetName)"
-                  class="btn btn-xs">open
-          </button>
-        </div>
-
-
-      </div>
-    </div>
-  </div>
-</div>
-
-
-</body>
+  </body>
 </html>

@@ -1,4 +1,7 @@
-/bower_components
 /node_modules
 /coverage
+/lib
+/typings
+/examples_src/workbench-widget-api.min.js
+/examples_dist
 /.idea

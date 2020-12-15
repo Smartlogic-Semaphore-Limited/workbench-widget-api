@@ -1,0 +1,11 @@
+{
+  "inputFiles": ["./src/index.ts"],
+  "mode": "file",
+  "out": "doc/ApiDocumentation",
+  "name": "Semaphore: WorkbenchWidgetApi",
+  "readme": "none",
+  "excludeNotExported": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "stripInternal": true
+}
