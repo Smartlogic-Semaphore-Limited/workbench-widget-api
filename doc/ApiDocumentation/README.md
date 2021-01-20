@@ -10,6 +10,12 @@
 
 * [WorkbenchWidgetApi](classes/workbenchwidgetapi.md)
 
+### Other Type aliases
+
+* [EventListener](README.md#eventlistener)
+* [KmmEvent](README.md#kmmevent)
+* [KmmEventType](README.md#kmmeventtype)
+
 ### Widget Api Type aliases
 
 * [LabelEditFormData](README.md#labeleditformdata)
@@ -21,13 +27,55 @@
 * [decycle](README.md#decycle)
 * [retrocycle](README.md#retrocycle)
 
+## Other Type aliases
+
+### EventListener
+
+Ƭ  **EventListener**: (data: [KmmEvent](README.md#kmmevent)) => void
+
+*Defined in [src/workbench-widget-api.ts:44](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/01d9094/src/workbench-widget-api.ts#L44)*
+
+General type of an event listener.
+
+**`see`** [WorkbenchWidgetApi.addEventListener](classes/workbenchwidgetapi.md#addeventlistener)
+
+___
+
+### KmmEvent
+
+Ƭ  **KmmEvent**: { type: \"CONCEPT\_UPDATED\"  }
+
+*Defined in [src/workbench-widget-api.ts:32](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/01d9094/src/workbench-widget-api.ts#L32)*
+
+Type of event that KMM application can broadcast to widgets.
+
+Widgets can register to listen to specyfic event using
+
+#### Type declaration:
+
+Name | Type |
+------ | ------ |
+`type` | \"CONCEPT\_UPDATED\" |
+
+___
+
+### KmmEventType
+
+Ƭ  **KmmEventType**: Pick\<KmmEvent, \"type\">[\"type\"]
+
+*Defined in [src/workbench-widget-api.ts:38](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/01d9094/src/workbench-widget-api.ts#L38)*
+
+All event types users can listen for.
+
+___
+
 ## Widget Api Type aliases
 
 ### LabelEditFormData
 
 Ƭ  **LabelEditFormData**: { config: [LabelFormConfig](README.md#labelformconfig) ; data: [LabelFormValue](README.md#labelformvalue)  }
 
-*Defined in [src/workbench-widget-api.ts:55](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/b6b1358/src/workbench-widget-api.ts#L55)*
+*Defined in [src/workbench-widget-api.ts:79](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/01d9094/src/workbench-widget-api.ts#L79)*
 
 Data transfer type for sending information about editing single label (alt or pref).
 Used in [showFormAddMultipleTranslation](classes/workbenchwidgetapi.md#showformaddmultipletranslation)
@@ -45,7 +93,7 @@ ___
 
 Ƭ  **LabelFormConfig**: { editableLanguage: boolean ; editableType: boolean  }
 
-*Defined in [src/workbench-widget-api.ts:42](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/b6b1358/src/workbench-widget-api.ts#L42)*
+*Defined in [src/workbench-widget-api.ts:66](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/01d9094/src/workbench-widget-api.ts#L66)*
 
 #### Type declaration:
 
@@ -60,7 +108,7 @@ ___
 
 Ƭ  **LabelFormValue**: { labelLanguage: string ; labelValue: string ; typeUri: string  }
 
-*Defined in [src/workbench-widget-api.ts:30](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/b6b1358/src/workbench-widget-api.ts#L30)*
+*Defined in [src/workbench-widget-api.ts:54](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/01d9094/src/workbench-widget-api.ts#L54)*
 
 #### Type declaration:
 
@@ -76,7 +124,7 @@ Name | Type | Description |
 
 ▸ **decycle**(`object`: any): any
 
-*Defined in [src/cycle.ts:24](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/b6b1358/src/cycle.ts#L24)*
+*Defined in [src/cycle.ts:24](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/01d9094/src/cycle.ts#L24)*
 
 Make a deep copy of an object or array, assuring that there is at most
 one instance of each object or array in the resulting structure. The
@@ -112,7 +160,7 @@ ___
 
 ▸ **retrocycle**(`$`: any): any
 
-*Defined in [src/cycle.ts:110](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/b6b1358/src/cycle.ts#L110)*
+*Defined in [src/cycle.ts:110](https://github.com/Smartlogic-Semaphore-Limited/Smartlogic-Semaphore-side-panel-widget-framework/blob/01d9094/src/cycle.ts#L110)*
 
 Restore an object that was reduced by decycle. Members whose values are
 objects of the form `{$ref: PATH}` are replaced with references to the

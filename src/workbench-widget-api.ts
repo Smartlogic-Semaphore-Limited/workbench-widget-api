@@ -8,8 +8,13 @@ type WaitForResponse = {
 };
 
 /** @internal */
-interface MessageProps {
-  [key: string]: any;
+interface SimpleObject<V = any> {
+  [key: string]: V;
+}
+/** @internal */
+interface MessageProps extends SimpleObject {
+  widgetId: string;
+  tag: string;
 }
 
 /** @internal */
@@ -18,6 +23,25 @@ type Message = {
   key: string;
   data: MessageProps;
 };
+
+/**
+ * Type of event that KMM application can broadcast to widgets.
+ *
+ * Widgets can register to listen to specyfic event using
+ */
+type KmmEvent = {
+  type: "CONCEPT_UPDATED";
+};
+/**
+ * All event types users can listen for.
+ */
+type KmmEventType = Pick<KmmEvent, "type">["type"];
+
+/**
+ * General type of an event listener.
+ * @see {@link WorkbenchWidgetApi.addEventListener}
+ */
+type EventListener = (data: KmmEvent) => void;
 
 /** @internal */
 const DEFAULT_WIDGET_ID = decodeURIComponent(
@@ -61,15 +85,39 @@ type LabelEditFormData = {
  * @category Widget Api
  */
 export class WorkbenchWidgetApi {
+  // Host application assumes that this DEFAULT_WIDGET_ID is used, changing it will result in widget unable to communicate with the host application
+  private readonly widgetId = DEFAULT_WIDGET_ID;
   private _promises: Map<string, WaitForResponse> = new Map();
 
+  private _eventListeners: Map<string, Set<EventListener>> = new Map();
+
+  /**
+   * @param debug If set to true additional debug messages will be logged to console
+   */
+  constructor(debug?: boolean);
+  /**
+   * @param _widgetId Not used
+   * @param debug If set to true additional debug messages will be logged to console
+   */
+  constructor(widgetId?: string, debug?: boolean);
+
   constructor(
-    private readonly widgetId = DEFAULT_WIDGET_ID,
+    widgetIdOrDebug: string | boolean = "",
     private readonly debug = false
   ) {
+    if (typeof widgetIdOrDebug === "boolean") {
+      this.debug = widgetIdOrDebug;
+    }
     window.addEventListener("message", this._receiveMessage, false);
-
     this._postMessage(this._createMessage(this.widgetId, "ready"));
+  }
+
+  addEventListener(type: KmmEventType, listener: EventListener): () => void {
+    if (!this._eventListeners.has(type)) {
+      this._eventListeners.set(type, new Set<EventListener>());
+    }
+    this._eventListeners.get(type)!.add(listener);
+    return () => this._eventListeners.get(type)!.delete(listener);
   }
 
   /**
@@ -599,69 +647,94 @@ export class WorkbenchWidgetApi {
     return this._getBackendData<Result>(backendFunction, { modelGraphUri });
   }
 
-  private withOnlyDefinedValues = (obj: MessageProps) =>
+  private withOnlyDefinedValues = (obj: SimpleObject<any>) =>
     Object.fromEntries(
-      Object.entries(obj).filter(([key, value]) => value != null)
+      Object.entries(obj).filter(([_, value]) => value != null)
     );
-
-  private _createMessage(
-    widgetId: string,
-    key: string,
-    additionalData: MessageProps = {}
-  ): Message {
-    return {
-      type: "action",
-      key,
-      data: {
-        widgetId,
-        ...this.withOnlyDefinedValues(additionalData),
-      },
-    };
-  }
-
-  private _postMessage = <Result>(message: Message): Promise<Result> => {
-    var tag = this._generateTag();
-    message.data.tag = tag;
-    const waitForResponse: Partial<WaitForResponse> = {};
-    waitForResponse.promise = new Promise((resolve, reject) => {
-      waitForResponse.resolve = resolve;
-      waitForResponse.reject = reject;
-    });
-    this._promises.set(tag, waitForResponse as WaitForResponse);
-    window.parent.postMessage(decycle(message), "*");
-    this._logMessage("postMessage", message);
-    return waitForResponse.promise;
-  };
 
   private _postIndex = 0;
   private _generateTag() {
     this._postIndex++;
     return this.widgetId + "_" + this._postIndex;
   }
+  private _createMessage(
+    widgetId: string,
+    key: string,
+    additionalData: SimpleObject = {}
+  ): Message {
+    const tag = this._generateTag();
+    return {
+      type: "action",
+      key,
+      data: {
+        widgetId,
+        tag,
+        ...this.withOnlyDefinedValues(additionalData),
+      },
+    };
+  }
 
-  private _receiveMessage = (
-    event: MessageEvent<{
-      tag: string;
-      type: "response";
-      results?: any;
-      reason?: any;
-    }>
-  ) => {
-    this._logMessage("receiveMessage", event);
-    //var origin = event.origin || event.originalEvent.origin; // For Chrome, the origin property is in the event.originalEvent object.
-    const responseTag = event.data?.tag;
+  private _postMessage = <Result>(message: Message): Promise<Result> => {
+    const waitForResponse: Partial<WaitForResponse> = {};
+    waitForResponse.promise = new Promise((resolve, reject) => {
+      waitForResponse.resolve = resolve;
+      waitForResponse.reject = reject;
+    });
+    this._promises.set(message.data.tag, waitForResponse as WaitForResponse);
+    window.parent.postMessage(decycle(message), "*");
+    this._logMessage("postMessage", message);
+    return waitForResponse.promise;
+  };
+
+  private _handleResponseMessage(eventMessage: {
+    type: "response";
+    tag: string;
+    results?: any;
+    reason?: any;
+  }) {
+    const responseTag = eventMessage?.tag;
     if (responseTag && this._promises.has(responseTag)) {
       const waitForResponse = this._promises.get(responseTag)!;
-      if (event.data.type === "response") {
-        if (event.data.results !== undefined) {
-          waitForResponse.resolve(retrocycle(event.data.results));
-        } else if (event.data.reason !== undefined) {
-          waitForResponse.reject(retrocycle(event.data.reason));
-        } else {
-          this._logError("Response message need results or reason in data.");
-        }
+      if (eventMessage.results !== undefined) {
+        waitForResponse.resolve(retrocycle(eventMessage.results));
+      } else if (eventMessage.reason !== undefined) {
+        waitForResponse.reject(retrocycle(eventMessage.reason));
+      } else {
+        this._logError("Response message need results or reason in data.");
       }
       this._promises.delete(responseTag);
+    }
+  }
+
+  private _handleEventMessage({ data }: { type: "event"; data: KmmEvent }) {
+    const listeners = this._eventListeners.get(data.type) ?? new Set();
+    listeners.forEach((listener) => listener(data));
+  }
+
+  private _receiveMessage = (
+    event: MessageEvent<
+      | {
+          type: "response";
+          tag: string;
+          results?: any;
+          reason?: any;
+        }
+      | {
+          type: "event";
+          data: KmmEvent;
+        }
+    >
+  ) => {
+    this._logMessage("receiveMessage", event);
+    switch (event.data.type) {
+      case "response": {
+        this._handleResponseMessage(event.data);
+        break;
+      }
+      case "event": {
+        this._handleEventMessage(event.data);
+        break;
+      }
     }
   };
 
