@@ -124,7 +124,7 @@ export class WorkbenchWidgetApi {
    */
   constructor(private readonly debug = false) {
     window.addEventListener("message", this._receiveMessage, false);
-    this._postMessage(this._createMessage(WIDGET_ID, "ready"));
+    this._postMessage(this._createMessage("ready"));
   }
 
   /**
@@ -145,7 +145,7 @@ export class WorkbenchWidgetApi {
    * Fetch current host state params (modelGraphUri, taskGraphUri, itemUri).
    */
   getStateParams() {
-    var message = this._createMessage(WIDGET_ID, "getStateParams");
+    var message = this._createMessage("getStateParams");
     return this._postMessage<{
       taskGraphUri?: string;
       modelGraphUri?: string;
@@ -158,7 +158,7 @@ export class WorkbenchWidgetApi {
    * @param item Item can be concept, concept scheme, relationship, class etc. existing in current task.
    */
   navigateToItem(item: string) {
-    var message = this._createMessage(WIDGET_ID, "navigateToItem", {
+    var message = this._createMessage("navigateToItem", {
       item,
     });
     return this._postMessage<void>(message);
@@ -168,7 +168,7 @@ export class WorkbenchWidgetApi {
    * Close right side panel in host application.
    */
   closeWidget() {
-    var message = this._createMessage(WIDGET_ID, "closeWidget");
+    var message = this._createMessage("closeWidget");
     return this._postMessage<void>(message);
   }
 
@@ -176,7 +176,7 @@ export class WorkbenchWidgetApi {
    * Open different widget in the same model.
    */
   openWidget(targetWidgetId: string) {
-    var message = this._createMessage(targetWidgetId, "openWidget");
+    var message = this._createMessage("openWidget", {}, targetWidgetId);
     return this._postMessage<void>(message);
   }
 
@@ -599,7 +599,7 @@ export class WorkbenchWidgetApi {
   };
 
   private _actionCall(action: string, data: object) {
-    const message = this._createMessage(WIDGET_ID, "callAction", {
+    const message = this._createMessage("callAction", {
       action,
       data,
     });
@@ -610,7 +610,7 @@ export class WorkbenchWidgetApi {
     backendFunction: string,
     backendArguments: { [key: string]: string | number | undefined }
   ) {
-    const message = this._createMessage(WIDGET_ID, "getBackendData", {
+    const message = this._createMessage("getBackendData", {
       backendFunction,
       backendArguments,
     });
@@ -679,9 +679,9 @@ export class WorkbenchWidgetApi {
     return WIDGET_ID + "_" + this._postIndex;
   }
   private _createMessage(
-    widgetId: string,
     key: string,
-    additionalData: SimpleObject = {}
+    additionalData: SimpleObject = {},
+    widgetId = WIDGET_ID
   ): Message {
     const tag = this._generateTag();
     return {
