@@ -1,6 +1,14 @@
 import { decycle, retrocycle } from "./cycle";
 
 /** @internal */
+function hasOwnProperty<X extends {}, Y extends PropertyKey>(
+  obj: X,
+  prop: Y
+): obj is X & Record<Y, unknown> {
+  return obj.hasOwnProperty(prop);
+}
+
+/** @internal */
 type WaitForResponse = {
   promise: Promise<any>;
   resolve: (data: any) => void;
@@ -8,8 +16,13 @@ type WaitForResponse = {
 };
 
 /** @internal */
-interface MessageProps {
-  [key: string]: any;
+interface SimpleObject<V = any> {
+  [key: string]: V;
+}
+/** @internal */
+interface MessageProps extends SimpleObject {
+  widgetId: string;
+  tag: string;
 }
 
 /** @internal */
@@ -19,13 +32,49 @@ type Message = {
   data: MessageProps;
 };
 
-/** @internal */
-const DEFAULT_WIDGET_ID = decodeURIComponent(
-  window.location.hash.substr(1).replace(/^\//, "").replace(/\+/g, " ")
-);
+/**
+ * Type of event that KMM application can broadcast to widgets.
+ *
+ * Widgets can register to listen to specyfic event using
+ * @category KMM Messaging
+ */
+type KmmEvent =
+  | {
+      type: "CONCEPT_UPDATED";
+    }
+  | {
+      type: "CONCEPT_SCHEME_UPDATED";
+    };
 
 /**
- * @category Widget Api
+ * All event types users can listen for.
+ * @category KMM Messaging
+ */
+type KmmEventType = "CONCEPT_UPDATED" | "CONCEPT_SCHEME_UPDATED"; // Pick<KmmEvent, "type">["type"];
+
+/**
+ * General type of an event listener.
+ * @see {@link WorkbenchWidgetApi.addEventListener}
+ * @category KMM Messaging
+ */
+type EventListener = (data: KmmEvent) => void;
+
+/** @internal */
+type MaybeResponseMessage = {
+  type: "response";
+  tag?: unknown;
+  results?: any;
+  reason?: any;
+};
+
+/** @internal */
+type MaybeEventMessage = {
+  type: "event";
+  data?: KmmEvent;
+};
+
+/**
+ * @category KMM action parameters
  */
 type LabelFormValue = {
   /** The uri of type of the label */
@@ -37,7 +86,7 @@ type LabelFormValue = {
 };
 
 /**
- * @category Widget Api
+ * @category KMM action parameters
  */
 type LabelFormConfig = {
   /** `true` value makes the language code editable */
@@ -50,7 +99,7 @@ type LabelFormConfig = {
  * Data transfer type for sending information about editing single label (alt or pref).
  * Used in {@link showFormAddMultipleTranslation}
  *
- * @category Widget Api
+ * @category KMM action parameters
  */
 type LabelEditFormData = {
   data: LabelFormValue;
@@ -61,22 +110,40 @@ type LabelEditFormData = {
  * @category Widget Api
  */
 export class WorkbenchWidgetApi {
+  private readonly WIDGET_ID = decodeURIComponent(
+    window.location.hash.substr(1).replace(/^\//, "").replace(/\+/g, " ")
+  );
   private _promises: Map<string, WaitForResponse> = new Map();
 
-  constructor(
-    private readonly widgetId = DEFAULT_WIDGET_ID,
-    private readonly debug = false
-  ) {
-    window.addEventListener("message", this._receiveMessage, false);
+  private _eventListeners: Map<string, Set<EventListener>> = new Map();
 
-    this._postMessage(this._createMessage(this.widgetId, "ready"));
+  /**
+   * @param debug If set to true additional debug messages will be logged to console
+   */
+  constructor(private readonly debug = false) {
+    window.addEventListener("message", this._receiveMessage, false);
+    this._postMessage(this._createMessage("ready"));
+  }
+
+  /**
+   * Registers a new listener for KMM events.
+   * @param type Which event to listen for
+   * @param listener Callback function that will be called with event data every time an event of type `type` will be received
+   * @returns Deregistering function; when invoked removes this event listener.
+   */
+  addEventListener(type: KmmEventType, listener: EventListener): () => void {
+    if (!this._eventListeners.has(type)) {
+      this._eventListeners.set(type, new Set<EventListener>());
+    }
+    this._eventListeners.get(type)!.add(listener);
+    return () => this._eventListeners.get(type)!.delete(listener);
   }
 
   /**
    * Fetch current host state params (modelGraphUri, taskGraphUri, itemUri).
    */
   getStateParams() {
-    var message = this._createMessage(this.widgetId, "getStateParams");
+    var message = this._createMessage("getStateParams");
     return this._postMessage<{
       taskGraphUri?: string;
       modelGraphUri?: string;
@@ -89,7 +156,7 @@ export class WorkbenchWidgetApi {
    * @param item Item can be concept, concept scheme, relationship, class etc. existing in current task.
    */
   navigateToItem(item: string) {
-    var message = this._createMessage(this.widgetId, "navigateToItem", {
+    var message = this._createMessage("navigateToItem", {
       item,
     });
     return this._postMessage<void>(message);
@@ -99,7 +166,7 @@ export class WorkbenchWidgetApi {
    * Close right side panel in host application.
    */
   closeWidget() {
-    var message = this._createMessage(this.widgetId, "closeWidget");
+    var message = this._createMessage("closeWidget");
     return this._postMessage<void>(message);
   }
 
@@ -107,7 +174,7 @@ export class WorkbenchWidgetApi {
    * Open different widget in the same model.
    */
   openWidget(targetWidgetId: string) {
-    var message = this._createMessage(targetWidgetId, "openWidget");
+    var message = this._createMessage("openWidget", {}, targetWidgetId);
     return this._postMessage<void>(message);
   }
 
@@ -530,7 +597,7 @@ export class WorkbenchWidgetApi {
   };
 
   private _actionCall(action: string, data: object) {
-    const message = this._createMessage(this.widgetId, "callAction", {
+    const message = this._createMessage("callAction", {
       action,
       data,
     });
@@ -541,7 +608,7 @@ export class WorkbenchWidgetApi {
     backendFunction: string,
     backendArguments: { [key: string]: string | number | undefined }
   ) {
-    const message = this._createMessage(this.widgetId, "getBackendData", {
+    const message = this._createMessage("getBackendData", {
       backendFunction,
       backendArguments,
     });
@@ -599,69 +666,85 @@ export class WorkbenchWidgetApi {
     return this._getBackendData<Result>(backendFunction, { modelGraphUri });
   }
 
-  private withOnlyDefinedValues = (obj: MessageProps) =>
+  private withOnlyDefinedValues = (obj: SimpleObject<any>) =>
     Object.fromEntries(
-      Object.entries(obj).filter(([key, value]) => value != null)
+      Object.entries(obj).filter(([_, value]) => value != null)
     );
 
+  private _postIndex = 0;
+  private _generateTag() {
+    this._postIndex++;
+    return this.WIDGET_ID + "_" + this._postIndex;
+  }
   private _createMessage(
-    widgetId: string,
     key: string,
-    additionalData: MessageProps = {}
+    additionalData: SimpleObject = {},
+    widgetId = this.WIDGET_ID
   ): Message {
+    const tag = this._generateTag();
     return {
       type: "action",
       key,
       data: {
-        widgetId,
         ...this.withOnlyDefinedValues(additionalData),
+        widgetId,
+        tag,
       },
     };
   }
 
   private _postMessage = <Result>(message: Message): Promise<Result> => {
-    var tag = this._generateTag();
-    message.data.tag = tag;
     const waitForResponse: Partial<WaitForResponse> = {};
     waitForResponse.promise = new Promise((resolve, reject) => {
       waitForResponse.resolve = resolve;
       waitForResponse.reject = reject;
     });
-    this._promises.set(tag, waitForResponse as WaitForResponse);
+    this._promises.set(message.data.tag, waitForResponse as WaitForResponse);
     window.parent.postMessage(decycle(message), "*");
     this._logMessage("postMessage", message);
     return waitForResponse.promise;
   };
 
-  private _postIndex = 0;
-  private _generateTag() {
-    this._postIndex++;
-    return this.widgetId + "_" + this._postIndex;
+  private _handleResponseMessage(eventMessage: MaybeResponseMessage) {
+    const responseTag = eventMessage?.tag;
+    if (responseTag && this._promises.has(responseTag as string)) {
+      const waitForResponse = this._promises.get(responseTag as string)!;
+      if (eventMessage.results !== undefined) {
+        waitForResponse.resolve(retrocycle(eventMessage.results));
+      } else if (eventMessage.reason !== undefined) {
+        waitForResponse.reject(retrocycle(eventMessage.reason));
+      } else {
+        this._logError("Response message need results or reason in data.");
+      }
+      this._promises.delete(responseTag as string);
+    }
+  }
+
+  private _handleEventMessage({ data }: MaybeEventMessage) {
+    if (typeof data === "object" && hasOwnProperty(data, "type")) {
+      const listeners = this._eventListeners.get(data.type) ?? new Set();
+      listeners.forEach((listener) => listener(data));
+    }
   }
 
   private _receiveMessage = (
-    event: MessageEvent<{
-      tag: string;
-      type: "response";
-      results?: any;
-      reason?: any;
-    }>
+    event: MessageEvent<MaybeResponseMessage | MaybeEventMessage | unknown>
   ) => {
     this._logMessage("receiveMessage", event);
-    //var origin = event.origin || event.originalEvent.origin; // For Chrome, the origin property is in the event.originalEvent object.
-    const responseTag = event.data?.tag;
-    if (responseTag && this._promises.has(responseTag)) {
-      const waitForResponse = this._promises.get(responseTag)!;
-      if (event.data.type === "response") {
-        if (event.data.results !== undefined) {
-          waitForResponse.resolve(retrocycle(event.data.results));
-        } else if (event.data.reason !== undefined) {
-          waitForResponse.reject(retrocycle(event.data.reason));
-        } else {
-          this._logError("Response message need results or reason in data.");
+    if (typeof event.data === "object" && event.data != null) {
+      const data = event.data;
+      if (hasOwnProperty(data, "type") && typeof data.type === "string") {
+        switch (data.type) {
+          case "response": {
+            this._handleResponseMessage(event.data as MaybeResponseMessage);
+            break;
+          }
+          case "event": {
+            this._handleEventMessage(event.data as MaybeEventMessage);
+            break;
+          }
         }
       }
-      this._promises.delete(responseTag);
     }
   };
 
