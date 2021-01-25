@@ -1,11 +1,6 @@
 import { decycle, retrocycle } from "./cycle";
 
 /** @internal */
-const WIDGET_ID = decodeURIComponent(
-  window.location.hash.substr(1).replace(/^\//, "").replace(/\+/g, " ")
-);
-
-/** @internal */
 function hasOwnProperty<X extends {}, Y extends PropertyKey>(
   obj: X,
   prop: Y
@@ -115,6 +110,9 @@ type LabelEditFormData = {
  * @category Widget Api
  */
 export class WorkbenchWidgetApi {
+  private readonly WIDGET_ID = decodeURIComponent(
+    window.location.hash.substr(1).replace(/^\//, "").replace(/\+/g, " ")
+  );
   private _promises: Map<string, WaitForResponse> = new Map();
 
   private _eventListeners: Map<string, Set<EventListener>> = new Map();
@@ -676,12 +674,12 @@ export class WorkbenchWidgetApi {
   private _postIndex = 0;
   private _generateTag() {
     this._postIndex++;
-    return WIDGET_ID + "_" + this._postIndex;
+    return this.WIDGET_ID + "_" + this._postIndex;
   }
   private _createMessage(
     key: string,
     additionalData: SimpleObject = {},
-    widgetId = WIDGET_ID
+    widgetId = this.WIDGET_ID
   ): Message {
     const tag = this._generateTag();
     return {

@@ -1,10 +1,16 @@
 describe("Unit tests: swApiWidget", () => {
   const widgetId = "widgetId";
   let widget;
+
+  function setupWidgetId(widgetId) {
+    window.location.hash = `#${widgetId}`;
+  }
+
   beforeEach(() => {
+    setupWidgetId(widgetId);
     spyOn(window.parent, "postMessage");
     spyOn(console, "error");
-    widget = new Semaphore.WorkbenchWidgetApi(widgetId);
+    widget = new Semaphore.WorkbenchWidgetApi();
   });
 
   it("getStateParams", function () {
